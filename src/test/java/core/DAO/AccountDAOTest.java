@@ -62,7 +62,7 @@ public class AccountDAOTest {
         dbAccount.setAmount(1000.0d);
 
         dao.update(dbAccount);
-        
+
         assertThat(dao.getAll().get(0).getAmount(), is(dbAccount.getAmount()));
 
     }

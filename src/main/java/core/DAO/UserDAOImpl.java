@@ -3,13 +3,11 @@ package core.DAO;
 import core.Model.Account;
 import core.Model.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("Duplicates")
 public class UserDAOImpl implements UserDAO {
 
 
@@ -147,10 +145,85 @@ public class UserDAOImpl implements UserDAO {
     }
 
     public User getByUsername(String username) {
-        return null;
+        User user = new User();
+
+        try {
+            PreparedStatement get = conn.prepareStatement(
+                    "SELECT * FROM users" +
+                            " WHERE username LIKE ?"
+            );
+
+            get.setString(1, username);
+
+            ResultSet result = get.executeQuery();
+
+            while (result.next()){
+                user.setId(result.getInt("id"));
+                user.setAccountId(result.getInt("accountId"));
+                user.setUsername(result.getString("username"));
+                user.setPassword(result.getString("password"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return user;
     }
 
     public boolean checkPassword(User user) {
+
+        try {
+            PreparedStatement get = conn.prepareStatement(
+                    "SELECT TOP 1 FROM users WHERE password LIKE ?"
+            );
+
+            get.setString(1, user.getPassword());
+
+            ResultSet result = get.executeQuery();
+            if(result.next()) return true;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         return false;
+    }
+
+    public void createUserTable() {
+
+        try {
+            PreparedStatement create = conn.prepareStatement(
+                    "CREATE TABLE IF NOT EXISTS users(" +
+                            "id int NOT NULL AUTO_INCREMENT," +
+                            "username varchar(255) NOT NULL," +
+                            "password varchar(255) NOT NULL," +
+                            "accountId int NOT NULL," +
+                            "PRIMARY KEY(id)," +
+                            "FOREIGN KEY(accountId) REFERENCES account(id) ON DELETE CASCADE)"
+            );
+            create.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void dropUserTable() {
+
+        try {
+            PreparedStatement drop = conn.prepareStatement(
+                    "DROP TABLE users"
+            );
+
+            drop.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public DatabaseMetaData getMetaData() throws SQLException {
+        return conn.getMetaData();
     }
 }
