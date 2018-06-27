@@ -1,9 +1,6 @@
 package core.DAO;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +24,7 @@ public class AccountDAOImpl implements AccountDAO {
         try{
             PreparedStatement get = conn.prepareStatement(
                     "SELECT * FROM account" +
-                            " WHERE id == ?"
+                            " WHERE id = ?"
             );
 
             get.setInt(1, id);
@@ -69,9 +66,9 @@ public class AccountDAOImpl implements AccountDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        finally {
+
             return accounts;
-        }
+
     }
 
     public void save(Account account) {
@@ -83,6 +80,8 @@ public class AccountDAOImpl implements AccountDAO {
             );
 
             save.setDouble(1, account.getAmount());
+
+            save.execute();
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -169,6 +168,10 @@ public class AccountDAOImpl implements AccountDAO {
             e.printStackTrace();
         }
 
+    }
+
+    public DatabaseMetaData getMetaData() throws SQLException {
+        return conn.getMetaData();
     }
 
 }
