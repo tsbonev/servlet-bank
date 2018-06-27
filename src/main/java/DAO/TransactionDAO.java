@@ -15,6 +15,8 @@ public interface TransactionDAO {
 
     void save(Transaction transaction);
 
+    void update(Transaction transaction);
+
     List<Transaction> getByUserId(int id);
 
     List<Transaction> getByDate(Date date);

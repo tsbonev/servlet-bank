@@ -14,6 +14,8 @@ public interface UserDAO {
 
     void save(User user);
 
+    void update(User user);
+
     User getByUsername(String username);
 
     boolean checkPassword(User user);
