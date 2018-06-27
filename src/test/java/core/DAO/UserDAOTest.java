@@ -2,6 +2,7 @@ package core.DAO;
 
 import core.Model.Account;
 import core.Model.User;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -19,12 +20,14 @@ public class UserDAOTest {
     UserDAOImpl dao = new UserDAOImpl();
 
     @Before
-    public void cleanRows(){
+    public void addAccount(){
+        accountDao.save(new Account(200));
+    }
 
+    @After
+    public void cleanRows(){
         dao.deleteAllRows();
         accountDao.deleteAllRows();
-        accountDao.save(new Account(200));
-
     }
 
     @Test
