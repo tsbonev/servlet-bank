@@ -174,10 +174,11 @@ public class UserDAOImpl implements UserDAO {
 
         try {
             PreparedStatement get = conn.prepareStatement(
-                    "SELECT TOP 1 FROM userDb WHERE password LIKE ?"
+                    "SELECT * FROM userDb WHERE username LIKE ? AND password LIKE ? LIMIT 1"
             );
 
-            get.setString(1, user.getPassword());
+            get.setString(1, user.getUsername());
+            get.setString(2, user.getPassword());
 
             ResultSet result = get.executeQuery();
             if(result.next()) return true;

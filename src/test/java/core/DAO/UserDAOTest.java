@@ -1,6 +1,7 @@
 package core.DAO;
 
 import core.Model.Account;
+import core.Model.User;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -27,9 +28,88 @@ public class UserDAOTest {
     }
 
     @Test
+    public void getByUsername(){
+
+        User user = new User("admin", "admin");
+
+        user.setAccountId(accountDao.getAll().get(0).getId());
+
+        dao.save(user);
+
+        assertThat(dao.getByUsername("admin").getPassword(), is(user.getPassword()));
+
+    }
+
+    @Test
     public void saveUser(){
 
+        User user = new User("admin", "admin");
 
+        user.setAccountId(accountDao.getAll().get(0).getId());
+
+        dao.save(user);
+
+        assertThat(dao.getAll().get(0).getUsername(), is(user.getUsername()));
+
+    }
+
+    @Test
+    public void updateUser(){
+
+        User user = new User("admin", "admin");
+
+        user.setAccountId(accountDao.getAll().get(0).getId());
+
+        dao.save(user);
+
+        User updatedUser = dao.getAll().get(0);
+        updatedUser.setUsername("new admin");
+
+        dao.update(updatedUser);
+
+        assertThat(dao.getAll().get(0).getUsername(), is(updatedUser.getUsername()));
+
+    }
+
+    @Test
+    public void deleteUser(){
+
+        User user = new User("admin", "admin");
+
+        user.setAccountId(accountDao.getAll().get(0).getId());
+
+        dao.save(user);
+        dao.deleteById(dao.getAll().get(0).getId());
+
+        assertThat(dao.getAll().size(), is(0));
+
+    }
+
+    @Test
+    public void correctPassword(){
+
+        User user = new User("admin", "admin");
+
+        user.setAccountId(accountDao.getAll().get(0).getId());
+
+        dao.save(user);
+
+        assertThat(dao.checkPassword(user), is(true));
+
+    }
+
+    @Test
+    public void incorrectPassword(){
+
+        User user = new User("admin", "admin");
+
+        user.setAccountId(accountDao.getAll().get(0).getId());
+
+        dao.save(user);
+
+        user.setPassword("not a correct password");
+
+        assertThat(dao.checkPassword(user), is(false));
 
     }
 
