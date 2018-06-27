@@ -1,6 +1,6 @@
-package DAO;
+package core.DAO;
 
-import Model.Transaction;
+import core.Model.Transaction;
 
 import java.sql.Date;
 import java.util.List;
@@ -12,6 +12,8 @@ public interface TransactionDAO {
     List<Transaction> getAll();
 
     void deleteById(int id);
+
+    void deleteAllRows();
 
     void save(Transaction transaction);
 

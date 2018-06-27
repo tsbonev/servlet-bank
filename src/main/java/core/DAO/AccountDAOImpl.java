@@ -1,6 +1,4 @@
-package DAO;
-
-import Model.Account;
+package core.DAO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import core.Model.Account;
 
 public class AccountDAOImpl implements AccountDAO {
 
@@ -111,6 +111,7 @@ public class AccountDAOImpl implements AccountDAO {
     }
 
     public void deleteById(int id) {
+
         try{
             PreparedStatement delete = conn.prepareStatement(
                     "DELETE FROM account" +
@@ -124,6 +125,20 @@ public class AccountDAOImpl implements AccountDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public void deleteAllRows(){
+
+        try {
+            PreparedStatement delete = conn.prepareStatement(
+                    "DELETE FROM account"
+            );
+
+            delete.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void createAccountTable() {

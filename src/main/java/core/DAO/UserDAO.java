@@ -1,6 +1,6 @@
-package DAO;
+package core.DAO;
 
-import Model.User;
+import core.Model.User;
 
 import java.util.List;
 
@@ -11,6 +11,8 @@ public interface UserDAO {
     List<User> getAll();
 
     void deleteById(int id);
+
+    void deleteAllRows();
 
     void save(User user);
 

@@ -1,6 +1,6 @@
-package DAO;
+package core.DAO;
 
-import Model.Account;
+import core.Model.Account;
 
 import java.util.List;
 
@@ -15,5 +15,7 @@ public interface AccountDAO {
     void update(Account account);
 
     void deleteById(int id);
+
+    void deleteAllRows();
 
 }
