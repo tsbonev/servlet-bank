@@ -1,6 +1,5 @@
 package core.DAO;
 
-import core.Model.Account;
 import core.Model.User;
 
 import java.sql.*;
@@ -27,7 +26,7 @@ public class UserDAOImpl implements UserDAO {
 
         try{
             PreparedStatement get = conn.prepareStatement(
-                    "SELECT * FROM users" +
+                    "SELECT * FROM userDb" +
                             " WHERE id = ?"
             );
 
@@ -55,7 +54,7 @@ public class UserDAOImpl implements UserDAO {
 
         try{
             PreparedStatement get = conn.prepareStatement(
-                    "SELECT * FROM users"
+                    "SELECT * FROM userDb"
             );
 
             ResultSet result = get.executeQuery();
@@ -79,7 +78,7 @@ public class UserDAOImpl implements UserDAO {
     public void deleteById(int id) {
         try{
             PreparedStatement delete = conn.prepareStatement(
-                    "DELETE FROM users" +
+                    "DELETE FROM userDb" +
                             " WHERE id = ?"
             );
 
@@ -95,7 +94,7 @@ public class UserDAOImpl implements UserDAO {
     public void deleteAllRows() {
         try {
             PreparedStatement delete = conn.prepareStatement(
-                    "DELETE FROM users"
+                    "DELETE FROM userDb"
             );
 
             delete.execute();
@@ -107,7 +106,7 @@ public class UserDAOImpl implements UserDAO {
     public void save(User user) {
         try{
             PreparedStatement save = conn.prepareStatement(
-                    "INSERT INTO users(username, password, accountId)" +
+                    "INSERT INTO userDb(username, password, accountId)" +
                             " VALUES(?, ?, ?)"
             );
 
@@ -125,7 +124,7 @@ public class UserDAOImpl implements UserDAO {
     public void update(User user) {
         try{
             PreparedStatement update = conn.prepareStatement(
-                    "UPDATE users" +
+                    "UPDATE userDb" +
                             " SET username = ?," +
                             "password = ?," +
                             "accountId = ?" +
@@ -149,7 +148,7 @@ public class UserDAOImpl implements UserDAO {
 
         try {
             PreparedStatement get = conn.prepareStatement(
-                    "SELECT * FROM users" +
+                    "SELECT * FROM userDb" +
                             " WHERE username LIKE ?"
             );
 
@@ -175,7 +174,7 @@ public class UserDAOImpl implements UserDAO {
 
         try {
             PreparedStatement get = conn.prepareStatement(
-                    "SELECT TOP 1 FROM users WHERE password LIKE ?"
+                    "SELECT TOP 1 FROM userDb WHERE password LIKE ?"
             );
 
             get.setString(1, user.getPassword());
@@ -194,7 +193,7 @@ public class UserDAOImpl implements UserDAO {
 
         try {
             PreparedStatement create = conn.prepareStatement(
-                    "CREATE TABLE IF NOT EXISTS users(" +
+                    "CREATE TABLE IF NOT EXISTS userDb(" +
                             "id int NOT NULL AUTO_INCREMENT," +
                             "username varchar(255) NOT NULL," +
                             "password varchar(255) NOT NULL," +
@@ -213,7 +212,7 @@ public class UserDAOImpl implements UserDAO {
 
         try {
             PreparedStatement drop = conn.prepareStatement(
-                    "DROP TABLE users"
+                    "DROP TABLE userDb"
             );
 
             drop.execute();
