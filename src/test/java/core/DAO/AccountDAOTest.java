@@ -25,19 +25,45 @@ public class AccountDAOTest {
     }
 
     @Test
-    public void saveGetAndDeleteAccount(){
+    public void getAccount(){
 
         Account account = new Account(154.0d);
 
         dao.save(account);
 
-        Account dbAccount = dao.getById(1);
+        assertThat(dao.getAll().get(0).getAmount(), is(account.getAmount()));
+    }
+
+    @Test
+    public void deleteAccount(){
+
+        Account account = new Account(154.0d);
+
+        dao.save(account);
+
+        Account dbAccount = dao.getAll().get(0);
 
         dao.deleteById(dbAccount.getId());
 
-        assertThat(dbAccount.getAmount(), is(154.0d));
 
-        assertThat(dao.getById(1).getId(), is(0));
+        assertThat(dao.getAll().size(), is(0));
+
+    }
+
+    @Test
+    public void updateAccount(){
+
+        Account account = new Account(154.0d);
+
+        dao.save(account);
+
+        Account dbAccount = dao.getAll().get(0);
+
+        dbAccount.setAmount(1000.0d);
+
+        dao.update(dbAccount);
+        
+        assertThat(dao.getAll().get(0).getAmount(), is(dbAccount.getAmount()));
 
     }
 
@@ -58,9 +84,9 @@ public class AccountDAOTest {
     @Test
     public void createTable() throws SQLException {
 
-        DatabaseMetaData dbm = dao.getMetaData();
-
         dao.createAccountTable();
+
+        DatabaseMetaData dbm = dao.getMetaData();
 
         ResultSet tables = dbm.getTables(null, null, "account", null);
 
@@ -72,9 +98,9 @@ public class AccountDAOTest {
     @Test
     public void dropTable() throws SQLException {
 
-        DatabaseMetaData dbm = dao.getMetaData();
-
         dao.dropAccountTable();
+
+        DatabaseMetaData dbm = dao.getMetaData();
 
         ResultSet tables = dbm.getTables(null, null, "account", null);
 

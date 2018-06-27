@@ -39,10 +39,8 @@ public class AccountDAOImpl implements AccountDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        finally {
-            return account;
-        }
 
+            return account;
 
     }
 
@@ -94,14 +92,14 @@ public class AccountDAOImpl implements AccountDAO {
         try{
             PreparedStatement update = conn.prepareStatement(
                     "UPDATE account" +
-                            "SET amount = ?" +
+                            " SET amount = ?" +
                             " WHERE id = ?"
             );
 
             update.setDouble(1, account.getAmount());
             update.setInt(2, account.getId());
 
-            update.setDouble(1, account.getAmount());
+            update.execute();
 
         } catch (SQLException e) {
             e.printStackTrace();
