@@ -1,14 +1,19 @@
 package core.DAO;
 
 import core.Model.Account;
+import core.Model.Transaction;
+import core.Model.User;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import java.sql.DatabaseMetaData;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Instant;
+import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -19,15 +24,105 @@ public class TransactionDAOTest {
     UserDAOImpl userDao = new UserDAOImpl();
     TransactionDAOImpl dao = new TransactionDAOImpl();
 
+    Account account = new Account(200);
+    User user = new User("admin", "admin");
+    Transaction transaction;
+
     @Before
-    public void addAccount(){
-        accountDao.save(new Account(200));
+    public void setUp(){
+        accountDao.save(account);
+        user.setAccountId(accountDao.getAll().get(0).getId());
+        userDao.save(user);
+        user.setId(userDao.getAll().get(0).getId());
+
+        transaction = new Transaction();
+        transaction.setAmount(200.0d);
+        transaction.setOperation(Transaction.Operation.DEPOSIT);
+        java.util.Date utilDate = Date.from(Instant.now());
+        java.sql.Date sqlDate = new Date(utilDate.getTime());
+        transaction.setDate(sqlDate);
+        transaction.setUserId(user.getId());
     }
 
     @After
     public void cleanRows(){
         userDao.deleteAllRows();
         accountDao.deleteAllRows();
+    }
+
+    @Test
+    public void addTransaction() {
+
+        dao.save(transaction);
+
+        assertThat(dao.getAll().get(0).getUserId(), is(user.getId()));
+
+    }
+
+    @Test
+    public void deleteTransaction(){
+
+        dao.save(transaction);
+
+        dao.deleteById(dao.getAll().get(0).getId());
+
+        assertThat(dao.getAll().size(), is(0));
+
+    }
+
+    @Test
+    public void updateTransaction(){
+
+        dao.save(transaction);
+
+        transaction = dao.getById(dao.getAll().get(0).getId());
+
+        transaction.setOperation(Transaction.Operation.WITHDRAW);
+        transaction.setAmount(445.0d);
+
+        dao.update(transaction);
+
+        Transaction updatedTransaction = dao.getAll().get(0);
+
+        assertThat(updatedTransaction.getAmount(), is(445.0d));
+        assertThat(updatedTransaction.getOperation(), is(transaction.getOperation()));
+
+    }
+
+    @Test
+    public void getTransactionByUserId(){
+
+        dao.save(transaction);
+
+        List<Transaction> dbTransactions = dao.getByUserId(transaction.getUserId());
+
+        assertThat(dbTransactions.size(), is(1));
+        assertThat(dbTransactions.get(0).getAmount(), is(transaction.getAmount()));
+
+    }
+
+    @Test
+    public void getTransactionByDate(){
+
+        dao.save(transaction);
+
+        List<Transaction> dbTransactions = dao.getByDate(transaction.getDate());
+
+        assertThat(dbTransactions.size(), is(1));
+        assertThat(dbTransactions.get(0).getAmount(), is(transaction.getAmount()));
+
+    }
+
+    @Test
+    public void getTransactionByOperation(){
+
+        dao.save(transaction);
+
+        List<Transaction> dbTransactions = dao.getByOperation(Transaction.Operation.DEPOSIT);
+
+        assertThat(dbTransactions.size(), is(1));
+        assertThat(dbTransactions.get(0).getAmount(), is(transaction.getAmount()));
+
     }
 
     @Ignore

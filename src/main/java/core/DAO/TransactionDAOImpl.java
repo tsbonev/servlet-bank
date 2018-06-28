@@ -105,10 +105,28 @@ public class TransactionDAOImpl implements TransactionDAO {
     }
 
     public void save(Transaction transaction) {
+        try{
+            PreparedStatement save = conn.prepareStatement(
+                    "INSERT INTO transactions(amount, userId, transactionDate, operation)" +
+                            " VALUES(?, ?, ?, ?)"
+            );
 
+
+
+            save.setDouble(1, transaction.getAmount());
+            save.setInt(2, transaction.getUserId());
+            save.setDate(3, transaction.getDate());
+            save.setString(4, transaction.getOperation().name());
+
+            save.execute();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public void update(Transaction transaction) {
+
         try{
             PreparedStatement update = conn.prepareStatement(
                     "UPDATE transactions" +
@@ -123,6 +141,7 @@ public class TransactionDAOImpl implements TransactionDAO {
             update.setInt(2, transaction.getUserId());
             update.setDate(3, transaction.getDate());
             update.setString(4, transaction.getOperation().name());
+            update.setInt(5, transaction.getId());
 
             update.execute();
 
