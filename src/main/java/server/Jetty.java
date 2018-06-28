@@ -47,7 +47,7 @@ public final class Jetty {
         ContextHandler staticResourceHandler = new ContextHandler();
         staticResourceHandler.setContextPath("/css");
         ResourceHandler resourceHandler = new ResourceHandler();
-        resourceHandler.setResourceBase("static");
+        resourceHandler.setResourceBase("src/main/resources/static/css");
 
         staticResourceHandler.setHandler(resourceHandler);
 
