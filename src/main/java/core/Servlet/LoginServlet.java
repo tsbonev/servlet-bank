@@ -5,6 +5,7 @@ import core.Service.UserService;
 import core.Servlet.Helpers.LoginSession;
 import core.Servlet.Helpers.Page;
 import core.Servlet.Helpers.UserCounter;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -34,6 +35,14 @@ public class LoginServlet extends HttpServlet {
         String username = req.getParameter("username");
         String password = req.getParameter("password");
 
+        if(StringUtils.isEmpty(username) || StringUtils.isEmpty(password)){
+
+            req.setAttribute("errorMessage", "Something went wrong!");
+            doGet(req, resp);
+            return;
+
+        }
+
         user.setUsername(username);
         user.setPassword(password);
 
@@ -53,7 +62,7 @@ public class LoginServlet extends HttpServlet {
         }
         else {
             req.setAttribute("errorMessage", "User not registered!");
-            doGet(req, resp);
+            this.doGet(req, resp);
         }
 
 

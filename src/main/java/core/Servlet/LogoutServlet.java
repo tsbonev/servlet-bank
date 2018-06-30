@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @WebServlet("/logout")
@@ -18,17 +19,21 @@ public class LogoutServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 
-        String sessionUsername = ((LoginSession)req.getSession().getAttribute("authorized"))
-                .getUsername();
+        HttpSession session = req.getSession();
 
-        ((LoginSession) req.getSession().getAttribute("authorized")).setAuthorized(false);
+        LoginSession loginSession = (LoginSession) session.getAttribute("authorized");
+
+        String sessionUsername = loginSession.getUsername();
+
+        loginSession.setAuthorized(false);
 
         if(UserCounter.getInstance().userIsLoggedIn(sessionUsername)){
             UserCounter.getInstance().removeUserFromCount(sessionUsername);
         }
 
-        ((UserCounter)getServletContext().getAttribute("counter")).removeUserFromCount(
-                ((LoginSession)req.getSession().getAttribute("authorized")).getUsername());
+        UserCounter.getInstance().removeUserFromCount(
+                loginSession.getUsername());
+
         req.setAttribute("infoMessage", "User logged out!");
         Page.getPage("/home", req, resp);
 

@@ -2,6 +2,7 @@ package core.DAO;
 
 import core.Model.Account;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -17,6 +18,7 @@ public class AccountDAOTest {
 
     AccountDAOImpl dao = new AccountDAOImpl();
 
+    @Before
     @After
     public void cleanRows(){
 

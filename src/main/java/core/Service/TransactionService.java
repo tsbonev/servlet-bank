@@ -27,6 +27,14 @@ public class TransactionService {
 
     }
 
+    public static TransactionService getInstance(TransactionDAO dao){
+
+        instance = new TransactionService(dao);
+
+        return instance;
+
+    }
+
     public static void clearInstance(){
 
         instance = null;

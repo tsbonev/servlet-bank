@@ -27,6 +27,14 @@ public class UserService {
 
     }
 
+    public static UserService getInstance(UserDAO dao){
+
+        instance = new UserService(dao);
+
+        return instance;
+
+    }
+
     public static void clearInstance(){
 
         instance = null;

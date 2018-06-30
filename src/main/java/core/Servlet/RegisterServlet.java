@@ -3,6 +3,7 @@ package core.Servlet;
 import core.Model.User;
 import core.Service.UserService;
 import core.Servlet.Helpers.Page;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -29,13 +30,18 @@ public class RegisterServlet extends HttpServlet {
         String username = req.getParameter("username");
         String password = req.getParameter("password");
 
+        if(StringUtils.isEmpty(username) || StringUtils.isEmpty(password)){
+            req.setAttribute("errorMessage", "Something went wrong!");
+            this.doGet(req, resp);
+            return;
+        }
+
         user.setUsername(username);
         user.setPassword(password);
 
         if(service.getUserByUsername(username).getId() != 0){
-            req.setAttribute("title", "Register");
             req.setAttribute("errorMessage", "Username taken!");
-            this.doGet(req, resp);
+            doGet(req, resp);
         }
         else {
             req.setAttribute("title", "Login");

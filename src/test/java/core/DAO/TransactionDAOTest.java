@@ -30,6 +30,10 @@ public class TransactionDAOTest {
 
     @Before
     public void setUp(){
+
+        userDao.deleteAllRows();
+        accountDao.deleteAllRows();
+
         accountDao.save(account);
         user.setAccountId(accountDao.getAll().get(0).getId());
         userDao.save(user);

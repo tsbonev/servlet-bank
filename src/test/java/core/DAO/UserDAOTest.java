@@ -21,6 +21,10 @@ public class UserDAOTest {
 
     @Before
     public void addAccount(){
+
+        dao.deleteAllRows();
+        accountDao.deleteAllRows();
+
         accountDao.save(new Account(200));
     }
 

@@ -18,9 +18,17 @@ public class AccountService {
 
     public static AccountService getInstance(){
 
-        if(instance == null) {
+        if(instance == null){
             instance = new AccountService(wireDao());
         }
+
+        return instance;
+
+    }
+
+    public static AccountService getInstance(AccountDAO dao){
+
+        instance = new AccountService(dao);
 
         return instance;
 
