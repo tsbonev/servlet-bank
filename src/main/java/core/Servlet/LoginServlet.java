@@ -2,6 +2,7 @@ package core.Servlet;
 
 import core.Model.User;
 import core.Service.UserService;
+import core.Servlet.Helpers.LoginSession;
 import core.Servlet.Helpers.Page;
 
 import javax.servlet.ServletException;
@@ -38,6 +39,10 @@ public class LoginServlet extends HttpServlet {
         boolean isInSystem = service.checkUserPassword(user);
 
         if(isInSystem){
+
+            LoginSession session = new LoginSession(username, true);
+            req.getSession().setAttribute("authorized", session);
+
             req.setAttribute("successMessage", "Successfully logged in!");
             Page.getPage("/home", req, resp);
         }

@@ -2,6 +2,7 @@ package server;
 
 import core.Servlet.HomeServlet;
 import core.Servlet.LoginServlet;
+import core.Servlet.LogoutServlet;
 import core.Servlet.RegisterServlet;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
@@ -40,6 +41,7 @@ public final class Jetty {
                 servletContext.addServlet("home", new HomeServlet()).addMapping("/", "/home");
                 servletContext.addServlet("login", new LoginServlet()).addMapping("/login");
                 servletContext.addServlet("register", new RegisterServlet()).addMapping("/register");
+                servletContext.addServlet("logout", new LogoutServlet()).addMapping("/logout");
 
             }
 

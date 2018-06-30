@@ -66,6 +66,12 @@ public class UserService {
 
     public void deleteUserById(int id){
         dao.deleteById(id);
+        deleteUserAccount(id);
+    }
+
+    private void deleteUserAccount(int id){
+        AccountService accountService = AccountService.getInstance();
+        accountService.deleteAccountById(id);
     }
 
     public List<User> getAllUsers(){

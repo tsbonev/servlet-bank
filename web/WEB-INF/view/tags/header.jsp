@@ -1,3 +1,4 @@
+<%@ page import="core.Servlet.Helpers.LoginSession" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html lang="en">
@@ -19,8 +20,21 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
+
+                <% if((session.getAttribute("authorized")) == null
+                        || !((LoginSession) session.getAttribute("authorized")).isAuthorized()){%>
                 <li><a href="login">Login</a></li>
                 <li><a href="register">Register</a></li>
+
+                <%}
+                else {%>
+
+                <li><a>Welcome, <% request.setAttribute("username",
+                        ((LoginSession) session.getAttribute("authorized")).getUsername()); %>
+                ${username}</a></li>
+                <li><a href="logout">Logout</a></li>
+                <%}%>
+
             </ul>
         </div>
     </div>
