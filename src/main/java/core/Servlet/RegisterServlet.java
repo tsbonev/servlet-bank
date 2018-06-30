@@ -2,6 +2,7 @@ package core.Servlet;
 
 import core.Model.User;
 import core.Service.UserService;
+import core.Servlet.Helpers.Page;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -34,13 +35,13 @@ public class RegisterServlet extends HttpServlet {
         if(service.getUserByUsername(username).getId() != 0){
             req.setAttribute("title", "Register");
             req.setAttribute("errorMessage", "Username taken!");
-            Page.getPage("view/user/register.jsp", req, resp);
+            this.doGet(req, resp);
         }
         else {
             req.setAttribute("title", "Login");
             service.saveUser(user);
-            req.setAttribute("successMessage", "User register successfully!");
-            Page.getPage("view/user/login.jsp", req, resp);
+            req.setAttribute("successMessage", "User registered successfully!");
+            Page.getPage("/home", req, resp);
         }
 
     }

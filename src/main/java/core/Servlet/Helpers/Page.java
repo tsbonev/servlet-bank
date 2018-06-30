@@ -1,4 +1,4 @@
-package core.Servlet;
+package core.Servlet.Helpers;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -12,7 +12,6 @@ public class Page {
 
         RequestDispatcher rd = req.getRequestDispatcher(pagePath);
         rd.forward(req, resp);
-
     }
 
 }

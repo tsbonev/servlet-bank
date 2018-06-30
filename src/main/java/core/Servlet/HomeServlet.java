@@ -1,6 +1,7 @@
 package core.Servlet;
 
-import javax.servlet.RequestDispatcher;
+import core.Servlet.Helpers.Page;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -8,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/")
+@WebServlet("/home")
 public class HomeServlet extends HttpServlet {
 
     @Override
@@ -18,4 +19,8 @@ public class HomeServlet extends HttpServlet {
         Page.getPage("view/index.jsp", req, resp);
     }
 
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        this.doGet(req, resp);
+    }
 }

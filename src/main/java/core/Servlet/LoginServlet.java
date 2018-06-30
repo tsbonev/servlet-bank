@@ -2,8 +2,8 @@ package core.Servlet;
 
 import core.Model.User;
 import core.Service.UserService;
+import core.Servlet.Helpers.Page;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -39,11 +39,11 @@ public class LoginServlet extends HttpServlet {
 
         if(isInSystem){
             req.setAttribute("successMessage", "Successfully logged in!");
-            Page.getPage("view/index.jsp", req, resp);
+            Page.getPage("/home", req, resp);
         }
         else {
             req.setAttribute("errorMessage", "User not registered!");
-            Page.getPage("view/user/login.jsp", req, resp);
+            doGet(req, resp);
         }
 
 

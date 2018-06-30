@@ -37,7 +37,7 @@ public final class Jetty {
             public void contextInitialized(ServletContextEvent servletContextEvent) {
                 ServletContext servletContext = servletContextEvent.getServletContext();
 
-                servletContext.addServlet("home", new HomeServlet()).addMapping("/");
+                servletContext.addServlet("home", new HomeServlet()).addMapping("/", "/home");
                 servletContext.addServlet("login", new LoginServlet()).addMapping("/login");
                 servletContext.addServlet("register", new RegisterServlet()).addMapping("/register");
 
