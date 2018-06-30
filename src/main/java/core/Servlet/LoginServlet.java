@@ -4,6 +4,7 @@ import core.Model.User;
 import core.Service.UserService;
 import core.Servlet.Helpers.LoginSession;
 import core.Servlet.Helpers.Page;
+import core.Servlet.Helpers.UserCounter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -39,6 +40,10 @@ public class LoginServlet extends HttpServlet {
         boolean isInSystem = service.checkUserPassword(user);
 
         if(isInSystem){
+
+            if(!UserCounter.getInstance().userIsLoggedIn(user.getUsername())){
+                UserCounter.getInstance().addUserToCount(user.getUsername());
+            }
 
             LoginSession session = new LoginSession(username, true);
             req.getSession().setAttribute("authorized", session);

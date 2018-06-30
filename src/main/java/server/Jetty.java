@@ -1,5 +1,6 @@
 package server;
 
+import core.Servlet.Helpers.UserCounter;
 import core.Servlet.HomeServlet;
 import core.Servlet.LoginServlet;
 import core.Servlet.LogoutServlet;
@@ -37,6 +38,8 @@ public final class Jetty {
 
             public void contextInitialized(ServletContextEvent servletContextEvent) {
                 ServletContext servletContext = servletContextEvent.getServletContext();
+
+                servletContext.setAttribute("counter", UserCounter.getInstance());
 
                 servletContext.addServlet("home", new HomeServlet()).addMapping("/", "/home");
                 servletContext.addServlet("login", new LoginServlet()).addMapping("/login");

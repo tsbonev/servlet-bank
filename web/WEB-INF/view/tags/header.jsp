@@ -1,4 +1,5 @@
 <%@ page import="core.Servlet.Helpers.LoginSession" %>
+<%@ page import="core.Servlet.Helpers.UserCounter" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html lang="en">
@@ -34,6 +35,8 @@
                 ${username}</a></li>
                 <li><a href="logout">Logout</a></li>
                 <%}%>
+
+                <li><a>Users in system: ${counter.getUsersCount()}</a></li>
 
             </ul>
         </div>
