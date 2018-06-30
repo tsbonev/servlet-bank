@@ -1,6 +1,7 @@
 package server;
 
 import core.Servlet.HomeServlet;
+import core.Servlet.LoginServlet;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandler;
@@ -36,6 +37,7 @@ public final class Jetty {
                 ServletContext servletContext = servletContextEvent.getServletContext();
 
                 servletContext.addServlet("home", new HomeServlet()).addMapping("/");
+                servletContext.addServlet("login", new LoginServlet()).addMapping("/login");
 
             }
 
