@@ -2,6 +2,7 @@ package core.Service;
 
 import core.DAO.UserDAO;
 import core.DAO.UserDAOImpl;
+import core.Model.Account;
 import core.Model.User;
 
 import java.util.List;
@@ -41,7 +42,22 @@ public class UserService {
     }
 
     public void saveUser(User user){
+
+        user.setAccountId(createAccountForUser().getId());
+
         dao.save(user);
+    }
+
+    private Account createAccountForUser(){
+
+        AccountService accountService = AccountService.getInstance();
+        accountService.saveAccount(new Account(0.0d));
+
+        int accountListSize = accountService.getAllAccounts().size();
+
+        Account latest = accountService.getAllAccounts().get(accountListSize - 1);
+
+        return latest;
     }
 
     public void updateUser(User user){

@@ -3,7 +3,6 @@ package core.Servlet;
 import core.Model.User;
 import core.Service.UserService;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -11,41 +10,38 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/login")
-public class LoginServlet extends HttpServlet {
+@WebServlet("/register")
+public class RegisterServlet extends HttpServlet {
 
     UserService service = UserService.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-        req.setAttribute("title", "Login");
-        Page.getPage("view/user/login.jsp", req, resp);
-
+        req.setAttribute("title", "Register");
+        Page.getPage("view/user/register.jsp", req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         User user = new User();
-
         String username = req.getParameter("username");
         String password = req.getParameter("password");
 
         user.setUsername(username);
         user.setPassword(password);
 
-        boolean isInSystem = service.checkUserPassword(user);
-
-        if(isInSystem){
-            req.setAttribute("successMessage", "Successfully logged in!");
-            Page.getPage("view/index.jsp", req, resp);
+        if(service.getUserByUsername(username).getId() != 0){
+            req.setAttribute("title", "Register");
+            req.setAttribute("errorMessage", "Username taken!");
+            Page.getPage("view/user/register.jsp", req, resp);
         }
         else {
-            req.setAttribute("errorMessage", "User not registered!");
+            req.setAttribute("title", "Login");
+            service.saveUser(user);
+            req.setAttribute("successMessage", "User register successfully!");
             Page.getPage("view/user/login.jsp", req, resp);
         }
-
 
     }
 }
