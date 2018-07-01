@@ -16,7 +16,7 @@ import java.io.IOException;
 public class LogoutServlet extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
 
         HttpSession session = req.getSession();
@@ -34,13 +34,8 @@ public class LogoutServlet extends HttpServlet {
         UserCounter.getInstance().removeUserFromCount(
                 loginSession.getUsername());
 
-        req.setAttribute("infoMessage", "User logged out!");
-        Page.getPage("/home", req, resp);
+        Page.redirectTo("/home", resp, req,
+        "infoMessage", "User logged out!");
 
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        this.doGet(req, resp);
     }
 }

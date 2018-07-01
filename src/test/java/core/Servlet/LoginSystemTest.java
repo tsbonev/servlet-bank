@@ -209,7 +209,7 @@ public class LoginSystemTest {
     }
 
     @Test
-    public void userLogsOut() throws ServletException, IOException {
+    public void userLogsOut() throws IOException {
 
         LoginSession loginSession = new LoginSession();
 
@@ -221,15 +221,16 @@ public class LoginSystemTest {
             oneOf(req).getParameter("username"); will(returnValue(realUser.getUsername()));
             oneOf(req).getParameter("password"); will(returnValue(realUser.getPassword()));
             oneOf(userDAO).checkPassword(with(any(User.class))); will(returnValue(true));
-            oneOf(req).setAttribute("successMessage", "Successfully logged in!");
             oneOf(req).getSession().setAttribute("authorized", with(any(LoginSession.class)));
-            oneOf(req).getRequestDispatcher("/home"); will(returnValue(rd));
-            oneOf(rd).forward(req, resp);
+            oneOf(req).getSession(); will(returnValue(session));
+            oneOf(session).setAttribute("successMessage", "Successfully logged in!");
+            oneOf(resp).sendRedirect("/home");
+
             oneOf(req).getSession(); will(returnValue(session));
             oneOf(session).getAttribute("authorized"); will(returnValue(loginSession));
-            oneOf(req).setAttribute("infoMessage", "User logged out!");
-            oneOf(req).getRequestDispatcher("/home"); will(returnValue(rd));
-            oneOf(rd).forward(req, resp);
+            oneOf(req).getSession(); will(returnValue(session));
+            oneOf(session).setAttribute("infoMessage", "User logged out!");
+            oneOf(resp).sendRedirect("/home");
 
         }});
 
