@@ -19,7 +19,7 @@
 
     <tr>
         <td><c:out value="${transaction.id}"></c:out></td>
-        <td><c:out value="${transaction.userId}"></c:out></td>
+        <td><c:out value="${transaction.username}"></c:out></td>
         <td><c:out value="${transaction.date}"></c:out></td>
         <td><c:out value="${transaction.operation}"></c:out></td>
         <td><c:out value="${transaction.amountFormatted}"></c:out></td>

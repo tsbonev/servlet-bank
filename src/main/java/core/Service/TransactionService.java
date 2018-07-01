@@ -77,4 +77,14 @@ public class TransactionService {
         return dao.getByUserId(userId);
     }
 
+    public void fillUsernames(List<Transaction> list){
+
+        UserService userService = UserService.getInstance();
+
+        for (Transaction transaction : list) {
+            transaction.setUsername(userService.getUserById(transaction.getUserId()).getUsername());
+        }
+
+    }
+
 }

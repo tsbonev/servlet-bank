@@ -13,6 +13,7 @@ public class Transaction {
     private int userId;
     private Date date;
     private double amount;
+    private String username;
 
     public Transaction(){}
 
@@ -67,5 +68,13 @@ public class Transaction {
 
         return String.format("%.2f", getAmount());
 
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

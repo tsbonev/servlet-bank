@@ -46,6 +46,8 @@ public class HistoryServlet extends HttpServlet {
             );
         }
 
+        service.fillUsernames(transactions);
+
         System.out.println("Passed check!");
 
         req.setAttribute("transactions", transactions);
