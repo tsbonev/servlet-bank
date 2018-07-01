@@ -1,4 +1,4 @@
-package core.Servlet;
+package core.Servlet.User;
 
 import core.Model.Account;
 import core.Service.UserService;
@@ -31,7 +31,7 @@ public class AccountServlet extends HttpServlet {
         }
 
         Account account = userService.getUserAccount(username);
-        req.setAttribute("balance", String.format("%.2f", account.getAmount()));
+        req.setAttribute("balance", account.getAmountFormatted());
 
         Page.getPage("view/user/account.jsp", req, resp);
     }

@@ -2,6 +2,12 @@ package server;
 
 import core.Servlet.*;
 import core.Servlet.Helpers.UserCounter;
+import core.Servlet.Login.LoginServlet;
+import core.Servlet.Login.LogoutServlet;
+import core.Servlet.Login.RegisterServlet;
+import core.Servlet.Transaction.HistoryServlet;
+import core.Servlet.Transaction.TransactionServlet;
+import core.Servlet.User.AccountServlet;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandler;

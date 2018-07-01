@@ -1,4 +1,4 @@
-package core.Servlet;
+package core.Servlet.Login;
 
 import core.Servlet.Helpers.LoginSession;
 import core.Servlet.Helpers.Page;

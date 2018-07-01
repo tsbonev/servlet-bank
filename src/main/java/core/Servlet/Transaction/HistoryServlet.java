@@ -1,4 +1,4 @@
-package core.Servlet;
+package core.Servlet.Transaction;
 
 import core.Model.Transaction;
 import core.Service.TransactionService;

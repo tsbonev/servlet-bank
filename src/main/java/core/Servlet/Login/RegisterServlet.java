@@ -1,4 +1,4 @@
-package core.Servlet;
+package core.Servlet.Login;
 
 import core.Model.User;
 import core.Service.UserService;

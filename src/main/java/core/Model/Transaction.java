@@ -62,4 +62,10 @@ public class Transaction {
     public void setAmount(double amount) {
         this.amount = amount;
     }
+
+    public String getAmountFormatted() {
+
+        return String.format("%.2f", getAmount());
+
+    }
 }
