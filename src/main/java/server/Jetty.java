@@ -44,6 +44,7 @@ public final class Jetty {
                 servletContext.addServlet("logout", new LogoutServlet()).addMapping("/logout");
                 servletContext.addServlet("account", new AccountServlet()).addMapping("/account");
                 servletContext.addServlet("transaction", new TransactionServlet()).addMapping("/transaction");
+                servletContext.addServlet("history", new HistoryServlet()).addMapping("/history");
 
             }
 

@@ -8,6 +8,7 @@
             <th>Balance</th>
             <th></th>
             <th></th>
+            <th></th>
         </tr>
 
     </thead>
@@ -24,6 +25,11 @@
             <td>
                 <a class="btn btn-default" href="transaction?action=withdraw">Withdraw</a>
             </td>
+
+            <td>
+                <a class="btn btn-default" href="history">View history</a>
+            </td>
+
 
         </tr>
 
