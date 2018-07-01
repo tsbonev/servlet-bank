@@ -29,9 +29,10 @@
                 <%}
                 else {%>
 
-                <li><a>Welcome, <% request.setAttribute("username",
+                <% request.setAttribute("username",
                         ((LoginSession) session.getAttribute("authorized")).getUsername()); %>
-                ${username}</a></li>
+
+                <li><a href="account?username=${username}">Welcome, ${username}</a></li>
                 <li><a href="logout">Logout</a></li>
                 <%}%>
 

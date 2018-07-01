@@ -68,6 +68,12 @@ public class UserService {
         return latest;
     }
 
+    public Account getUserAccount(String username){
+        User user = getUserByUsername(username);
+        AccountService accountService = AccountService.getInstance();
+        return accountService.getAccountById(user.getAccountId());
+    }
+
     public void updateUser(User user){
         dao.update(user);
     }
