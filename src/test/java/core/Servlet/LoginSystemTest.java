@@ -90,17 +90,17 @@ public class LoginSystemTest {
     final User realUser = new User("admin", "admin");
 
     @Test
-    public void loginWithCorrectAccount() throws ServletException, IOException {
+    public void loginWithCorrectAccount() throws IOException {
 
         context.checking(new Expectations(){{
 
             oneOf(req).getParameter("username"); will(returnValue(realUser.getUsername()));
             oneOf(req).getParameter("password"); will(returnValue(realUser.getPassword()));
             oneOf(userDAO).checkPassword(with(any(User.class))); will(returnValue(true));
-            oneOf(req).setAttribute("successMessage", "Successfully logged in!");
             oneOf(req).getSession().setAttribute("authorized", with(any(LoginSession.class)));
-            oneOf(req).getRequestDispatcher("/home"); will(returnValue(rd));
-            oneOf(rd).forward(req, resp);
+            oneOf(req).getSession(); will(returnValue(session));
+            oneOf(session).setAttribute("successMessage", "Successfully logged in!");
+            oneOf(resp).sendRedirect("/home");
 
         }});
 
@@ -111,7 +111,7 @@ public class LoginSystemTest {
     }
 
     @Test
-    public void userCounterDoesNotGoUpWithSameLogin() throws ServletException, IOException {
+    public void userCounterDoesNotGoUpWithSameLogin() throws IOException {
 
         int count = 5;
 
@@ -120,10 +120,10 @@ public class LoginSystemTest {
             allowing(req).getParameter("username"); will(returnValue(realUser.getUsername()));
             allowing(req).getParameter("password"); will(returnValue(realUser.getPassword()));
             allowing(userDAO).checkPassword(with(any(User.class))); will(returnValue(true));
-            allowing(req).setAttribute("successMessage", "Successfully logged in!");
             allowing(req).getSession().setAttribute("authorized", with(any(LoginSession.class)));
-            allowing(req).getRequestDispatcher("/home"); will(returnValue(rd));
-            allowing(rd).forward(req, resp);
+            allowing(req).getSession(); will(returnValue(session));
+            allowing(session).setAttribute("successMessage", "Successfully logged in!");
+            allowing(resp).sendRedirect("/home");
 
         }});
 
@@ -136,7 +136,7 @@ public class LoginSystemTest {
     }
 
     @Test
-    public void userCounterGoesUpWithDifferentLogins() throws ServletException, IOException {
+    public void userCounterGoesUpWithDifferentLogins() throws IOException {
 
         String username1 = "admin";
         String username2 = "user";
@@ -148,18 +148,18 @@ public class LoginSystemTest {
             oneOf(req).getParameter("username"); will(returnValue(username1));
             oneOf(req).getParameter("password"); will(returnValue(password1));
             oneOf(userDAO).checkPassword(with(any(User.class))); will(returnValue(true));
-            oneOf(req).setAttribute("successMessage", "Successfully logged in!");
             oneOf(req).getSession().setAttribute("authorized", with(any(LoginSession.class)));
-            oneOf(req).getRequestDispatcher("/home"); will(returnValue(rd));
-            oneOf(rd).forward(req, resp);
+            oneOf(req).getSession(); will(returnValue(session));
+            oneOf(session).setAttribute("successMessage", "Successfully logged in!");
+            oneOf(resp).sendRedirect("/home");
 
             oneOf(req).getParameter("username"); will(returnValue(username2));
             oneOf(req).getParameter("password"); will(returnValue(password2));
             oneOf(userDAO).checkPassword(with(any(User.class))); will(returnValue(true));
-            oneOf(req).setAttribute("successMessage", "Successfully logged in!");
             oneOf(req).getSession().setAttribute("authorized", with(any(LoginSession.class)));
-            oneOf(req).getRequestDispatcher("/home"); will(returnValue(rd));
-            oneOf(rd).forward(req, resp);
+            oneOf(req).getSession(); will(returnValue(session));
+            oneOf(session).setAttribute("successMessage", "Successfully logged in!");
+            oneOf(resp).sendRedirect("/home");
 
         }});
 
@@ -172,16 +172,15 @@ public class LoginSystemTest {
     }
 
     @Test
-    public void loginWithEmptyForm() throws ServletException, IOException {
+    public void loginWithEmptyForm() throws IOException {
 
         context.checking(new Expectations(){{
 
             oneOf(req).getParameter("username"); will(returnValue(""));
             oneOf(req).getParameter("password"); will(returnValue(null));
-            oneOf(req).setAttribute("errorMessage", "Something went wrong!");
-            oneOf(req).setAttribute("title", "Login");
-            oneOf(req).getRequestDispatcher("view/user/login.jsp"); will(returnValue(rd));
-            oneOf(rd).forward(req, resp);
+            oneOf(req).getSession(); will(returnValue(session));
+            oneOf(session).setAttribute("errorMessage", "Something went wrong!");
+            oneOf(resp).sendRedirect("/login");
 
         }});
 
@@ -190,17 +189,16 @@ public class LoginSystemTest {
     }
 
     @Test
-    public void loginWithIncorrectAccount() throws ServletException, IOException {
+    public void loginWithIncorrectAccount() throws IOException {
 
         context.checking(new Expectations(){{
 
             oneOf(req).getParameter("username"); will(returnValue(realUser.getUsername()));
             oneOf(req).getParameter("password"); will(returnValue(realUser.getPassword()));
             oneOf(userDAO).checkPassword(with(any(User.class))); will(returnValue(false));
-            oneOf(req).setAttribute("errorMessage", "User not registered!");
-            oneOf(req).setAttribute("title", "Login");
-            oneOf(req).getRequestDispatcher("view/user/login.jsp"); will(returnValue(rd));
-            oneOf(rd).forward(req, resp);
+            oneOf(req).getSession(); will(returnValue(session));
+            oneOf(session).setAttribute("errorMessage", "User not registered!");
+            oneOf(resp).sendRedirect("/home");
 
         }});
 

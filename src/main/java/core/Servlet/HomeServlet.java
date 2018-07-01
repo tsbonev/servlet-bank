@@ -18,9 +18,4 @@ public class HomeServlet extends HttpServlet {
         req.setAttribute("title", "Servlet bank");
         Page.getPage("view/index.jsp", req, resp);
     }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        this.doGet(req, resp);
-    }
 }

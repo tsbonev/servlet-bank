@@ -28,7 +28,7 @@ public class LoginServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
         User user = new User();
 
@@ -37,8 +37,8 @@ public class LoginServlet extends HttpServlet {
 
         if(StringUtils.isEmpty(username) || StringUtils.isEmpty(password)){
 
-            req.setAttribute("errorMessage", "Something went wrong!");
-            doGet(req, resp);
+            Page.redirectTo("/login", resp, req,
+                    "errorMessage", "Something went wrong!");
             return;
 
         }
@@ -57,12 +57,13 @@ public class LoginServlet extends HttpServlet {
             LoginSession session = new LoginSession(username, true);
             req.getSession().setAttribute("authorized", session);
 
-            req.setAttribute("successMessage", "Successfully logged in!");
-            Page.getPage("/home", req, resp);
+
+            Page.redirectTo("/home", resp, req,
+                    "successMessage", "Successfully logged in!");
         }
         else {
-            req.setAttribute("errorMessage", "User not registered!");
-            this.doGet(req, resp);
+            Page.redirectTo("/home", resp, req,
+                    "errorMessage", "User not registered!");
         }
 
 
