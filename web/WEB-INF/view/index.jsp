@@ -2,12 +2,12 @@
 
 <div class="container">
 
-    <h1>Welcome!</h1>
+    <h1>Welcome to the bank!</h1>
 
     <% if(session.getAttribute("authorized") != null
     && ((LoginSession) session.getAttribute("authorized")).isAuthorized()){%>
 
-    <a href="history?scope=global">View all transactions</a>
+    <a class="btn btn-default" href="history?scope=global">View all transactions</a>
 
     <%}%>
 

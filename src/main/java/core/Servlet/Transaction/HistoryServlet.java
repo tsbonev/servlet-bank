@@ -48,11 +48,7 @@ public class HistoryServlet extends HttpServlet {
 
         service.fillUsernames(transactions);
 
-        System.out.println("Passed check!");
-
         req.setAttribute("transactions", transactions);
-
-        System.out.println(transactions.size());
 
         Page.getPage("view/transaction/history.jsp", req, resp);
 
