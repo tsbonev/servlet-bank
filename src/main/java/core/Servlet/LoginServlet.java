@@ -62,7 +62,7 @@ public class LoginServlet extends HttpServlet {
                     "successMessage", "Successfully logged in!");
         }
         else {
-            Page.redirectTo("/home", resp, req,
+            Page.redirectTo("/login", resp, req,
                     "errorMessage", "User not registered!");
         }
 

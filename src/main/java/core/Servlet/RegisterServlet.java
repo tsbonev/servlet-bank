@@ -31,8 +31,8 @@ public class RegisterServlet extends HttpServlet {
         String password = req.getParameter("password");
 
         if(StringUtils.isEmpty(username) || StringUtils.isEmpty(password)){
-            req.setAttribute("errorMessage", "Something went wrong!");
-            this.doGet(req, resp);
+            Page.redirectTo("/home", resp, req,
+                    "errorMessage", "Something went wrong!");
             return;
         }
 
@@ -40,14 +40,13 @@ public class RegisterServlet extends HttpServlet {
         user.setPassword(password);
 
         if(service.getUserByUsername(username).getId() != 0){
-            req.setAttribute("errorMessage", "Username taken!");
-            doGet(req, resp);
+            Page.redirectTo("/register", resp, req,
+                    "errorMessage", "Username taken!");
         }
         else {
-            req.setAttribute("title", "Login");
             service.saveUser(user);
-            req.setAttribute("successMessage", "User registered successfully!");
-            Page.getPage("/home", req, resp);
+            Page.redirectTo("/home", resp, req,
+                    "successMessage", "User registered successfully!");
         }
 
     }
