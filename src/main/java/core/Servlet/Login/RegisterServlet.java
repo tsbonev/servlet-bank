@@ -15,6 +15,9 @@ import java.io.IOException;
 @WebServlet("/register")
 public class RegisterServlet extends HttpServlet {
 
+    private static String usernamePattern = "^[\\w]{5,15}$";
+    private static String passwordPattern = "^[\\w]{8,20}$";
+
     UserService service = UserService.getInstance();
 
     @Override
@@ -29,6 +32,12 @@ public class RegisterServlet extends HttpServlet {
         User user = new User();
         String username = req.getParameter("username");
         String password = req.getParameter("password");
+
+        if(!username.matches(usernamePattern) || !password.matches(passwordPattern)){
+            Page.redirectTo("/register", resp, req,
+                    "errorMessage", "Something went wrong!");
+            return;
+        }
 
         if(StringUtils.isEmpty(username) || StringUtils.isEmpty(password)){
             Page.redirectTo("/home", resp, req,

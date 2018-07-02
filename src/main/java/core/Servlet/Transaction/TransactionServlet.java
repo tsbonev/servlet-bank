@@ -21,9 +21,17 @@ import java.time.LocalDate;
 @WebServlet("/transaction")
 public class TransactionServlet extends HttpServlet {
 
+    private static String fraction = "^[1-9]{1}[0-9]{0,9}[.,]{1}[0-9]{1,5}$";
+    private static String wholeNumber = "^[1-9]{1}[0-9]{0,9}$/";
+    private static String leadingZeroFraction = "^[0]{1}[.,]{1}[0-9]{0,4}[1-9]{1}$";
+    private static String trailingZeroFraction = "^[0]{1}[.,]{1}[1-9]{0,4}[1-9]{1}$";
+
+
     TransactionService service = TransactionService.getInstance();
     UserService userService = UserService.getInstance();
     AccountService accountService = AccountService.getInstance();
+
+    private static double maxAmount = Double.MAX_VALUE / 4;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -45,6 +53,25 @@ public class TransactionServlet extends HttpServlet {
         Transaction.Operation operation = Transaction.Operation.valueOf(req.getParameter("action").toUpperCase());
 
         Account account = userService.getUserAccount(session.getUsername());
+
+        if(amount > maxAmount
+                || amount <= 0){
+            Page.redirectTo("/account", resp, req,
+                    "errorMessage", "Transactions of that size are not permitted!");
+            return;
+        }
+
+        String amountToString = Double.toString(amount);
+
+        if(!amountToString.matches(wholeNumber)
+            || !amountToString.matches(fraction)
+                || !amountToString.matches(trailingZeroFraction)
+                || !amountToString.matches(leadingZeroFraction)
+                ){
+            Page.redirectTo("/account", resp, req,
+                    "errorMessage", "Transaction amount format invalid!");
+            return;
+        }
 
         Transaction transaction = new Transaction();
         transaction.setDate(Date.valueOf(LocalDate.now()));

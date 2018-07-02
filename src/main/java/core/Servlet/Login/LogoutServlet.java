@@ -4,7 +4,6 @@ import core.Servlet.Helpers.LoginSession;
 import core.Servlet.Helpers.Page;
 import core.Servlet.Helpers.UserCounter;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
