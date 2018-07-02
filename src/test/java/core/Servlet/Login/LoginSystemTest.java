@@ -83,7 +83,7 @@ public class LoginSystemTest {
     }
 
 
-    final User realUser = new User("admin", "admin");
+    final User realUser = new User("admin", "password");
 
     @Test
     public void loginWithCorrectAccount() throws IOException {
@@ -345,7 +345,7 @@ public class LoginSystemTest {
             oneOf(req).getSession();
             will(returnValue(session));
             oneOf(session).setAttribute("errorMessage", "Something went wrong!");
-            oneOf(resp).sendRedirect("/home");
+            oneOf(resp).sendRedirect("/register");
 
         }});
 

@@ -3,7 +3,6 @@ package core.Servlet.Login;
 import core.Model.User;
 import core.Service.UserService;
 import core.Servlet.Helpers.Page;
-import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.regex.Pattern;
 
 @WebServlet("/register")
 public class RegisterServlet extends HttpServlet {
@@ -33,14 +33,8 @@ public class RegisterServlet extends HttpServlet {
         String username = req.getParameter("username");
         String password = req.getParameter("password");
 
-        if(!username.matches(usernamePattern) || !password.matches(passwordPattern)){
+        if(!Pattern.matches(usernamePattern, username) || !Pattern.matches(passwordPattern, password)){
             Page.redirectTo("/register", resp, req,
-                    "errorMessage", "Something went wrong!");
-            return;
-        }
-
-        if(StringUtils.isEmpty(username) || StringUtils.isEmpty(password)){
-            Page.redirectTo("/home", resp, req,
                     "errorMessage", "Something went wrong!");
             return;
         }

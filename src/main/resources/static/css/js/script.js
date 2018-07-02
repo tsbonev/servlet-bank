@@ -16,6 +16,52 @@ function checkPasswordRepeat() {
     
 }
 
+function checkUsername() {
+
+    var value = document.getElementById("username").value;
+
+    var usernameRegex = /^[\w]{5,15}$/;
+
+    var result = usernameRegex.test(value);
+
+    if(!result){
+        document.getElementById("username-validation").innerHTML = "Invalid username, must be " +
+            "between 5 and 15 alphanumeric characters!";
+        return false;
+    }
+    else {
+        document.getElementById("username-validation").innerHTML = "";
+        return true;
+    }
+
+}
+
+function checkPassword() {
+
+    var value = document.getElementById("password").value;
+
+    var passwordRegex = /^[\w]{8,20}$/;
+
+    var result = passwordRegex.test(value);
+
+    if(!result){
+        document.getElementById("password-validation").innerHTML = "Invalid password, must be " +
+            "between 8 and 20 alphanumeric characters!";
+        return false;
+    }
+    else {
+        document.getElementById("password-validation").innerHTML = "";
+        return true;
+    }
+
+}
+
+function checkRegistrable() {
+
+    return (checkUsername() && checkPassword());
+
+}
+
 function checkNumber() {
 
     var value = document.getElementById("action-amount").value;
