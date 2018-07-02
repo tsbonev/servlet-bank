@@ -13,6 +13,7 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -126,6 +127,24 @@ public class TransactionDAOTest {
 
         assertThat(dbTransactions.size(), is(1));
         assertThat(dbTransactions.get(0).getAmount(), is(transaction.getAmount()));
+
+    }
+
+    @Test
+    public void paginateTransactions(){
+
+        dao.setPageSize(10);
+
+        List<Transaction> transactionList = new ArrayList<>();
+
+        for(int i = 0; i < 44; i++){
+            transaction.setAmount(i);
+            transactionList.add(transaction);
+            dao.save(transaction);
+        }
+
+        assertThat(dao.getAll(2).size(), is(10));
+        assertThat(dao.getAll(2).get(0).getAmount(), is(10.0));
 
     }
 

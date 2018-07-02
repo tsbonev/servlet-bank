@@ -61,6 +61,22 @@ public class TransactionService {
         dao.deleteById(id);
     }
 
+    public boolean hasNextPage(int currPage){
+
+        int rowCount = dao.getCount();
+        if(rowCount <= dao.getPageSize() * currPage)
+            return false;
+
+            return true;
+
+    }
+
+    public int lastPage(){
+
+        return (dao.getCount() + dao.getPageSize() - 1) / dao.getPageSize();
+
+    }
+
     public List<Transaction> getAllTransactions(int page){
         return dao.getAll(page);
     }

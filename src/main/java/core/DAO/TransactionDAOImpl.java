@@ -25,6 +25,10 @@ public class TransactionDAOImpl implements TransactionDAO {
         TransactionDAOImpl.pageSize = pageSize;
     }
 
+    public int getPageSize(){
+        return TransactionDAOImpl.pageSize;
+    }
+
     public Transaction getById(int id) {
         Transaction transaction = new Transaction();
 

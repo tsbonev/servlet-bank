@@ -26,6 +26,7 @@ public interface TransactionDAO {
     List<Transaction> getByOperation(Transaction.Operation operation, int page);
 
     void setPageSize(int pageSize);
+    int getPageSize();
 
     int getCount();
 
