@@ -9,7 +9,7 @@ public interface TransactionDAO {
 
     Transaction getById(int id);
 
-    List<Transaction> getAll();
+    List<Transaction> getAll(int page);
 
     void deleteById(int id);
 
@@ -19,11 +19,14 @@ public interface TransactionDAO {
 
     void update(Transaction transaction);
 
-    List<Transaction> getByUserId(int id);
+    List<Transaction> getByUserId(int id, int page);
 
-    List<Transaction> getByDate(Date date);
+    List<Transaction> getByDate(Date date, int page);
 
-    List<Transaction> getByOperation(Transaction.Operation operation);
+    List<Transaction> getByOperation(Transaction.Operation operation, int page);
 
+    void setPageSize(int pageSize);
+
+    int getCount();
 
 }

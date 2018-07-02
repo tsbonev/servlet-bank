@@ -1,6 +1,5 @@
 package core.DAO;
 
-import core.Model.Account;
 import core.Model.Transaction;
 
 import java.sql.*;
@@ -10,6 +9,8 @@ import java.util.List;
 @SuppressWarnings("Duplicates")
 public class TransactionDAOImpl implements TransactionDAO {
 
+    private static int pageSize = 20;
+
     private Connection conn;
 
     protected Connection getConnection(){
@@ -18,6 +19,10 @@ public class TransactionDAOImpl implements TransactionDAO {
 
     public TransactionDAOImpl(){
         this.conn = getConnection();
+    }
+
+    public void setPageSize(int pageSize) {
+        TransactionDAOImpl.pageSize = pageSize;
     }
 
     public Transaction getById(int id) {
@@ -48,13 +53,16 @@ public class TransactionDAOImpl implements TransactionDAO {
         return transaction;
     }
 
-    public List<Transaction> getAll() {
+    public List<Transaction> getAll(int page) {
         List<Transaction> transactionList = new ArrayList<Transaction>();
 
         try{
             PreparedStatement get = conn.prepareStatement(
-                    "SELECT * FROM transactions"
+                    "SELECT * FROM transactions LIMIT ? OFFSET ?"
             );
+
+            get.setInt(1, pageSize);
+            get.setInt(2, (page - 1) * pageSize);
 
             ResultSet result = get.executeQuery();
 
@@ -150,17 +158,19 @@ public class TransactionDAOImpl implements TransactionDAO {
         }
     }
 
-    public List<Transaction> getByUserId(int id) {
+    public List<Transaction> getByUserId(int id, int page) {
         List<Transaction> transactionList = new ArrayList<Transaction>();
 
         try {
 
             PreparedStatement get = conn.prepareStatement(
                     "SELECT * FROM transactions" +
-                            " WHERE userId = ?"
+                            " WHERE userId = ? LIMIT ? OFFSET ?"
             );
 
             get.setInt(1, id);
+            get.setInt(2, pageSize);
+            get.setInt(3, (page - 1) * pageSize);
 
             ResultSet result = get.executeQuery();
 
@@ -184,17 +194,20 @@ public class TransactionDAOImpl implements TransactionDAO {
         return transactionList;
     }
 
-    public List<Transaction> getByDate(Date date) {
+    public List<Transaction> getByDate(Date date, int page) {
         List<Transaction> transactionList = new ArrayList<Transaction>();
 
         try {
 
             PreparedStatement get = conn.prepareStatement(
                     "SELECT * FROM transactions" +
-                            " WHERE transactionDate LIKE ?"
+                            " WHERE transactionDate LIKE ?" +
+                            " LIMIT ? OFFSET ?"
             );
 
             get.setDate(1, date);
+            get.setInt(2, pageSize);
+            get.setInt(3, (page - 1) * pageSize);
 
             ResultSet result = get.executeQuery();
 
@@ -219,7 +232,7 @@ public class TransactionDAOImpl implements TransactionDAO {
 
     }
 
-    public List<Transaction> getByOperation(Transaction.Operation operation) {
+    public List<Transaction> getByOperation(Transaction.Operation operation, int page) {
 
         List<Transaction> transactionList = new ArrayList<Transaction>();
 
@@ -229,10 +242,13 @@ public class TransactionDAOImpl implements TransactionDAO {
 
             PreparedStatement get = conn.prepareStatement(
                     "SELECT * FROM transactions" +
-                            " WHERE operation LIKE ?"
+                            " WHERE operation LIKE ?" +
+                            " LIMIT ? OFFSET ?"
             );
 
             get.setString(1, parsedOperation);
+            get.setInt(2, pageSize);
+            get.setInt(3, (page - 1) * pageSize);
 
             ResultSet result = get.executeQuery();
 
@@ -274,6 +290,29 @@ public class TransactionDAOImpl implements TransactionDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+    }
+
+    public int getCount(){
+
+        int numberOfRows = 0;
+
+        try {
+            PreparedStatement count = conn.prepareStatement(
+                    "SELECT COUNT(id) FROM transactions"
+            );
+
+            ResultSet result = count.executeQuery();
+
+            while (result.next()){
+                numberOfRows++;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return numberOfRows;
 
     }
 

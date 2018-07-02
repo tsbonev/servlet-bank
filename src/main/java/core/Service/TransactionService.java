@@ -61,20 +61,20 @@ public class TransactionService {
         dao.deleteById(id);
     }
 
-    public List<Transaction> getAllTransactions(){
-        return dao.getAll();
+    public List<Transaction> getAllTransactions(int page){
+        return dao.getAll(page);
     }
 
-    public List<Transaction> getTransactionsByOperation(Transaction.Operation operation){
-        return dao.getByOperation(operation);
+    public List<Transaction> getTransactionsByOperation(Transaction.Operation operation, int page){
+        return dao.getByOperation(operation, page);
     }
 
-    public List<Transaction> getTransactionsByDate(Date date){
-        return dao.getByDate(date);
+    public List<Transaction> getTransactionsByDate(Date date, int page){
+        return dao.getByDate(date, page);
     }
 
-    public List<Transaction> getTransactionsByUserId(int userId){
-        return dao.getByUserId(userId);
+    public List<Transaction> getTransactionsByUserId(int userId, int page){
+        return dao.getByUserId(userId, page);
     }
 
     public void fillUsernames(List<Transaction> list){

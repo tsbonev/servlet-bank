@@ -32,12 +32,12 @@ public class HistoryServlet extends HttpServlet {
 
         if(!StringUtils.isEmpty(scope) && scope.equalsIgnoreCase("global")){
 
-            transactions = service.getAllTransactions();
+            transactions = service.getAllTransactions(1);
 
         }else {
             transactions = service.getTransactionsByUserId(
                     userService.getUserByUsername(
-                            session.getUsername()).getId()
+                            session.getUsername()).getId(), 1
             );
         }
 

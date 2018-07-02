@@ -59,7 +59,7 @@ public class TransactionDAOTest {
 
         dao.save(transaction);
 
-        assertThat(dao.getAll().get(0).getUserId(), is(user.getId()));
+        assertThat(dao.getAll(1).get(0).getUserId(), is(user.getId()));
 
     }
 
@@ -68,9 +68,9 @@ public class TransactionDAOTest {
 
         dao.save(transaction);
 
-        dao.deleteById(dao.getAll().get(0).getId());
+        dao.deleteById(dao.getAll(1).get(0).getId());
 
-        assertThat(dao.getAll().size(), is(0));
+        assertThat(dao.getAll(1).size(), is(0));
 
     }
 
@@ -79,14 +79,14 @@ public class TransactionDAOTest {
 
         dao.save(transaction);
 
-        transaction = dao.getById(dao.getAll().get(0).getId());
+        transaction = dao.getById(dao.getAll(1).get(0).getId());
 
         transaction.setOperation(Transaction.Operation.WITHDRAW);
         transaction.setAmount(445.0d);
 
         dao.update(transaction);
 
-        Transaction updatedTransaction = dao.getAll().get(0);
+        Transaction updatedTransaction = dao.getAll(1).get(0);
 
         assertThat(updatedTransaction.getAmount(), is(445.0d));
         assertThat(updatedTransaction.getOperation(), is(transaction.getOperation()));
@@ -98,7 +98,7 @@ public class TransactionDAOTest {
 
         dao.save(transaction);
 
-        List<Transaction> dbTransactions = dao.getByUserId(transaction.getUserId());
+        List<Transaction> dbTransactions = dao.getByUserId(transaction.getUserId(), 1);
 
         assertThat(dbTransactions.size(), is(1));
         assertThat(dbTransactions.get(0).getAmount(), is(transaction.getAmount()));
@@ -110,7 +110,7 @@ public class TransactionDAOTest {
 
         dao.save(transaction);
 
-        List<Transaction> dbTransactions = dao.getByDate(transaction.getDate());
+        List<Transaction> dbTransactions = dao.getByDate(transaction.getDate(), 1);
 
         assertThat(dbTransactions.size(), is(1));
         assertThat(dbTransactions.get(0).getAmount(), is(transaction.getAmount()));
@@ -122,7 +122,7 @@ public class TransactionDAOTest {
 
         dao.save(transaction);
 
-        List<Transaction> dbTransactions = dao.getByOperation(Transaction.Operation.DEPOSIT);
+        List<Transaction> dbTransactions = dao.getByOperation(Transaction.Operation.DEPOSIT, 1);
 
         assertThat(dbTransactions.size(), is(1));
         assertThat(dbTransactions.get(0).getAmount(), is(transaction.getAmount()));
