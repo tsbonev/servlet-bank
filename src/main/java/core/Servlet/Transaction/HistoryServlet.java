@@ -3,7 +3,6 @@ package core.Servlet.Transaction;
 import core.Model.Transaction;
 import core.Service.TransactionService;
 import core.Service.UserService;
-import core.Servlet.Helpers.LoginCheck;
 import core.Servlet.Helpers.LoginSession;
 import core.Servlet.Helpers.Page;
 import org.apache.commons.lang3.StringUtils;
@@ -26,10 +25,6 @@ public class HistoryServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         LoginSession session = (LoginSession) req.getSession().getAttribute("authorized");
-
-        if(!LoginCheck.checkLogged(session, req, resp)) {
-            return;
-        }
 
         String scope = req.getParameter("scope");
 

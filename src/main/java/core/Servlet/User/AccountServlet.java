@@ -2,10 +2,7 @@ package core.Servlet.User;
 
 import core.Model.Account;
 import core.Service.UserService;
-import core.Servlet.Helpers.LoginCheck;
-import core.Servlet.Helpers.LoginSession;
 import core.Servlet.Helpers.Page;
-import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,12 +20,6 @@ public class AccountServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         String username = req.getParameter("username");
-
-        LoginSession session = (LoginSession) req.getSession().getAttribute("authorized");
-
-        if(!LoginCheck.checkLogged(session, req, resp) || !LoginCheck.checkUsername(session, username, req, resp)){
-            return;
-        }
 
         Account account = userService.getUserAccount(username);
         req.setAttribute("balance", account.getAmountFormatted());

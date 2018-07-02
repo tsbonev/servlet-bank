@@ -1,6 +1,8 @@
 package server;
 
 import core.Servlet.*;
+import core.Servlet.Filter.AuthenticationFilter;
+import core.Servlet.Filter.AuthorizationFilter;
 import core.Servlet.Helpers.UserCounter;
 import core.Servlet.Login.LoginServlet;
 import core.Servlet.Login.LogoutServlet;
@@ -51,6 +53,10 @@ public final class Jetty {
                 servletContext.addServlet("account", new AccountServlet()).addMapping("/account");
                 servletContext.addServlet("transaction", new TransactionServlet()).addMapping("/transaction");
                 servletContext.addServlet("history", new HistoryServlet()).addMapping("/history");
+                servletContext.addFilter("loginFilter", new AuthenticationFilter())
+                        .addMappingForUrlPatterns(null, false, "/*");
+                servletContext.addFilter("accountFilter", new AuthorizationFilter())
+                        .addMappingForUrlPatterns(null, false, "/account");
 
             }
 

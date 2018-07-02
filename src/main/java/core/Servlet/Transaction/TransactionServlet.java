@@ -5,7 +5,6 @@ import core.Model.Transaction;
 import core.Service.AccountService;
 import core.Service.TransactionService;
 import core.Service.UserService;
-import core.Servlet.Helpers.LoginCheck;
 import core.Servlet.Helpers.LoginSession;
 import core.Servlet.Helpers.Page;
 import org.apache.commons.lang3.StringUtils;
@@ -29,12 +28,6 @@ public class TransactionServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        LoginSession session = (LoginSession) req.getSession().getAttribute("authorized");
-
-        if(!LoginCheck.checkLogged(session, req, resp)){
-            return;
-        }
-
         String action = req.getParameter("action");
         action = StringUtils.capitalize(action);
         req.setAttribute("action", action);
@@ -47,10 +40,6 @@ public class TransactionServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         LoginSession session = (LoginSession) req.getSession().getAttribute("authorized");
-
-        if(!LoginCheck.checkLogged(session, req, resp)){
-            return;
-        }
 
         double amount = Double.parseDouble(req.getParameter("amount").replace(",", "."));
         Transaction.Operation operation = Transaction.Operation.valueOf(req.getParameter("action").toUpperCase());
