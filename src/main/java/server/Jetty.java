@@ -53,6 +53,9 @@ public final class Jetty {
                 servletContext.addServlet("account", new AccountServlet()).addMapping("/account");
                 servletContext.addServlet("transaction", new TransactionServlet()).addMapping("/transaction");
                 servletContext.addServlet("history", new HistoryServlet()).addMapping("/history");
+                servletContext.addServlet("error", new ErrorHandler()).addMapping("/error");
+
+
                 servletContext.addFilter("loginFilter", new AuthenticationFilter())
                         .addMappingForUrlPatterns(null, false, "/*");
                 servletContext.addFilter("accountFilter", new AuthorizationFilter())
