@@ -303,14 +303,13 @@ public class TransactionDAOImpl implements TransactionDAO {
 
         try {
             PreparedStatement count = conn.prepareStatement(
-                    "SELECT COUNT(id) FROM transactions"
+                    "SELECT COUNT(*) as total FROM transactions"
             );
 
             ResultSet result = count.executeQuery();
+            result.next();
+            numberOfRows = result.getInt("total");
 
-            while (result.next()){
-                numberOfRows++;
-            }
 
         } catch (SQLException e) {
             e.printStackTrace();

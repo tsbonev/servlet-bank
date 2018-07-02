@@ -16,7 +16,6 @@
 
 <c:forEach var="transaction" items="${transactions}">
 
-
     <tr>
         <td><c:out value="${transaction.id}"></c:out></td>
         <td><c:out value="${transaction.username}"></c:out></td>
@@ -25,10 +24,35 @@
         <td><c:out value="${transaction.amountFormatted}"></c:out></td>
     </tr>
 
-
 </c:forEach>
 
 </tbody>
+
+    <tfoot align="center">
+
+    <tr>
+
+        <td><a class="btn btn-default" href="history?page=1">First</a></td>
+
+        <td><a class="btn btn-default" onclick="window.location.href='history?page=${currPage - 1}'"
+
+               <c:if test="${currPage <= 1}">disabled=""</c:if>
+
+        >Previous</a></td>
+
+        <td>${currPage} / ${totalPage}</td>
+
+        <td><button class="btn btn-default" onclick="window.location.href='history?page=${currPage + 1}'"
+
+              <c:if test="${!hasNext}">disabled=""</c:if>
+
+        >Next</button></td>
+
+        <td><a class="btn btn-default" href="history?page=${totalPage}">Last</a></td>
+
+    </tr>
+
+    </tfoot>
 
 </table>
 

@@ -61,6 +61,12 @@ public class TransactionService {
         dao.deleteById(id);
     }
 
+    public void setPageSize(int pageSize){
+
+        dao.setPageSize(pageSize);
+
+    }
+
     public boolean hasNextPage(int currPage){
 
         int rowCount = dao.getCount();
@@ -71,10 +77,12 @@ public class TransactionService {
 
     }
 
+    public int pageCount(){
+        return dao.getCount();
+    }
+
     public int lastPage(){
-
         return (dao.getCount() + dao.getPageSize() - 1) / dao.getPageSize();
-
     }
 
     public List<Transaction> getAllTransactions(int page){

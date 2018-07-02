@@ -1,5 +1,6 @@
 package core.Servlet.Transaction;
 
+import core.DAO.TransactionDAOImpl;
 import core.Model.Transaction;
 import core.Service.TransactionService;
 import core.Service.UserService;
@@ -24,6 +25,19 @@ public class HistoryServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+        int currPage;
+
+        try {
+            currPage = (Integer.parseInt(req.getParameter("page")));
+        }
+        catch (Exception e){
+            currPage = 1;
+        }
+
+        req.setAttribute("hasNext", service.hasNextPage(currPage));
+        req.setAttribute("currPage", currPage);
+        req.setAttribute("totalPage", service.lastPage());
+
         LoginSession session = (LoginSession) req.getSession().getAttribute("authorized");
 
         String scope = req.getParameter("scope");
@@ -32,12 +46,12 @@ public class HistoryServlet extends HttpServlet {
 
         if(!StringUtils.isEmpty(scope) && scope.equalsIgnoreCase("global")){
 
-            transactions = service.getAllTransactions(1);
+            transactions = service.getAllTransactions(currPage);
 
         }else {
             transactions = service.getTransactionsByUserId(
                     userService.getUserByUsername(
-                            session.getUsername()).getId(), 1
+                            session.getUsername()).getId(), currPage
             );
         }
 
