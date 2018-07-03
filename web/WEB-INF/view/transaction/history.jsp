@@ -34,11 +34,11 @@
 
         <td><a class="btn btn-default" href="history?page=1">First</a></td>
 
-        <td><a class="btn btn-default" onclick="window.location.href='history?page=${currPage - 1}'"
+        <td><button class="btn btn-default" onclick="window.location.href='history?page=${currPage - 1}'"
 
                <c:if test="${currPage <= 1}">disabled=""</c:if>
 
-        >Previous</a></td>
+        >Previous</button></td>
 
         <td>${currPage} / ${totalPage}</td>
 
