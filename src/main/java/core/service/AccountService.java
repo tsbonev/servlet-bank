@@ -1,19 +1,19 @@
 package core.service;
 
-import core.repository.AccountDAO;
-import core.repository.AccountDAOImpl;
+import core.repository.AccountRepository;
+import core.repository.AccountRepositoryImpl;
 import core.model.Account;
 
 import java.util.List;
 
 public class AccountService {
 
-    private static AccountDAO dao;
+    private static AccountRepository dao;
 
     private static AccountService instance;
 
-    protected static AccountDAO wireDao(){
-        return new AccountDAOImpl();
+    protected static AccountRepository wireDao(){
+        return new AccountRepositoryImpl();
     }
 
     public static AccountService getInstance(){
@@ -26,7 +26,7 @@ public class AccountService {
 
     }
 
-    public static AccountService getInstance(AccountDAO dao){
+    public static AccountService getInstance(AccountRepository dao){
 
         instance = new AccountService(dao);
 
@@ -40,7 +40,7 @@ public class AccountService {
 
     }
 
-    private AccountService(AccountDAO dao){
+    private AccountService(AccountRepository dao){
         this.dao = dao;
     }
 

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("Duplicates")
-public class TransactionDAOImpl implements TransactionDAO {
+public class TransactionRepositoryImpl implements TransactionRepository {
 
     private static int pageSize = 20;
 
@@ -17,16 +17,16 @@ public class TransactionDAOImpl implements TransactionDAO {
         return MySQLConnection.getConnection();
     }
 
-    public TransactionDAOImpl(){
+    public TransactionRepositoryImpl(){
         this.conn = getConnection();
     }
 
     public void setPageSize(int pageSize) {
-        TransactionDAOImpl.pageSize = pageSize;
+        TransactionRepositoryImpl.pageSize = pageSize;
     }
 
     public int getPageSize(){
-        return TransactionDAOImpl.pageSize;
+        return TransactionRepositoryImpl.pageSize;
     }
 
     public Transaction getById(int id) {

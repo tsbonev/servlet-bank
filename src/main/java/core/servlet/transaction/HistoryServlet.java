@@ -4,7 +4,7 @@ import core.model.Transaction;
 import core.service.TransactionService;
 import core.service.UserService;
 import core.servlet.helpers.LoginSession;
-import core.servlet.helpers.Page;
+import core.servlet.helpers.PageImpl;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.ServletException;
@@ -58,7 +58,7 @@ public class HistoryServlet extends HttpServlet {
 
         req.setAttribute("transactions", transactions);
 
-        Page.getPage("view/transaction/history.jsp", req, resp);
+        PageImpl.getPage("view/transaction/history.jsp", req, resp);
 
     }
 }

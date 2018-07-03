@@ -1,7 +1,7 @@
 package core.servlet.filter;
 
 import core.servlet.helpers.LoginSession;
-import core.servlet.helpers.Page;
+import core.servlet.helpers.PageImpl;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -38,7 +38,7 @@ public class AuthenticationFilter implements Filter {
             filterChain.doFilter(servletRequest, servletResponse);
         }
         else {
-            Page.redirectTo("/login", resp, req,
+            PageImpl.redirectTo("/login", resp, req,
                     "infoMessage", "You must be logged in to view this page!");
         }
 

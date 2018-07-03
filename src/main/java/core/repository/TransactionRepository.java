@@ -5,7 +5,7 @@ import core.model.Transaction;
 import java.sql.Date;
 import java.util.List;
 
-public interface TransactionDAO {
+public interface TransactionRepository {
 
     Transaction getById(int id);
 

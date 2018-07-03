@@ -4,7 +4,7 @@ import core.model.User;
 
 import java.util.List;
 
-public interface UserDAO {
+public interface UserRepository {
 
     User getById(int id);
 

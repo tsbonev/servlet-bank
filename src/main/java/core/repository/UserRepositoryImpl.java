@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("Duplicates")
-public class UserDAOImpl implements UserDAO {
+public class UserRepositoryImpl implements UserRepository {
 
 
     private Connection conn;
@@ -16,7 +16,7 @@ public class UserDAOImpl implements UserDAO {
         return MySQLConnection.getConnection();
     }
 
-    public UserDAOImpl(){
+    public UserRepositoryImpl(){
         this.conn = getConnection();
     }
 

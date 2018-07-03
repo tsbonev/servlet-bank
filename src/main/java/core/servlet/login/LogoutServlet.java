@@ -1,7 +1,7 @@
 package core.servlet.login;
 
 import core.servlet.helpers.LoginSession;
-import core.servlet.helpers.Page;
+import core.servlet.helpers.PageImpl;
 import core.servlet.helpers.UserCounter;
 
 import javax.servlet.annotation.WebServlet;
@@ -33,7 +33,7 @@ public class LogoutServlet extends HttpServlet {
         UserCounter.getInstance().removeUserFromCount(
                 loginSession.getUsername());
 
-        Page.redirectTo("/home", resp, req,
+        PageImpl.redirectTo("/home", resp, req,
         "infoMessage", "User logged out!");
 
     }

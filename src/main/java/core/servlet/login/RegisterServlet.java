@@ -2,7 +2,7 @@ package core.servlet.login;
 
 import core.model.User;
 import core.service.UserService;
-import core.servlet.helpers.Page;
+import core.servlet.helpers.PageImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,7 +23,7 @@ public class RegisterServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setAttribute("title", "Register");
-        Page.getPage("view/user/register.jsp", req, resp);
+        PageImpl.getPage("view/user/register.jsp", req, resp);
     }
 
     @Override
@@ -34,7 +34,7 @@ public class RegisterServlet extends HttpServlet {
         String password = req.getParameter("password");
 
         if(!Pattern.matches(usernamePattern, username) || !Pattern.matches(passwordPattern, password)){
-            Page.redirectTo("/register", resp, req,
+            PageImpl.redirectTo("/register", resp, req,
                     "errorMessage", "Something went wrong!");
             return;
         }
@@ -43,12 +43,12 @@ public class RegisterServlet extends HttpServlet {
         user.setPassword(password);
 
         if(service.getUserByUsername(username).getId() != 0){
-            Page.redirectTo("/register", resp, req,
+            PageImpl.redirectTo("/register", resp, req,
                     "errorMessage", "Username taken!");
         }
         else {
             service.saveUser(user);
-            Page.redirectTo("/home", resp, req,
+            PageImpl.redirectTo("/home", resp, req,
                     "successMessage", "User registered successfully!");
         }
 

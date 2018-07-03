@@ -1,7 +1,7 @@
 package core.service;
 
-import core.repository.TransactionDAO;
-import core.repository.TransactionDAOImpl;
+import core.repository.TransactionRepository;
+import core.repository.TransactionRepositoryImpl;
 import core.model.Transaction;
 
 import java.sql.Date;
@@ -9,12 +9,12 @@ import java.util.List;
 
 public class TransactionService {
 
-    private static TransactionDAO dao;
+    private static TransactionRepository dao;
 
     private static TransactionService instance;
 
-    protected static TransactionDAO wireDao(){
-        return new TransactionDAOImpl();
+    protected static TransactionRepository wireDao(){
+        return new TransactionRepositoryImpl();
     }
 
     public static TransactionService getInstance(){
@@ -27,7 +27,7 @@ public class TransactionService {
 
     }
 
-    public static TransactionService getInstance(TransactionDAO dao){
+    public static TransactionService getInstance(TransactionRepository dao){
 
         instance = new TransactionService(dao);
 
@@ -41,7 +41,7 @@ public class TransactionService {
 
     }
 
-    private TransactionService(TransactionDAO dao){
+    private TransactionService(TransactionRepository dao){
         this.dao = dao;
     }
 

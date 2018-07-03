@@ -4,7 +4,7 @@ import core.model.Account;
 
 import java.util.List;
 
-public interface AccountDAO {
+public interface AccountRepository {
 
     Account getById(int id);
 

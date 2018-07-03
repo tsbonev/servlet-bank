@@ -1,7 +1,7 @@
 package core.servlet.filter;
 
 import core.servlet.helpers.LoginSession;
-import core.servlet.helpers.Page;
+import core.servlet.helpers.PageImpl;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -43,7 +43,7 @@ public class AuthorizationFilter implements Filter {
             filterChain.doFilter(servletRequest, servletResponse);
         }
         else {
-            Page.redirectTo("/home", resp, req,
+            PageImpl.redirectTo("/home", resp, req,
                     "errorMessage", "You do not have access to this page!");
         }
 

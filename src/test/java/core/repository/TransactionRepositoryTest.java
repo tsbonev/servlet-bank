@@ -19,11 +19,11 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class TransactionDAOTest {
+public class TransactionRepositoryTest {
 
-    AccountDAOImpl accountDao = new AccountDAOImpl();
-    UserDAOImpl userDao = new UserDAOImpl();
-    TransactionDAOImpl dao = new TransactionDAOImpl();
+    AccountRepositoryImpl accountDao = new AccountRepositoryImpl();
+    UserRepositoryImpl userDao = new UserRepositoryImpl();
+    TransactionRepositoryImpl dao = new TransactionRepositoryImpl();
 
     Account account = new Account(200);
     User user = new User("admin", "admin");

@@ -3,7 +3,7 @@ package core.servlet.login;
 import core.model.User;
 import core.service.UserService;
 import core.servlet.helpers.LoginSession;
-import core.servlet.helpers.Page;
+import core.servlet.helpers.PageImpl;
 import core.servlet.helpers.UserCounter;
 import org.apache.commons.lang3.StringUtils;
 
@@ -23,7 +23,7 @@ public class LoginServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         req.setAttribute("title", "login");
-        Page.getPage("view/user/login.jsp", req, resp);
+        PageImpl.getPage("view/user/login.jsp", req, resp);
 
     }
 
@@ -37,7 +37,7 @@ public class LoginServlet extends HttpServlet {
 
         if(StringUtils.isEmpty(username) || StringUtils.isEmpty(password)){
 
-            Page.redirectTo("/login", resp, req,
+            PageImpl.redirectTo("/login", resp, req,
                     "errorMessage", "Something went wrong!");
             return;
 
@@ -58,11 +58,11 @@ public class LoginServlet extends HttpServlet {
             req.getSession().setAttribute("authorized", session);
 
 
-            Page.redirectTo("/home", resp, req,
+            PageImpl.redirectTo("/home", resp, req,
                     "successMessage", "Successfully logged in!");
         }
         else {
-            Page.redirectTo("/login", resp, req,
+            PageImpl.redirectTo("/login", resp, req,
                     "errorMessage", "User not registered!");
         }
 

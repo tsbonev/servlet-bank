@@ -1,7 +1,7 @@
 package core.service;
 
-import core.repository.UserDAO;
-import core.repository.UserDAOImpl;
+import core.repository.UserRepository;
+import core.repository.UserRepositoryImpl;
 import core.model.Account;
 import core.model.User;
 
@@ -9,12 +9,12 @@ import java.util.List;
 
 public class UserService {
 
-    private static UserDAO dao;
+    private static UserRepository dao;
 
     private static UserService instance;
 
-    protected static UserDAO wireDao(){
-        return new UserDAOImpl();
+    protected static UserRepository wireDao(){
+        return new UserRepositoryImpl();
     }
 
     public static UserService getInstance(){
@@ -27,7 +27,7 @@ public class UserService {
 
     }
 
-    public static UserService getInstance(UserDAO dao){
+    public static UserService getInstance(UserRepository dao){
 
         instance = new UserService(dao);
 
@@ -41,7 +41,7 @@ public class UserService {
 
     }
 
-    private UserService(UserDAO dao){
+    private UserService(UserRepository dao){
         this.dao = dao;
     }
 

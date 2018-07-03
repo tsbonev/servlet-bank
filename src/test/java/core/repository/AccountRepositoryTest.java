@@ -13,10 +13,10 @@ import java.sql.SQLException;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.CoreMatchers.is;
 
-public class AccountDAOTest {
+public class AccountRepositoryTest {
 
 
-    AccountDAOImpl dao = new AccountDAOImpl();
+    AccountRepositoryImpl dao = new AccountRepositoryImpl();
 
     @Before
     @After

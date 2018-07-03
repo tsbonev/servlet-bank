@@ -6,7 +6,7 @@ import java.util.List;
 
 import core.model.Account;
 
-public class AccountDAOImpl implements AccountDAO {
+public class AccountRepositoryImpl implements AccountRepository {
 
     private Connection conn;
 
@@ -14,7 +14,7 @@ public class AccountDAOImpl implements AccountDAO {
         return MySQLConnection.getConnection();
     }
 
-    public AccountDAOImpl(){
+    public AccountRepositoryImpl(){
         this.conn = getConnection();
     }
 

@@ -1,7 +1,7 @@
 package core.servlet.login;
 
-import core.repository.AccountDAO;
-import core.repository.UserDAO;
+import core.repository.AccountRepository;
+import core.repository.UserRepository;
 import core.model.Account;
 import core.model.User;
 import core.service.AccountService;
@@ -35,10 +35,10 @@ public class LoginSystemTest {
     public JUnitRuleMockery context = new JUnitRuleMockery();
 
     @Mock
-    public UserDAO userDAO;
+    public UserRepository userRepository;
 
     @Mock
-    public AccountDAO accountDAO;
+    public AccountRepository accountRepository;
 
     @Mock
     public HttpServletRequest req;
@@ -64,8 +64,8 @@ public class LoginSystemTest {
         AccountService.clearInstance();
         UserCounter.clearInstance();
 
-        userService = UserService.getInstance(userDAO);
-        accountService = AccountService.getInstance(accountDAO);
+        userService = UserService.getInstance(userRepository);
+        accountService = AccountService.getInstance(accountRepository);
 
         loginServlet = new LoginServlet();
         logoutServlet = new LogoutServlet();
@@ -94,7 +94,7 @@ public class LoginSystemTest {
             will(returnValue(realUser.getUsername()));
             oneOf(req).getParameter("password");
             will(returnValue(realUser.getPassword()));
-            oneOf(userDAO).checkPassword(with(any(User.class)));
+            oneOf(userRepository).checkPassword(with(any(User.class)));
             will(returnValue(true));
             oneOf(req).getSession().setAttribute("authorized", with(any(LoginSession.class)));
             oneOf(req).getSession();
@@ -121,7 +121,7 @@ public class LoginSystemTest {
             will(returnValue(realUser.getUsername()));
             allowing(req).getParameter("password");
             will(returnValue(realUser.getPassword()));
-            allowing(userDAO).checkPassword(with(any(User.class)));
+            allowing(userRepository).checkPassword(with(any(User.class)));
             will(returnValue(true));
             allowing(req).getSession().setAttribute("authorized", with(any(LoginSession.class)));
             allowing(req).getSession();
@@ -153,7 +153,7 @@ public class LoginSystemTest {
             will(returnValue(username1));
             oneOf(req).getParameter("password");
             will(returnValue(password1));
-            oneOf(userDAO).checkPassword(with(any(User.class)));
+            oneOf(userRepository).checkPassword(with(any(User.class)));
             will(returnValue(true));
             oneOf(req).getSession().setAttribute("authorized", with(any(LoginSession.class)));
             oneOf(req).getSession();
@@ -165,7 +165,7 @@ public class LoginSystemTest {
             will(returnValue(username2));
             oneOf(req).getParameter("password");
             will(returnValue(password2));
-            oneOf(userDAO).checkPassword(with(any(User.class)));
+            oneOf(userRepository).checkPassword(with(any(User.class)));
             will(returnValue(true));
             oneOf(req).getSession().setAttribute("authorized", with(any(LoginSession.class)));
             oneOf(req).getSession();
@@ -212,7 +212,7 @@ public class LoginSystemTest {
             will(returnValue(realUser.getUsername()));
             oneOf(req).getParameter("password");
             will(returnValue(realUser.getPassword()));
-            oneOf(userDAO).checkPassword(with(any(User.class)));
+            oneOf(userRepository).checkPassword(with(any(User.class)));
             will(returnValue(false));
             oneOf(req).getSession();
             will(returnValue(session));
@@ -241,7 +241,7 @@ public class LoginSystemTest {
             will(returnValue(realUser.getUsername()));
             oneOf(req).getParameter("password");
             will(returnValue(realUser.getPassword()));
-            oneOf(userDAO).checkPassword(with(any(User.class)));
+            oneOf(userRepository).checkPassword(with(any(User.class)));
             will(returnValue(true));
             oneOf(req).getSession().setAttribute("authorized", with(any(LoginSession.class)));
             oneOf(req).getSession();
@@ -281,7 +281,7 @@ public class LoginSystemTest {
             will(returnValue(realUser.getUsername()));
             oneOf(req).getParameter("password");
             will(returnValue(realUser.getPassword()));
-            oneOf(userDAO).getByUsername("admin");
+            oneOf(userRepository).getByUsername("admin");
             will(returnValue(realUser));
 
             oneOf(req).getSession();
@@ -313,13 +313,13 @@ public class LoginSystemTest {
             will(returnValue(realUser.getUsername()));
             oneOf(req).getParameter("password");
             will(returnValue(realUser.getPassword()));
-            oneOf(userDAO).getByUsername("admin");
+            oneOf(userRepository).getByUsername("admin");
             will(returnValue(realUser));
 
-            oneOf(accountDAO).save(with(any(Account.class)));
-            exactly(2).of(accountDAO).getAll();
+            oneOf(accountRepository).save(with(any(Account.class)));
+            exactly(2).of(accountRepository).getAll();
             will(returnValue(accountList));
-            oneOf(userDAO).save(with(any(User.class)));
+            oneOf(userRepository).save(with(any(User.class)));
 
             oneOf(req).getSession();
             will(returnValue(session));

@@ -6,7 +6,7 @@ import core.service.AccountService;
 import core.service.TransactionService;
 import core.service.UserService;
 import core.servlet.helpers.LoginSession;
-import core.servlet.helpers.Page;
+import core.servlet.helpers.PageImpl;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.ServletException;
@@ -40,7 +40,7 @@ public class TransactionServlet extends HttpServlet {
         action = StringUtils.capitalize(action);
         req.setAttribute("action", action);
 
-        Page.getPage("view/transaction/doTransaction.jsp", req, resp);
+        PageImpl.getPage("view/transaction/doTransaction.jsp", req, resp);
 
     }
 
@@ -56,7 +56,7 @@ public class TransactionServlet extends HttpServlet {
 
         if(amount > maxAmount
                 || amount <= 0){
-            Page.redirectTo("/account", resp, req,
+            PageImpl.redirectTo("/account", resp, req,
                     "errorMessage", "Transactions of that size are not permitted!");
             return;
         }
@@ -68,7 +68,7 @@ public class TransactionServlet extends HttpServlet {
                 && !amountToString.matches(trailingZeroFraction)
                 && !amountToString.matches(leadingZeroFraction)
                 ){
-            Page.redirectTo("/account", resp, req,
+            PageImpl.redirectTo("/account", resp, req,
                     "errorMessage", "transaction amount format invalid!");
             return;
         }
@@ -89,7 +89,7 @@ public class TransactionServlet extends HttpServlet {
         accountService.updateAccount(account);
         service.saveTransaction(transaction);
 
-        Page.redirectTo("/account?username=" + session.getUsername(), resp, req,
+        PageImpl.redirectTo("/account?username=" + session.getUsername(), resp, req,
                 "successMessage", "transaction successful!");
 
 
