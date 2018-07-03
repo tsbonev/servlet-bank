@@ -1,5 +1,7 @@
 package core.servlet.login;
 
+import core.model.Transaction;
+import core.repository.TransactionRepository;
 import core.repository.UserRepository;
 import core.model.User;
 import core.servlet.helper.LoginSession;
@@ -34,6 +36,9 @@ public class LoginSystemTest {
     private UserRepository userRepository;
 
     @Mock
+    private TransactionRepository transactionRepository;
+
+    @Mock
     private HttpServletRequest req;
 
     @Mock
@@ -63,10 +68,12 @@ public class LoginSystemTest {
                 repo.setConnection(conn);
             }
         };
-        registerServlet = new RegisterServlet(page, userRepository){
+        registerServlet = new RegisterServlet(page, userRepository, transactionRepository){
             @Override
-            protected void setConnection(UserRepository repo){
-                repo.setConnection(conn);
+            protected void setConnection(UserRepository userRepository,
+                                         TransactionRepository transactionRepository){
+                userRepository.setConnection(conn);
+                transactionRepository.setConnection(conn);
             }
         };
 
@@ -290,6 +297,7 @@ public class LoginSystemTest {
         context.checking(new Expectations() {{
 
             oneOf(userRepository).setConnection(conn);
+            oneOf(transactionRepository).setConnection(conn);
 
             oneOf(req).getParameter("username");
             will(returnValue(realUser.getUsername()));
@@ -315,14 +323,16 @@ public class LoginSystemTest {
         context.checking(new Expectations() {{
 
             oneOf(userRepository).setConnection(conn);
+            oneOf(transactionRepository).setConnection(conn);
 
             oneOf(req).getParameter("username");
             will(returnValue(realUser.getUsername()));
             oneOf(req).getParameter("password");
             will(returnValue(realUser.getPassword()));
-            oneOf(userRepository).getByUsername("admin");
-            will(returnValue(realUser));
             oneOf(userRepository).save(with(any(User.class)));
+            exactly(2).of(userRepository).getByUsername("admin");
+            will(returnValue(realUser));
+            oneOf(transactionRepository).save(with(any(Transaction.class)));
 
 
             oneOf(page).redirectTo("/home", resp, req,
@@ -340,6 +350,7 @@ public class LoginSystemTest {
         context.checking(new Expectations() {{
 
             oneOf(userRepository).setConnection(conn);
+            oneOf(transactionRepository).setConnection(conn);
 
             oneOf(req).getParameter("username");
             will(returnValue(""));

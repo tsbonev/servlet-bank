@@ -56,7 +56,7 @@ public final class Jetty {
 
                 servletContext.addServlet("home", new HomeServlet(page)).addMapping("/", "/home");
                 servletContext.addServlet("login", new LoginServlet(page, userRepo)).addMapping("/login");
-                servletContext.addServlet("register", new RegisterServlet(page, userRepo)).addMapping("/register");
+                servletContext.addServlet("register", new RegisterServlet(page, userRepo, transactionRepo)).addMapping("/register");
                 servletContext.addServlet("logout", new LogoutServlet(page)).addMapping("/logout");
                 servletContext.addServlet("account", new AccountServlet(page)).addMapping("/account");
                 servletContext.addServlet("transaction", new TransactionServlet(page)).addMapping("/transaction");

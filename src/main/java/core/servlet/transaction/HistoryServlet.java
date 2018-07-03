@@ -29,8 +29,8 @@ public class HistoryServlet extends HttpServlet {
     public HistoryServlet(Page page, TransactionRepository transactionRepository,
                           UserRepository userRepository){
         this.page = page;
-        this.userRepository = new UserRepositoryImpl();
-        this.transactionRepository = new TransactionRepositoryImpl();
+        this.userRepository = userRepository;
+        this.transactionRepository = transactionRepository;
     }
 
     protected void setConnection(TransactionRepository transactionRepository,
