@@ -54,7 +54,6 @@ public final class Jetty {
                 Page page = new PageImpl();
                 UserRepository userRepo = new UserRepositoryImpl();
                 TransactionRepository transactionRepo = new TransactionRepositoryImpl();
-                AccountRepository accountRepo = new AccountRepositoryImpl();
 
                 servletContext.addServlet("home", new HomeServlet(page)).addMapping("/", "/home");
                 servletContext.addServlet("login", new LoginServlet(page, userRepo)).addMapping("/login");

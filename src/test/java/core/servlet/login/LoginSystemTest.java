@@ -1,11 +1,7 @@
 package core.servlet.login;
 
-import core.repository.AccountRepository;
 import core.repository.UserRepository;
-import core.model.Account;
 import core.model.User;
-import core.service.AccountService;
-import core.service.UserService;
 import core.servlet.helpers.LoginSession;
 import core.servlet.helpers.Page;
 import core.servlet.helpers.UserCounter;
@@ -23,8 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.Connection;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.CoreMatchers.is;
@@ -36,41 +31,53 @@ public class LoginSystemTest {
     public JUnitRuleMockery context = new JUnitRuleMockery();
 
     @Mock
-    public UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Mock
-    public AccountRepository accountRepository;
+    private HttpServletRequest req;
 
     @Mock
-    public HttpServletRequest req;
+    private HttpServletResponse resp;
 
     @Mock
-    public HttpServletResponse resp;
+    private HttpSession session;
 
     @Mock
-    public HttpSession session;
+    private Page page;
 
     @Mock
-    public Page page;
+    private Connection conn;
 
-    public LoginServlet loginServlet;
-    public RegisterServlet registerServlet;
-    public LogoutServlet logoutServlet;
+    private LoginServlet loginServlet;
+    private RegisterServlet registerServlet;
+    private LogoutServlet logoutServlet;
 
 
 
     @Before
     public void setUp() {
 
-        loginServlet = new LoginServlet(page, userRepository);
+        loginServlet = new LoginServlet(page, userRepository){
+            @Override
+            protected void setConnection(UserRepository repo){
+                repo.setConnection(conn);
+            }
+        };
+        registerServlet = new RegisterServlet(page, userRepository){
+            @Override
+            protected void setConnection(UserRepository repo){
+                repo.setConnection(conn);
+            }
+        };
+
         logoutServlet = new LogoutServlet(page);
-        registerServlet = new RegisterServlet(page, userRepository);
 
     }
 
     @After
     public void cleanUp() {
 
+        UserCounter.clearInstance();
 
     }
 
@@ -82,17 +89,19 @@ public class LoginSystemTest {
 
         context.checking(new Expectations() {{
 
+            oneOf(userRepository).setConnection(conn);
+
             oneOf(req).getParameter("username");
             will(returnValue(realUser.getUsername()));
             oneOf(req).getParameter("password");
             will(returnValue(realUser.getPassword()));
+
             oneOf(userRepository).checkPassword(with(any(User.class)));
             will(returnValue(true));
+
             oneOf(req).getSession().setAttribute("authorized", with(any(LoginSession.class)));
-            oneOf(req).getSession();
-            will(returnValue(session));
-            oneOf(session).setAttribute("successMessage", "Successfully logged in!");
-            oneOf(resp).sendRedirect("/home");
+            oneOf(page).redirectTo("/home", resp, req, "successMessage",
+                    "Successfully logged in!");
 
         }});
 
@@ -109,17 +118,21 @@ public class LoginSystemTest {
 
         context.checking(new Expectations() {{
 
+            allowing(userRepository).setConnection(conn);
+
             allowing(req).getParameter("username");
             will(returnValue(realUser.getUsername()));
             allowing(req).getParameter("password");
             will(returnValue(realUser.getPassword()));
+
             allowing(userRepository).checkPassword(with(any(User.class)));
             will(returnValue(true));
+
             allowing(req).getSession().setAttribute("authorized", with(any(LoginSession.class)));
-            allowing(req).getSession();
-            will(returnValue(session));
-            allowing(session).setAttribute("successMessage", "Successfully logged in!");
-            allowing(resp).sendRedirect("/home");
+
+            allowing(req).getSession().setAttribute("authorized", with(any(LoginSession.class)));
+            allowing(page).redirectTo("/home", resp, req, "successMessage",
+                    "Successfully logged in!");
 
         }});
 
@@ -141,29 +154,34 @@ public class LoginSystemTest {
 
         context.checking(new Expectations() {{
 
+            oneOf(userRepository).setConnection(conn);
+
             oneOf(req).getParameter("username");
             will(returnValue(username1));
             oneOf(req).getParameter("password");
             will(returnValue(password1));
+
             oneOf(userRepository).checkPassword(with(any(User.class)));
             will(returnValue(true));
             oneOf(req).getSession().setAttribute("authorized", with(any(LoginSession.class)));
-            oneOf(req).getSession();
-            will(returnValue(session));
-            oneOf(session).setAttribute("successMessage", "Successfully logged in!");
-            oneOf(resp).sendRedirect("/home");
+
+            oneOf(page).redirectTo("/home", resp, req,
+                    "successMessage", "Successfully logged in!");
+
+            oneOf(userRepository).setConnection(conn);
 
             oneOf(req).getParameter("username");
             will(returnValue(username2));
             oneOf(req).getParameter("password");
             will(returnValue(password2));
+
             oneOf(userRepository).checkPassword(with(any(User.class)));
             will(returnValue(true));
+
             oneOf(req).getSession().setAttribute("authorized", with(any(LoginSession.class)));
-            oneOf(req).getSession();
-            will(returnValue(session));
-            oneOf(session).setAttribute("successMessage", "Successfully logged in!");
-            oneOf(resp).sendRedirect("/home");
+
+            oneOf(page).redirectTo("/home", resp, req,
+                    "successMessage", "Successfully logged in!");
 
         }});
 
@@ -180,14 +198,15 @@ public class LoginSystemTest {
 
         context.checking(new Expectations() {{
 
+            oneOf(userRepository).setConnection(conn);
+
             oneOf(req).getParameter("username");
             will(returnValue(""));
             oneOf(req).getParameter("password");
             will(returnValue(null));
-            oneOf(req).getSession();
-            will(returnValue(session));
-            oneOf(session).setAttribute("errorMessage", "Something went wrong!");
-            oneOf(resp).sendRedirect("/login");
+
+            oneOf(page).redirectTo("/login", resp, req,
+                    "errorMessage", "Something went wrong!");
 
         }});
 
@@ -200,16 +219,17 @@ public class LoginSystemTest {
 
         context.checking(new Expectations() {{
 
+            oneOf(userRepository).setConnection(conn);
+
             oneOf(req).getParameter("username");
             will(returnValue(realUser.getUsername()));
             oneOf(req).getParameter("password");
             will(returnValue(realUser.getPassword()));
             oneOf(userRepository).checkPassword(with(any(User.class)));
             will(returnValue(false));
-            oneOf(req).getSession();
-            will(returnValue(session));
-            oneOf(session).setAttribute("errorMessage", "User not registered!");
-            oneOf(resp).sendRedirect("/login");
+
+            oneOf(page).redirectTo("/login", resp, req,
+                    "errorMessage", "User not registered!");
 
         }});
 
@@ -229,6 +249,8 @@ public class LoginSystemTest {
 
         context.checking(new Expectations() {{
 
+            oneOf(userRepository).setConnection(conn);
+
             oneOf(req).getParameter("username");
             will(returnValue(realUser.getUsername()));
             oneOf(req).getParameter("password");
@@ -236,19 +258,17 @@ public class LoginSystemTest {
             oneOf(userRepository).checkPassword(with(any(User.class)));
             will(returnValue(true));
             oneOf(req).getSession().setAttribute("authorized", with(any(LoginSession.class)));
-            oneOf(req).getSession();
-            will(returnValue(session));
-            oneOf(session).setAttribute("successMessage", "Successfully logged in!");
-            oneOf(resp).sendRedirect("/home");
+            oneOf(page).redirectTo("/home", resp, req,
+                    "successMessage", "Successfully logged in!");
 
             oneOf(req).getSession();
             will(returnValue(session));
             oneOf(session).getAttribute("authorized");
             will(returnValue(loginSession));
-            oneOf(req).getSession();
-            will(returnValue(session));
-            oneOf(session).setAttribute("infoMessage", "User logged out!");
-            oneOf(resp).sendRedirect("/home");
+
+
+            oneOf(page).redirectTo("/home", resp, req,
+                    "infoMessage", "User logged out!");
 
         }});
 
@@ -269,6 +289,8 @@ public class LoginSystemTest {
 
         context.checking(new Expectations() {{
 
+            oneOf(userRepository).setConnection(conn);
+
             oneOf(req).getParameter("username");
             will(returnValue(realUser.getUsername()));
             oneOf(req).getParameter("password");
@@ -276,10 +298,8 @@ public class LoginSystemTest {
             oneOf(userRepository).getByUsername("admin");
             will(returnValue(realUser));
 
-            oneOf(req).getSession();
-            will(returnValue(session));
-            oneOf(session).setAttribute("errorMessage", "Username taken!");
-            oneOf(resp).sendRedirect("/register");
+            oneOf(page).redirectTo("/register", resp, req,
+                    "errorMessage", "Username taken!");
 
         }});
 
@@ -290,16 +310,11 @@ public class LoginSystemTest {
     @Test
     public void registerUser() throws ServletException, IOException {
 
-        Account account = new Account();
-        account.setId(1);
-
-        List<Account> accountList = new ArrayList<>();
-
-        accountList.add(account);
-
         realUser.setId(0);
 
         context.checking(new Expectations() {{
+
+            oneOf(userRepository).setConnection(conn);
 
             oneOf(req).getParameter("username");
             will(returnValue(realUser.getUsername()));
@@ -307,16 +322,11 @@ public class LoginSystemTest {
             will(returnValue(realUser.getPassword()));
             oneOf(userRepository).getByUsername("admin");
             will(returnValue(realUser));
-
-            oneOf(accountRepository).save(with(any(Account.class)));
-            exactly(2).of(accountRepository).getAll();
-            will(returnValue(accountList));
             oneOf(userRepository).save(with(any(User.class)));
 
-            oneOf(req).getSession();
-            will(returnValue(session));
-            oneOf(session).setAttribute("successMessage", "User registered successfully!");
-            oneOf(resp).sendRedirect("/home");
+
+            oneOf(page).redirectTo("/home", resp, req,
+                    "successMessage", "User registered successfully!");
 
         }});
 
@@ -329,15 +339,15 @@ public class LoginSystemTest {
 
         context.checking(new Expectations() {{
 
+            oneOf(userRepository).setConnection(conn);
+
             oneOf(req).getParameter("username");
             will(returnValue(""));
             oneOf(req).getParameter("password");
             will(returnValue(null));
 
-            oneOf(req).getSession();
-            will(returnValue(session));
-            oneOf(session).setAttribute("errorMessage", "Something went wrong!");
-            oneOf(resp).sendRedirect("/register");
+            oneOf(page).redirectTo("/register", resp, req,
+                    "errorMessage", "Something went wrong!");
 
         }});
 

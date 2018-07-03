@@ -1,8 +1,6 @@
 package core.servlet.transaction;
 
-import core.model.Account;
 import core.model.Transaction;
-import core.service.AccountService;
 import core.service.TransactionService;
 import core.service.UserService;
 import core.servlet.helpers.LoginSession;
@@ -29,7 +27,6 @@ public class TransactionServlet extends HttpServlet {
 
     TransactionService service = TransactionService.getInstance();
     UserService userService = UserService.getInstance();
-    AccountService accountService = AccountService.getInstance();
 
     Page page;
 
@@ -57,8 +54,6 @@ public class TransactionServlet extends HttpServlet {
 
         double amount = Double.parseDouble(req.getParameter("amount").replace(",", "."));
         Transaction.Operation operation = Transaction.Operation.valueOf(req.getParameter("action").toUpperCase());
-
-        Account account = userService.getUserAccount(session.getUsername());
 
         if(amount > maxAmount
                 || amount <= 0){
@@ -91,8 +86,6 @@ public class TransactionServlet extends HttpServlet {
             amount *= -1;
         }
 
-        account.setAmount(account.getAmount() + amount);
-        accountService.updateAccount(account);
         service.saveTransaction(transaction);
 
         page.redirectTo("/account?username=" + session.getUsername(), resp, req,

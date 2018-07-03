@@ -1,6 +1,5 @@
 package core.repository;
 
-import core.model.Account;
 import core.model.Transaction;
 import core.model.User;
 import org.junit.After;
@@ -8,10 +7,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.sql.DatabaseMetaData;
-import java.sql.Date;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,24 +17,26 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class TransactionRepositoryTest {
 
-    AccountRepositoryImpl accountDao = new AccountRepositoryImpl();
-    UserRepositoryImpl userDao = new UserRepositoryImpl();
-    TransactionRepositoryImpl dao = new TransactionRepositoryImpl();
+    UserRepositoryImpl userRepository = new UserRepositoryImpl();
+    TransactionRepositoryImpl transactionRepository = new TransactionRepositoryImpl();
 
-    Account account = new Account(200);
     User user = new User("admin", "admin");
     Transaction transaction;
+
+    Connection connection;
 
     @Before
     public void setUp(){
 
-        userDao.deleteAllRows();
-        accountDao.deleteAllRows();
+         connection = MySQLConnection.getConnection();
 
-        accountDao.save(account);
-        user.setAccountId(accountDao.getAll().get(0).getId());
-        userDao.save(user);
-        user.setId(userDao.getAll().get(0).getId());
+        userRepository.setConnection(connection);
+        transactionRepository.setConnection(connection);
+
+        userRepository.deleteAllRows();
+
+        userRepository.save(user);
+        user.setId(userRepository.getAll().get(0).getId());
 
         transaction = new Transaction();
         transaction.setAmount(200.0d);
@@ -50,44 +48,44 @@ public class TransactionRepositoryTest {
     }
 
     @After
-    public void cleanRows(){
-        userDao.deleteAllRows();
-        accountDao.deleteAllRows();
+    public void cleanRows() throws SQLException {
+        userRepository.deleteAllRows();
+        connection.close();
     }
 
     @Test
     public void addTransaction() {
 
-        dao.save(transaction);
+        transactionRepository.save(transaction);
 
-        assertThat(dao.getAll(1).get(0).getUserId(), is(user.getId()));
+        assertThat(transactionRepository.getAll(1).get(0).getUserId(), is(user.getId()));
 
     }
 
     @Test
     public void deleteTransaction(){
 
-        dao.save(transaction);
+        transactionRepository.save(transaction);
 
-        dao.deleteById(dao.getAll(1).get(0).getId());
+        transactionRepository.deleteById(transactionRepository.getAll(1).get(0).getId());
 
-        assertThat(dao.getAll(1).size(), is(0));
+        assertThat(transactionRepository.getAll(1).size(), is(0));
 
     }
 
     @Test
     public void updateTransaction(){
 
-        dao.save(transaction);
+        transactionRepository.save(transaction);
 
-        transaction = dao.getById(dao.getAll(1).get(0).getId());
+        transaction = transactionRepository.getById(transactionRepository.getAll(1).get(0).getId());
 
         transaction.setOperation(Transaction.Operation.WITHDRAW);
         transaction.setAmount(445.0d);
 
-        dao.update(transaction);
+        transactionRepository.update(transaction);
 
-        Transaction updatedTransaction = dao.getAll(1).get(0);
+        Transaction updatedTransaction = transactionRepository.getAll(1).get(0);
 
         assertThat(updatedTransaction.getAmount(), is(445.0d));
         assertThat(updatedTransaction.getOperation(), is(transaction.getOperation()));
@@ -97,9 +95,9 @@ public class TransactionRepositoryTest {
     @Test
     public void getTransactionByUserId(){
 
-        dao.save(transaction);
+        transactionRepository.save(transaction);
 
-        List<Transaction> dbTransactions = dao.getByUserId(transaction.getUserId(), 1);
+        List<Transaction> dbTransactions = transactionRepository.getByUserId(transaction.getUserId(), 1);
 
         assertThat(dbTransactions.size(), is(1));
         assertThat(dbTransactions.get(0).getAmount(), is(transaction.getAmount()));
@@ -109,9 +107,9 @@ public class TransactionRepositoryTest {
     @Test
     public void getTransactionByDate(){
 
-        dao.save(transaction);
+        transactionRepository.save(transaction);
 
-        List<Transaction> dbTransactions = dao.getByDate(transaction.getDate(), 1);
+        List<Transaction> dbTransactions = transactionRepository.getByDate(transaction.getDate(), 1);
 
         assertThat(dbTransactions.size(), is(1));
         assertThat(dbTransactions.get(0).getAmount(), is(transaction.getAmount()));
@@ -121,9 +119,9 @@ public class TransactionRepositoryTest {
     @Test
     public void getTransactionByOperation(){
 
-        dao.save(transaction);
+        transactionRepository.save(transaction);
 
-        List<Transaction> dbTransactions = dao.getByOperation(Transaction.Operation.DEPOSIT, 1);
+        List<Transaction> dbTransactions = transactionRepository.getByOperation(Transaction.Operation.DEPOSIT, 1);
 
         assertThat(dbTransactions.size(), is(1));
         assertThat(dbTransactions.get(0).getAmount(), is(transaction.getAmount()));
@@ -133,18 +131,18 @@ public class TransactionRepositoryTest {
     @Test
     public void paginateTransactions(){
 
-        dao.setPageSize(10);
+        transactionRepository.setPageSize(10);
 
         List<Transaction> transactionList = new ArrayList<>();
 
         for(int i = 0; i < 44; i++){
             transaction.setAmount(i);
             transactionList.add(transaction);
-            dao.save(transaction);
+            transactionRepository.save(transaction);
         }
 
-        assertThat(dao.getAll(2).size(), is(10));
-        assertThat(dao.getAll(2).get(0).getAmount(), is(10.0));
+        assertThat(transactionRepository.getAll(2).size(), is(10));
+        assertThat(transactionRepository.getAll(2).get(0).getAmount(), is(10.0));
 
     }
 
@@ -152,9 +150,9 @@ public class TransactionRepositoryTest {
     @Test
     public void createTable() throws SQLException {
 
-        dao.createTransactionTable();
+        transactionRepository.createTransactionTable();
 
-        DatabaseMetaData dbm = dao.getMetaData();
+        DatabaseMetaData dbm = transactionRepository.getMetaData();
 
         ResultSet tables = dbm.getTables(null, null, "transactions", null);
 
@@ -166,9 +164,9 @@ public class TransactionRepositoryTest {
     @Test
     public void dropTable() throws SQLException {
 
-        DatabaseMetaData dbm = dao.getMetaData();
+        DatabaseMetaData dbm = transactionRepository.getMetaData();
 
-        dao.dropTransactionTable();
+        transactionRepository.dropTransactionTable();
 
         ResultSet tables = dbm.getTables(null, null, "transactions", null);
 

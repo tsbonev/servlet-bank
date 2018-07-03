@@ -2,7 +2,6 @@ package core.service;
 
 import core.repository.UserRepository;
 import core.repository.UserRepositoryImpl;
-import core.model.Account;
 import core.model.User;
 
 import java.util.List;
@@ -51,27 +50,7 @@ public class UserService {
 
     public void saveUser(User user){
 
-        user.setAccountId(createAccountForUser().getId());
-
         dao.save(user);
-    }
-
-    private Account createAccountForUser(){
-
-        AccountService accountService = AccountService.getInstance();
-        accountService.saveAccount(new Account(0.0d));
-
-        int accountListSize = accountService.getAllAccounts().size();
-
-        Account latest = accountService.getAllAccounts().get(accountListSize - 1);
-
-        return latest;
-    }
-
-    public Account getUserAccount(String username){
-        User user = getUserByUsername(username);
-        AccountService accountService = AccountService.getInstance();
-        return accountService.getAccountById(user.getAccountId());
     }
 
     public void updateUser(User user){
@@ -80,12 +59,6 @@ public class UserService {
 
     public void deleteUserById(int id){
         dao.deleteById(id);
-        deleteUserAccount(id);
-    }
-
-    private void deleteUserAccount(int id){
-        AccountService accountService = AccountService.getInstance();
-        accountService.deleteAccountById(id);
     }
 
     public List<User> getAllUsers(){

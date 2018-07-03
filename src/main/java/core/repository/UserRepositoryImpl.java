@@ -9,7 +9,6 @@ import java.util.List;
 @SuppressWarnings("Duplicates")
 public class UserRepositoryImpl implements UserRepository {
 
-
     private Connection conn;
 
     public UserRepositoryImpl(){ }
@@ -34,7 +33,6 @@ public class UserRepositoryImpl implements UserRepository {
 
             while (result.next()){
                 user.setId(result.getInt("id"));
-                user.setAccountId(result.getInt("accountId"));
                 user.setUsername(result.getString("username"));
                 user.setPassword(result.getString("password"));
             }
@@ -60,7 +58,6 @@ public class UserRepositoryImpl implements UserRepository {
             while (result.next()){
                 User user = new User();
                 user.setId(result.getInt("id"));
-                user.setAccountId(result.getInt("accountId"));
                 user.setUsername(result.getString("username"));
                 user.setPassword(result.getString("password"));
                 users.add(user);
@@ -104,13 +101,12 @@ public class UserRepositoryImpl implements UserRepository {
     public void save(User user) {
         try{
             PreparedStatement save = conn.prepareStatement(
-                    "INSERT INTO userDb(username, password, accountId)" +
-                            " VALUES(?, ?, ?)"
+                    "INSERT INTO userDb(username, password)" +
+                            " VALUES(?, ?)"
             );
 
             save.setString(1, user.getUsername());
             save.setString(2, user.getPassword());
-            save.setInt(3, user.getAccountId());
 
             save.execute();
 
@@ -124,15 +120,13 @@ public class UserRepositoryImpl implements UserRepository {
             PreparedStatement update = conn.prepareStatement(
                     "UPDATE userDb" +
                             " SET username = ?," +
-                            "password = ?," +
-                            "accountId = ?" +
+                            "password = ?" +
                             " WHERE id = ?"
             );
 
             update.setString(1, user.getUsername());
             update.setString(2, user.getPassword());
-            update.setInt(3, user.getAccountId());
-            update.setInt(4, user.getId());
+            update.setInt(3, user.getId());
 
             update.execute();
 
@@ -156,7 +150,6 @@ public class UserRepositoryImpl implements UserRepository {
 
             while (result.next()){
                 user.setId(result.getInt("id"));
-                user.setAccountId(result.getInt("accountId"));
                 user.setUsername(result.getString("username"));
                 user.setPassword(result.getString("password"));
             }
@@ -196,9 +189,7 @@ public class UserRepositoryImpl implements UserRepository {
                             "id int NOT NULL AUTO_INCREMENT," +
                             "username varchar(255) NOT NULL," +
                             "password varchar(255) NOT NULL," +
-                            "accountId int NOT NULL," +
-                            "PRIMARY KEY(id)," +
-                            "FOREIGN KEY(accountId) REFERENCES account(id) ON DELETE CASCADE)"
+                            "PRIMARY KEY(id))"
             );
             create.execute();
         } catch (SQLException e) {

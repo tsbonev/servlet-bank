@@ -1,12 +1,12 @@
 package core.repository;
 
-import core.model.Account;
 import core.model.User;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,22 +16,21 @@ import static org.hamcrest.CoreMatchers.is;
 
 public class UserRepositoryTest {
 
-    AccountRepositoryImpl accountDao = new AccountRepositoryImpl();
-    UserRepositoryImpl dao = new UserRepositoryImpl();
+    UserRepositoryImpl userRepository = new UserRepositoryImpl();
+    Connection connection;
 
     @Before
     public void addAccount(){
+        connection = MySQLConnection.getConnection();
+        userRepository.setConnection(connection);
+        userRepository.deleteAllRows();
 
-        dao.deleteAllRows();
-        accountDao.deleteAllRows();
-
-        accountDao.save(new Account(200));
     }
 
     @After
-    public void cleanRows(){
-        dao.deleteAllRows();
-        accountDao.deleteAllRows();
+    public void cleanRows() throws SQLException {
+        userRepository.deleteAllRows();
+        connection.close();
     }
 
     @Test
@@ -39,11 +38,9 @@ public class UserRepositoryTest {
 
         User user = new User("admin", "admin");
 
-        user.setAccountId(accountDao.getAll().get(0).getId());
+        this.userRepository.save(user);
 
-        dao.save(user);
-
-        assertThat(dao.getByUsername("admin").getPassword(), is(user.getPassword()));
+        assertThat(this.userRepository.getByUsername("admin").getPassword(), is(user.getPassword()));
 
     }
 
@@ -52,11 +49,9 @@ public class UserRepositoryTest {
 
         User user = new User("admin", "admin");
 
-        user.setAccountId(accountDao.getAll().get(0).getId());
+        this.userRepository.save(user);
 
-        dao.save(user);
-
-        assertThat(dao.getAll().get(0).getUsername(), is(user.getUsername()));
+        assertThat(this.userRepository.getAll().get(0).getUsername(), is(user.getUsername()));
 
     }
 
@@ -65,16 +60,14 @@ public class UserRepositoryTest {
 
         User user = new User("admin", "admin");
 
-        user.setAccountId(accountDao.getAll().get(0).getId());
+        this.userRepository.save(user);
 
-        dao.save(user);
-
-        User updatedUser = dao.getAll().get(0);
+        User updatedUser = this.userRepository.getAll().get(0);
         updatedUser.setUsername("new admin");
 
-        dao.update(updatedUser);
+        this.userRepository.update(updatedUser);
 
-        assertThat(dao.getAll().get(0).getUsername(), is(updatedUser.getUsername()));
+        assertThat(this.userRepository.getAll().get(0).getUsername(), is(updatedUser.getUsername()));
 
     }
 
@@ -83,12 +76,10 @@ public class UserRepositoryTest {
 
         User user = new User("admin", "admin");
 
-        user.setAccountId(accountDao.getAll().get(0).getId());
+        this.userRepository.save(user);
+        this.userRepository.deleteById(this.userRepository.getAll().get(0).getId());
 
-        dao.save(user);
-        dao.deleteById(dao.getAll().get(0).getId());
-
-        assertThat(dao.getAll().size(), is(0));
+        assertThat(this.userRepository.getAll().size(), is(0));
 
     }
 
@@ -97,11 +88,9 @@ public class UserRepositoryTest {
 
         User user = new User("admin", "admin");
 
-        user.setAccountId(accountDao.getAll().get(0).getId());
+        this.userRepository.save(user);
 
-        dao.save(user);
-
-        assertThat(dao.checkPassword(user), is(true));
+        assertThat(this.userRepository.checkPassword(user), is(true));
 
     }
 
@@ -110,13 +99,11 @@ public class UserRepositoryTest {
 
         User user = new User("admin", "admin");
 
-        user.setAccountId(accountDao.getAll().get(0).getId());
-
-        dao.save(user);
+        this.userRepository.save(user);
 
         user.setPassword("not a correct password");
 
-        assertThat(dao.checkPassword(user), is(false));
+        assertThat(this.userRepository.checkPassword(user), is(false));
 
     }
 
@@ -124,9 +111,9 @@ public class UserRepositoryTest {
     @Test
     public void createTable() throws SQLException {
 
-        dao.createUserTable();
+        userRepository.createUserTable();
 
-        DatabaseMetaData dbm = dao.getMetaData();
+        DatabaseMetaData dbm = userRepository.getMetaData();
 
         ResultSet tables = dbm.getTables(null, null, "userDb", null);
 
@@ -138,9 +125,9 @@ public class UserRepositoryTest {
     @Test
     public void dropTable() throws SQLException {
 
-        DatabaseMetaData dbm = dao.getMetaData();
+        DatabaseMetaData dbm = userRepository.getMetaData();
 
-        dao.dropUserTable();
+        userRepository.dropUserTable();
 
         ResultSet tables = dbm.getTables(null, null, "userDb", null);
 
