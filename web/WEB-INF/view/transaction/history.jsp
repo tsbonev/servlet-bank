@@ -33,10 +33,10 @@
     <tr>
 
         <td><a class="btn btn-default"
-               href="history?page=1<c:if test="${globalScope}">&scope=global</c:if>">
-            First</a></td>
+               href="history?page=1<c:if test="${globalScope == true}">&scope=global</c:if>">First</a></td>
 
-        <td><button class="btn btn-default" onclick="window.location.href='history?page=${currPage - 1}'"
+        <td><button class="btn btn-default" onclick="window.location.href='history?page=${currPage - 1}'
+                +'<c:if test="${globalScope == true}">&scope=global</c:if>'"
 
                <c:if test="${currPage <= 1}">disabled=""</c:if>
 
@@ -44,14 +44,15 @@
 
         <td>${currPage} / ${totalPage}</td>
 
-        <td><button class="btn btn-default" onclick="window.location.href='history?page=${currPage + 1}'"
+        <td><button class="btn btn-default" onclick="window.location.href='history?page=${currPage + 1}'
+                + '<c:if test="${globalScope == true}">&scope=global</c:if>'"
 
               <c:if test="${!hasNext}">disabled=""</c:if>
 
         >Next</button></td>
 
         <td><a class="btn btn-default"
-               href="history?page=${totalPage}<c:if test="${globalScope}">&scope=global</c:if>">
+               href="history?page=${totalPage}<c:if test="${globalScope == true}">&scope=global</c:if>">
             Last</a></td>
 
     </tr>

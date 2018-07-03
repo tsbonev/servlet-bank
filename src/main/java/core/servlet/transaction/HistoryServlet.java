@@ -1,6 +1,7 @@
 package core.servlet.transaction;
 
 import core.model.Transaction;
+import core.model.User;
 import core.repository.TransactionRepository;
 import core.repository.UserRepository;
 import core.servlet.filter.ConnectionPerRequest;
@@ -23,6 +24,20 @@ public class HistoryServlet extends HttpServlet {
     UserRepository userRepository;
 
     Page page;
+
+    private int totalPages(int size){
+        return (size + transactionRepository.getPageSize() - 1) / transactionRepository.getPageSize();
+    }
+
+    private boolean hasNextPage(int size, int currPage){
+
+        if (size <= transactionRepository.getPageSize() * currPage)
+            return false;
+
+        return true;
+
+    }
+
 
     public HistoryServlet(Page page, TransactionRepository transactionRepository,
                           UserRepository userRepository){
@@ -51,13 +66,11 @@ public class HistoryServlet extends HttpServlet {
             currPage = 1;
         }
 
-        req.setAttribute("hasNext", transactionRepository.hasNextPage(currPage));
-        req.setAttribute("currPage", currPage);
-        req.setAttribute("totalPage", transactionRepository.lastPage());
-
         LoginSession session = (LoginSession) req.getSession().getAttribute("authorized");
 
         String scope = req.getParameter("scope");
+
+        int userId = 0;
 
         List<Transaction> transactions;
 
@@ -67,11 +80,20 @@ public class HistoryServlet extends HttpServlet {
 
         }else {
             req.setAttribute("globalScope", false);
+            userId = userRepository.getByUsername(
+                    session.getUsername()).getId();
+
             transactions = transactionRepository.getByUserId(
-                    userRepository.getByUsername(
-                            session.getUsername()).getId(), currPage
+                    userId, currPage
             );
         }
+
+        int rowCount = transactionRepository.getRowsForUserId(userId);
+
+        req.setAttribute("hasNext", hasNextPage(rowCount, currPage));
+        req.setAttribute("currPage", currPage);
+        req.setAttribute("totalPage", totalPages(rowCount));
+
 
         transactionRepository.fillUsernames(transactions);
 

@@ -1,7 +1,6 @@
 package core.repository;
 
 import core.model.Transaction;
-import core.model.User;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -10,7 +9,7 @@ import java.util.List;
 @SuppressWarnings("Duplicates")
 public class TransactionRepositoryImpl implements TransactionRepository {
 
-    private static int pageSize = 20;
+    private static int pageSize = 10;
 
     private Connection conn;
 
@@ -334,41 +333,6 @@ public class TransactionRepositoryImpl implements TransactionRepository {
 
     }
 
-    public int pageCount() {
-
-        int numberOfRows = 0;
-
-        try {
-            PreparedStatement count = conn.prepareStatement(
-                    "SELECT COUNT(*) as total FROM transactions"
-            );
-
-            ResultSet result = count.executeQuery();
-            result.next();
-            numberOfRows = result.getInt("total");
-
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return numberOfRows;
-
-    }
-
-    public boolean hasNextPage(int currPage) {
-        int rowCount = this.pageCount();
-        if (rowCount <= this.getPageSize() * currPage)
-            return false;
-
-        return true;
-    }
-
-    public int lastPage() {
-        return (this.pageCount() + this.getPageSize() - 1) / this.getPageSize();
-    }
-
-
     public void dropTransactionTable() {
 
         try {
@@ -391,6 +355,38 @@ public class TransactionRepositoryImpl implements TransactionRepository {
         for (Transaction transaction : list) {
             transaction.setUsername(userRepository.getById(transaction.getUserId()).getUsername());
         }
+
+    }
+
+    @Override
+    public int getRowsForUserId(int userId) {
+
+        int rows = 0;
+
+        try {
+
+            PreparedStatement select;
+
+            if(userId == 0){
+                select = conn.prepareStatement(
+                        "SELECT COUNT(*) AS total FROM transactions"
+                );
+            }else {
+                select = conn.prepareStatement(
+                        "SELECT COUNT(*) AS total FROM transactions WHERE userId = ?"
+                );
+                select.setInt(1, userId);
+            }
+
+            ResultSet result = select.executeQuery();
+            result.next();
+            rows = result.getInt("total");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return rows;
 
     }
 

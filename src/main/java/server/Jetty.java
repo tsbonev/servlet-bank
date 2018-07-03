@@ -69,7 +69,8 @@ public final class Jetty {
                 servletContext.addFilter("accountFilter", new AuthorizationFilter(page))
                         .addMappingForUrlPatterns(null, false, "/account");
                 servletContext.addFilter("connectionPerRequest", new ConnectionPerRequest())
-                        .addMappingForUrlPatterns(null, false, "/*");
+                        .addMappingForUrlPatterns(null, false, "/account",
+                                "/transaction", "/login", "/register", "/history");
 
             }
 

@@ -32,9 +32,9 @@ public class AuthenticationFilter implements Filter {
         HttpServletResponse resp = (HttpServletResponse) servletResponse;
         LoginSession session = (LoginSession) req.getSession().getAttribute("authorized");
 
-        if(req.getRequestURI().contains("login")
-                || req.getRequestURI().contains("register")
-                || req.getRequestURI().contains("home")
+        if(req.getRequestURI().endsWith("/login")
+                || req.getRequestURI().endsWith("/register")
+                || req.getRequestURI().endsWith("/home")
                 || req.getRequestURI().endsWith("/")){
             filterChain.doFilter(servletRequest, servletResponse);
             return;

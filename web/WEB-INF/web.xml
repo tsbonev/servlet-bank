@@ -31,7 +31,11 @@
 
     <filter-mapping>
         <filter-name>ConnectionPerRequest</filter-name>
-        <url-pattern>/*</url-pattern>
+        <url-pattern>/account</url-pattern>
+        <url-pattern>/transaction</url-pattern>
+        <url-pattern>/login</url-pattern>
+        <url-pattern>/register</url-pattern>
+        <url-pattern>/history</url-pattern>
     </filter-mapping>
 
     <error-page>

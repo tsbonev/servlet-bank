@@ -3,20 +3,20 @@ package core.servlet.filter;
 import core.repository.MySQLConnection;
 
 import javax.servlet.*;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Connection;
 
-@WebFilter("/*")
 public class ConnectionPerRequest implements Filter {
+
+    private FilterConfig filterConfig = null;
 
     public static ThreadLocal<Connection> connection;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-
+        this.filterConfig = filterConfig;
     }
 
     @Override
@@ -34,6 +34,5 @@ public class ConnectionPerRequest implements Filter {
 
     @Override
     public void destroy() {
-
     }
 }

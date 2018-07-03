@@ -4,6 +4,7 @@ import core.model.Transaction;
 
 import java.sql.Connection;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.util.List;
 
 public interface TransactionRepository {
@@ -32,9 +33,8 @@ public interface TransactionRepository {
 
     void fillUsernames(List<Transaction> list);
 
+    int getRowsForUserId(int userId);
+
     void setPageSize(int pageSize);
     int getPageSize();
-    boolean hasNextPage(int currPage);
-    int pageCount();
-    int lastPage();
 }
