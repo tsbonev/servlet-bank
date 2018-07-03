@@ -1,17 +1,15 @@
 package server;
 
-import core.DAO.UserDAOImpl;
-import core.Service.UserService;
-import core.Servlet.*;
-import core.Servlet.Filter.AuthenticationFilter;
-import core.Servlet.Filter.AuthorizationFilter;
-import core.Servlet.Helpers.UserCounter;
-import core.Servlet.Login.LoginServlet;
-import core.Servlet.Login.LogoutServlet;
-import core.Servlet.Login.RegisterServlet;
-import core.Servlet.Transaction.HistoryServlet;
-import core.Servlet.Transaction.TransactionServlet;
-import core.Servlet.User.AccountServlet;
+import core.servlet.*;
+import core.servlet.filter.AuthenticationFilter;
+import core.servlet.filter.AuthorizationFilter;
+import core.servlet.helpers.UserCounter;
+import core.servlet.login.LoginServlet;
+import core.servlet.login.LogoutServlet;
+import core.servlet.login.RegisterServlet;
+import core.servlet.transaction.HistoryServlet;
+import core.servlet.transaction.TransactionServlet;
+import core.servlet.user.AccountServlet;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandler;
