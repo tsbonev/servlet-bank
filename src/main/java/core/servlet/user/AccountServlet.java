@@ -1,7 +1,6 @@
 package core.servlet.user;
 
-import core.service.UserService;
-import core.servlet.helpers.Page;
+import core.servlet.helper.Page;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,8 +11,6 @@ import java.io.IOException;
 
 @WebServlet("/account")
 public class AccountServlet extends HttpServlet {
-
-    UserService userService = UserService.getInstance();
 
     Page page;
     public AccountServlet(Page page){

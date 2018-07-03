@@ -2,9 +2,9 @@ package core.servlet.login;
 
 import core.repository.UserRepository;
 import core.model.User;
-import core.servlet.helpers.LoginSession;
-import core.servlet.helpers.Page;
-import core.servlet.helpers.UserCounter;
+import core.servlet.helper.LoginSession;
+import core.servlet.helper.Page;
+import core.servlet.helper.UserCounter;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.jmock.integration.junit4.JUnitRuleMockery;

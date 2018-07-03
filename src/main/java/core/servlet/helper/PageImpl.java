@@ -1,4 +1,4 @@
-package core.servlet.helpers;
+package core.servlet.helper;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;

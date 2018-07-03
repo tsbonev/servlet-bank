@@ -3,9 +3,9 @@ package core.servlet.login;
 import core.model.User;
 import core.repository.UserRepository;
 import core.servlet.filter.ConnectionPerRequest;
-import core.servlet.helpers.LoginSession;
-import core.servlet.helpers.Page;
-import core.servlet.helpers.UserCounter;
+import core.servlet.helper.LoginSession;
+import core.servlet.helper.Page;
+import core.servlet.helper.UserCounter;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.ServletException;

@@ -3,7 +3,7 @@ package core.servlet.login;
 import core.model.User;
 import core.repository.UserRepository;
 import core.servlet.filter.ConnectionPerRequest;
-import core.servlet.helpers.Page;
+import core.servlet.helper.Page;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

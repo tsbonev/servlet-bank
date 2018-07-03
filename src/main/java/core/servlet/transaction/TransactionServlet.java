@@ -1,10 +1,10 @@
 package core.servlet.transaction;
 
 import core.model.Transaction;
-import core.service.TransactionService;
-import core.service.UserService;
-import core.servlet.helpers.LoginSession;
-import core.servlet.helpers.Page;
+import core.repository.TransactionRepository;
+import core.repository.UserRepository;
+import core.servlet.helper.LoginSession;
+import core.servlet.helper.Page;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.ServletException;
@@ -24,9 +24,8 @@ public class TransactionServlet extends HttpServlet {
     private static String leadingZeroFraction = "^[0]{1}[.,]{1}[0-9]{0,4}[1-9]{1}$";
     private static String trailingZeroFraction = "^[0]{1}[.,]{1}[1-9]{0,4}[1-9]{1}$";
 
-
-    TransactionService service = TransactionService.getInstance();
-    UserService userService = UserService.getInstance();
+    UserRepository userRepository;
+    TransactionRepository transactionRepository;
 
     Page page;
 
@@ -80,13 +79,13 @@ public class TransactionServlet extends HttpServlet {
         transaction.setDate(Date.valueOf(LocalDate.now()));
         transaction.setAmount(amount);
         transaction.setOperation(operation);
-        transaction.setUserId(userService.getUserByUsername(session.getUsername()).getId());
+        transaction.setUserId(userRepository.getByUsername(session.getUsername()).getId());
 
         if(operation.equals(Transaction.Operation.WITHDRAW)){
             amount *= -1;
         }
 
-        service.saveTransaction(transaction);
+        transactionRepository.save(transaction);
 
         page.redirectTo("/account?username=" + session.getUsername(), resp, req,
                 "successMessage", "transaction successful!");

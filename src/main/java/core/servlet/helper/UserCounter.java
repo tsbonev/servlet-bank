@@ -1,4 +1,4 @@
-package core.servlet.helpers;
+package core.servlet.helper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,19 +22,19 @@ public class UserCounter {
 
     List<String> users = new ArrayList<>();
 
-    public synchronized int getUsersCount(){
+    public int getUsersCount(){
         return users.size();
     }
 
-    public synchronized boolean userIsLoggedIn(String username){
+    public boolean userIsLoggedIn(String username){
         return users.contains(username);
     }
 
-    public synchronized void addUserToCount(String username){
+    public void addUserToCount(String username){
         users.add(username);
     }
 
-    public synchronized void removeUserFromCount(String username){
+    public void removeUserFromCount(String username){
         users.remove(username);
     }
 

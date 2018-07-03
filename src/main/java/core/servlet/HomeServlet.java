@@ -1,6 +1,6 @@
 package core.servlet;
 
-import core.servlet.helpers.Page;
+import core.servlet.helper.Page;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;

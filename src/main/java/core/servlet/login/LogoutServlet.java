@@ -1,8 +1,8 @@
 package core.servlet.login;
 
-import core.servlet.helpers.LoginSession;
-import core.servlet.helpers.Page;
-import core.servlet.helpers.UserCounter;
+import core.servlet.helper.LoginSession;
+import core.servlet.helper.Page;
+import core.servlet.helper.UserCounter;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;

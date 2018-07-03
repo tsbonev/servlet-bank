@@ -28,9 +28,11 @@ public interface TransactionRepository {
 
     List<Transaction> getByOperation(Transaction.Operation operation, int page);
 
+    void fillUsernames(List<Transaction> list);
+
     void setPageSize(int pageSize);
     int getPageSize();
-
-    int getCount();
-
+    boolean hasNextPage(int currPage);
+    int pageCount();
+    int lastPage();
 }

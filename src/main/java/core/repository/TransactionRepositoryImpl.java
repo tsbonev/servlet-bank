@@ -295,7 +295,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
 
     }
 
-    public int getCount(){
+    public int pageCount(){
 
         int numberOfRows = 0;
 
@@ -317,6 +317,19 @@ public class TransactionRepositoryImpl implements TransactionRepository {
 
     }
 
+    public boolean hasNextPage(int currPage) {
+        int rowCount = this.pageCount();
+        if(rowCount <= this.getPageSize() * currPage)
+            return false;
+
+        return true;
+    }
+
+    public int lastPage() {
+        return (this.pageCount() + this.getPageSize() - 1) / this.getPageSize();
+    }
+
+
     public void dropTransactionTable() {
 
         try {
@@ -327,6 +340,17 @@ public class TransactionRepositoryImpl implements TransactionRepository {
             drop.execute();
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+
+    }
+
+    public void fillUsernames(List<Transaction> list){
+
+        UserRepositoryImpl userRepository = new UserRepositoryImpl();
+        userRepository.setConnection(conn);
+
+        for (Transaction transaction : list) {
+            transaction.setUsername(userRepository.getById(transaction.getUserId()).getUsername());
         }
 
     }

@@ -1,10 +1,13 @@
 package core.servlet.transaction;
 
 import core.model.Transaction;
-import core.service.TransactionService;
-import core.service.UserService;
-import core.servlet.helpers.LoginSession;
-import core.servlet.helpers.Page;
+import core.repository.TransactionRepository;
+import core.repository.TransactionRepositoryImpl;
+import core.repository.UserRepository;
+import core.repository.UserRepositoryImpl;
+import core.servlet.filter.ConnectionPerRequest;
+import core.servlet.helper.LoginSession;
+import core.servlet.helper.Page;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.ServletException;
@@ -18,17 +21,28 @@ import java.util.List;
 @WebServlet("/history")
 public class HistoryServlet extends HttpServlet {
 
-    TransactionService service = TransactionService.getInstance();
-    UserService userService = UserService.getInstance();
+    TransactionRepository transactionRepository;
+    UserRepository userRepository;
 
     Page page;
 
-    public HistoryServlet(Page page){
+    public HistoryServlet(Page page, TransactionRepository transactionRepository,
+                          UserRepository userRepository){
         this.page = page;
+        this.userRepository = new UserRepositoryImpl();
+        this.transactionRepository = new TransactionRepositoryImpl();
+    }
+
+    protected void setConnection(TransactionRepository transactionRepository,
+                                 UserRepository userRepository){
+        userRepository.setConnection(ConnectionPerRequest.connection.get());
+        transactionRepository.setConnection(ConnectionPerRequest.connection.get());
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        setConnection(transactionRepository, userRepository);
 
         int currPage;
 
@@ -39,9 +53,9 @@ public class HistoryServlet extends HttpServlet {
             currPage = 1;
         }
 
-        req.setAttribute("hasNext", service.hasNextPage(currPage));
+        req.setAttribute("hasNext", transactionRepository.hasNextPage(currPage));
         req.setAttribute("currPage", currPage);
-        req.setAttribute("totalPage", service.lastPage());
+        req.setAttribute("totalPage", transactionRepository.lastPage());
 
         LoginSession session = (LoginSession) req.getSession().getAttribute("authorized");
 
@@ -51,16 +65,16 @@ public class HistoryServlet extends HttpServlet {
 
         if(!StringUtils.isEmpty(scope) && scope.equalsIgnoreCase("global")){
 
-            transactions = service.getAllTransactions(currPage);
+            transactions = transactionRepository.getAll(currPage);
 
         }else {
-            transactions = service.getTransactionsByUserId(
-                    userService.getUserByUsername(
+            transactions = transactionRepository.getByUserId(
+                    userRepository.getByUsername(
                             session.getUsername()).getId(), currPage
             );
         }
 
-        service.fillUsernames(transactions);
+        transactionRepository.fillUsernames(transactions);
 
         req.setAttribute("transactions", transactions);
 

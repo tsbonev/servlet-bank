@@ -1,8 +1,7 @@
 package core.servlet.filter;
 
-import core.servlet.helpers.LoginSession;
-import core.servlet.helpers.Page;
-import core.servlet.helpers.PageImpl;
+import core.servlet.helper.LoginSession;
+import core.servlet.helper.Page;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
