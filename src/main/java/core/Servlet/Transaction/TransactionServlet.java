@@ -22,7 +22,7 @@ import java.time.LocalDate;
 public class TransactionServlet extends HttpServlet {
 
     private static String fraction = "^[1-9]{1}[0-9]{0,9}[.,]{1}[0-9]{1,5}$";
-    private static String wholeNumber = "^[1-9]{1}[0-9]{0,9}$/";
+    private static String wholeNumber = "^[1-9]{1}[0-9]{0,9}$";
     private static String leadingZeroFraction = "^[0]{1}[.,]{1}[0-9]{0,4}[1-9]{1}$";
     private static String trailingZeroFraction = "^[0]{1}[.,]{1}[1-9]{0,4}[1-9]{1}$";
 
@@ -64,14 +64,16 @@ public class TransactionServlet extends HttpServlet {
         String amountToString = Double.toString(amount);
 
         if(!amountToString.matches(wholeNumber)
-            || !amountToString.matches(fraction)
-                || !amountToString.matches(trailingZeroFraction)
-                || !amountToString.matches(leadingZeroFraction)
+            && !amountToString.matches(fraction)
+                && !amountToString.matches(trailingZeroFraction)
+                && !amountToString.matches(leadingZeroFraction)
                 ){
             Page.redirectTo("/account", resp, req,
                     "errorMessage", "Transaction amount format invalid!");
             return;
         }
+
+        String username = req.getParameter("username");
 
         Transaction transaction = new Transaction();
         transaction.setDate(Date.valueOf(LocalDate.now()));

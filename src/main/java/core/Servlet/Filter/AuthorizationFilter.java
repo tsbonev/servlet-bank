@@ -32,6 +32,12 @@ public class AuthorizationFilter implements Filter {
             return;
         }
 
+        String username = req.getParameter("username");
+        if(username == null && session.isAuthorized()){
+            filterChain.doFilter(servletRequest, servletResponse);
+            return;
+        }
+
         if(req.getParameter("username").equalsIgnoreCase(session.getUsername())
         && session.isAuthorized()){
             filterChain.doFilter(servletRequest, servletResponse);
