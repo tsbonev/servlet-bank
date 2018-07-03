@@ -1,6 +1,7 @@
 package core.servlet.filter;
 
 import core.servlet.helpers.LoginSession;
+import core.servlet.helpers.Page;
 import core.servlet.helpers.PageImpl;
 
 import javax.servlet.*;
@@ -13,6 +14,12 @@ import java.io.IOException;
 public class AuthorizationFilter implements Filter {
 
     private FilterConfig filterConfig = null;
+
+    private Page page;
+
+    public AuthorizationFilter(Page page){
+        this.page = page;
+    }
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -43,7 +50,7 @@ public class AuthorizationFilter implements Filter {
             filterChain.doFilter(servletRequest, servletResponse);
         }
         else {
-            PageImpl.redirectTo("/home", resp, req,
+            page.redirectTo("/home", resp, req,
                     "errorMessage", "You do not have access to this page!");
         }
 

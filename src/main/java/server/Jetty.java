@@ -1,8 +1,11 @@
 package server;
 
+import core.repository.*;
 import core.servlet.*;
 import core.servlet.filter.AuthenticationFilter;
 import core.servlet.filter.AuthorizationFilter;
+import core.servlet.helpers.Page;
+import core.servlet.helpers.PageImpl;
 import core.servlet.helpers.UserCounter;
 import core.servlet.login.LoginServlet;
 import core.servlet.login.LogoutServlet;
@@ -17,6 +20,7 @@ import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.webapp.WebAppContext;
 
+import javax.servlet.FilterConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -46,19 +50,24 @@ public final class Jetty {
 
                 servletContext.setAttribute("counter", UserCounter.getInstance());
 
-                servletContext.addServlet("home", new HomeServlet()).addMapping("/", "/home");
-                servletContext.addServlet("login", new LoginServlet()).addMapping("/login");
-                servletContext.addServlet("register", new RegisterServlet()).addMapping("/register");
-                servletContext.addServlet("logout", new LogoutServlet()).addMapping("/logout");
-                servletContext.addServlet("account", new AccountServlet()).addMapping("/account");
-                servletContext.addServlet("transaction", new TransactionServlet()).addMapping("/transaction");
-                servletContext.addServlet("history", new HistoryServlet()).addMapping("/history");
-                servletContext.addServlet("error", new ErrorHandler()).addMapping("/error");
+                Page page = new PageImpl();
+                UserRepository userRepo = new UserRepositoryImpl();
+                TransactionRepository transactionRepo = new TransactionRepositoryImpl();
+                AccountRepository accountRepo = new AccountRepositoryImpl();
+
+                servletContext.addServlet("home", new HomeServlet(page)).addMapping("/", "/home");
+                servletContext.addServlet("login", new LoginServlet(page, userRepo)).addMapping("/login");
+                servletContext.addServlet("register", new RegisterServlet(page, userRepo)).addMapping("/register");
+                servletContext.addServlet("logout", new LogoutServlet(page)).addMapping("/logout");
+                servletContext.addServlet("account", new AccountServlet(page)).addMapping("/account");
+                servletContext.addServlet("transaction", new TransactionServlet(page)).addMapping("/transaction");
+                servletContext.addServlet("history", new HistoryServlet(page)).addMapping("/history");
+                servletContext.addServlet("error", new ErrorHandler(page)).addMapping("/error");
 
 
-                servletContext.addFilter("loginFilter", new AuthenticationFilter())
+                servletContext.addFilter("loginFilter", new AuthenticationFilter(page))
                         .addMappingForUrlPatterns(null, false, "/*");
-                servletContext.addFilter("accountFilter", new AuthorizationFilter())
+                servletContext.addFilter("accountFilter", new AuthorizationFilter(page))
                         .addMappingForUrlPatterns(null, false, "/account");
 
             }

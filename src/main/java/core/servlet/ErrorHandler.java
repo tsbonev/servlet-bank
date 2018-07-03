@@ -1,6 +1,6 @@
 package core.servlet;
 
-import core.servlet.helpers.PageImpl;
+import core.servlet.helpers.Page;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,10 +12,16 @@ import java.io.IOException;
 @WebServlet("/error")
 public class ErrorHandler extends HttpServlet {
 
+    Page page;
+
+    public ErrorHandler(Page page){
+        this.page = page;
+    }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        PageImpl.redirectTo("/home", resp, req,
+        page.redirectTo("/home", resp, req,
                 "errorMessage", "Something has happened!");
 
     }

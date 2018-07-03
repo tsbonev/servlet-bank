@@ -4,7 +4,7 @@ import core.model.Transaction;
 import core.service.TransactionService;
 import core.service.UserService;
 import core.servlet.helpers.LoginSession;
-import core.servlet.helpers.PageImpl;
+import core.servlet.helpers.Page;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.ServletException;
@@ -20,6 +20,12 @@ public class HistoryServlet extends HttpServlet {
 
     TransactionService service = TransactionService.getInstance();
     UserService userService = UserService.getInstance();
+
+    Page page;
+
+    public HistoryServlet(Page page){
+        this.page = page;
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -58,7 +64,7 @@ public class HistoryServlet extends HttpServlet {
 
         req.setAttribute("transactions", transactions);
 
-        PageImpl.getPage("view/transaction/history.jsp", req, resp);
+        page.getPage("view/transaction/history.jsp", req, resp);
 
     }
 }

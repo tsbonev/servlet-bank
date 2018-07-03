@@ -7,6 +7,7 @@ import core.model.User;
 import core.service.AccountService;
 import core.service.UserService;
 import core.servlet.helpers.LoginSession;
+import core.servlet.helpers.Page;
 import core.servlet.helpers.UserCounter;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -49,6 +50,12 @@ public class LoginSystemTest {
     @Mock
     public HttpSession session;
 
+    @Mock
+    UserRepository userRepo;
+
+    @Mock
+    public Page page;
+
     public LoginServlet loginServlet;
     public RegisterServlet registerServlet;
     public LogoutServlet logoutServlet;
@@ -67,9 +74,9 @@ public class LoginSystemTest {
         userService = UserService.getInstance(userRepository);
         accountService = AccountService.getInstance(accountRepository);
 
-        loginServlet = new LoginServlet();
-        logoutServlet = new LogoutServlet();
-        registerServlet = new RegisterServlet();
+        loginServlet = new LoginServlet(page, userRepo);
+        logoutServlet = new LogoutServlet(page);
+        registerServlet = new RegisterServlet(page, userRepo);
 
     }
 

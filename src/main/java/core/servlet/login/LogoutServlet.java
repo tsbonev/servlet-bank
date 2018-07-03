@@ -1,7 +1,7 @@
 package core.servlet.login;
 
 import core.servlet.helpers.LoginSession;
-import core.servlet.helpers.PageImpl;
+import core.servlet.helpers.Page;
 import core.servlet.helpers.UserCounter;
 
 import javax.servlet.annotation.WebServlet;
@@ -13,6 +13,12 @@ import java.io.IOException;
 
 @WebServlet("/logout")
 public class LogoutServlet extends HttpServlet {
+
+    Page page;
+
+    public LogoutServlet(Page page){
+        this.page = page;
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -33,7 +39,7 @@ public class LogoutServlet extends HttpServlet {
         UserCounter.getInstance().removeUserFromCount(
                 loginSession.getUsername());
 
-        PageImpl.redirectTo("/home", resp, req,
+        page.redirectTo("/home", resp, req,
         "infoMessage", "User logged out!");
 
     }

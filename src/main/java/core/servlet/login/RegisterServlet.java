@@ -1,8 +1,9 @@
 package core.servlet.login;
 
 import core.model.User;
+import core.repository.UserRepository;
 import core.service.UserService;
-import core.servlet.helpers.PageImpl;
+import core.servlet.helpers.Page;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,12 +19,19 @@ public class RegisterServlet extends HttpServlet {
     private static String usernamePattern = "^[\\w]{5,15}$";
     private static String passwordPattern = "^[\\w]{8,20}$";
 
-    UserService service = UserService.getInstance();
+    UserRepository repo;
+
+    Page page;
+
+    public RegisterServlet(Page page, UserRepository repository){
+        this.page = page;
+        this.repo = repository;
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setAttribute("title", "Register");
-        PageImpl.getPage("view/user/register.jsp", req, resp);
+        page.getPage("view/user/register.jsp", req, resp);
     }
 
     @Override
@@ -34,7 +42,7 @@ public class RegisterServlet extends HttpServlet {
         String password = req.getParameter("password");
 
         if(!Pattern.matches(usernamePattern, username) || !Pattern.matches(passwordPattern, password)){
-            PageImpl.redirectTo("/register", resp, req,
+            page.redirectTo("/register", resp, req,
                     "errorMessage", "Something went wrong!");
             return;
         }
@@ -42,13 +50,13 @@ public class RegisterServlet extends HttpServlet {
         user.setUsername(username);
         user.setPassword(password);
 
-        if(service.getUserByUsername(username).getId() != 0){
-            PageImpl.redirectTo("/register", resp, req,
+        if(repo.getByUsername(username).getId() != 0){
+            page.redirectTo("/register", resp, req,
                     "errorMessage", "Username taken!");
         }
         else {
-            service.saveUser(user);
-            PageImpl.redirectTo("/home", resp, req,
+            repo.save(user);
+            page.redirectTo("/home", resp, req,
                     "successMessage", "User registered successfully!");
         }
 

@@ -6,7 +6,7 @@ import core.service.AccountService;
 import core.service.TransactionService;
 import core.service.UserService;
 import core.servlet.helpers.LoginSession;
-import core.servlet.helpers.PageImpl;
+import core.servlet.helpers.Page;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.ServletException;
@@ -31,6 +31,12 @@ public class TransactionServlet extends HttpServlet {
     UserService userService = UserService.getInstance();
     AccountService accountService = AccountService.getInstance();
 
+    Page page;
+
+    public TransactionServlet(Page page){
+        this.page = page;
+    }
+
     private static double maxAmount = Double.MAX_VALUE / 4;
 
     @Override
@@ -40,7 +46,7 @@ public class TransactionServlet extends HttpServlet {
         action = StringUtils.capitalize(action);
         req.setAttribute("action", action);
 
-        PageImpl.getPage("view/transaction/doTransaction.jsp", req, resp);
+        page.getPage("view/transaction/doTransaction.jsp", req, resp);
 
     }
 
@@ -56,7 +62,7 @@ public class TransactionServlet extends HttpServlet {
 
         if(amount > maxAmount
                 || amount <= 0){
-            PageImpl.redirectTo("/account", resp, req,
+            page.redirectTo("/account", resp, req,
                     "errorMessage", "Transactions of that size are not permitted!");
             return;
         }
@@ -68,7 +74,7 @@ public class TransactionServlet extends HttpServlet {
                 && !amountToString.matches(trailingZeroFraction)
                 && !amountToString.matches(leadingZeroFraction)
                 ){
-            PageImpl.redirectTo("/account", resp, req,
+            page.redirectTo("/account", resp, req,
                     "errorMessage", "transaction amount format invalid!");
             return;
         }
@@ -89,7 +95,7 @@ public class TransactionServlet extends HttpServlet {
         accountService.updateAccount(account);
         service.saveTransaction(transaction);
 
-        PageImpl.redirectTo("/account?username=" + session.getUsername(), resp, req,
+        page.redirectTo("/account?username=" + session.getUsername(), resp, req,
                 "successMessage", "transaction successful!");
 
 

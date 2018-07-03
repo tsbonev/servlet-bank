@@ -1,9 +1,9 @@
 package core.servlet.login;
 
 import core.model.User;
-import core.service.UserService;
+import core.repository.UserRepository;
 import core.servlet.helpers.LoginSession;
-import core.servlet.helpers.PageImpl;
+import core.servlet.helpers.Page;
 import core.servlet.helpers.UserCounter;
 import org.apache.commons.lang3.StringUtils;
 
@@ -17,13 +17,19 @@ import java.io.IOException;
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 
-    UserService service = UserService.getInstance();
+    UserRepository repo;
+    Page page;
+
+    public LoginServlet(Page page, UserRepository repository){
+        this.page = page;
+        this.repo = repository;
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         req.setAttribute("title", "login");
-        PageImpl.getPage("view/user/login.jsp", req, resp);
+        page.getPage("view/user/login.jsp", req, resp);
 
     }
 
@@ -37,7 +43,7 @@ public class LoginServlet extends HttpServlet {
 
         if(StringUtils.isEmpty(username) || StringUtils.isEmpty(password)){
 
-            PageImpl.redirectTo("/login", resp, req,
+            page.redirectTo("/login", resp, req,
                     "errorMessage", "Something went wrong!");
             return;
 
@@ -46,7 +52,7 @@ public class LoginServlet extends HttpServlet {
         user.setUsername(username);
         user.setPassword(password);
 
-        boolean isInSystem = service.checkUserPassword(user);
+        boolean isInSystem = repo.checkPassword(user);
 
         if(isInSystem){
 
@@ -58,11 +64,11 @@ public class LoginServlet extends HttpServlet {
             req.getSession().setAttribute("authorized", session);
 
 
-            PageImpl.redirectTo("/home", resp, req,
+            page.redirectTo("/home", resp, req,
                     "successMessage", "Successfully logged in!");
         }
         else {
-            PageImpl.redirectTo("/login", resp, req,
+            page.redirectTo("/login", resp, req,
                     "errorMessage", "User not registered!");
         }
 
