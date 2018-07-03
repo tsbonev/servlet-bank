@@ -12,12 +12,10 @@ public class UserRepositoryImpl implements UserRepository {
 
     private Connection conn;
 
-    protected Connection getConnection(){
-        return MySQLConnection.getConnection();
-    }
+    public UserRepositoryImpl(){ }
 
-    public UserRepositoryImpl(){
-        this.conn = getConnection();
+    public void setConnection(Connection conn){
+        this.conn = conn;
     }
 
     public User getById(int id) {

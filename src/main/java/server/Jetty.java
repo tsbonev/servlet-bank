@@ -4,6 +4,7 @@ import core.repository.*;
 import core.servlet.*;
 import core.servlet.filter.AuthenticationFilter;
 import core.servlet.filter.AuthorizationFilter;
+import core.servlet.filter.ConnectionPerRequest;
 import core.servlet.helpers.Page;
 import core.servlet.helpers.PageImpl;
 import core.servlet.helpers.UserCounter;
@@ -69,6 +70,8 @@ public final class Jetty {
                         .addMappingForUrlPatterns(null, false, "/*");
                 servletContext.addFilter("accountFilter", new AuthorizationFilter(page))
                         .addMappingForUrlPatterns(null, false, "/account");
+                servletContext.addFilter("connectionPerRequest", new ConnectionPerRequest())
+                        .addMappingForUrlPatterns(null, false, "/*");
 
             }
 

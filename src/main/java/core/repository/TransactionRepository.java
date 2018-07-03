@@ -2,10 +2,13 @@ package core.repository;
 
 import core.model.Transaction;
 
+import java.sql.Connection;
 import java.sql.Date;
 import java.util.List;
 
 public interface TransactionRepository {
+
+    void setConnection(Connection conn);
 
     Transaction getById(int id);
 

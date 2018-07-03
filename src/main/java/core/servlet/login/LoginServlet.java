@@ -2,6 +2,7 @@ package core.servlet.login;
 
 import core.model.User;
 import core.repository.UserRepository;
+import core.servlet.filter.ConnectionPerRequest;
 import core.servlet.helpers.LoginSession;
 import core.servlet.helpers.Page;
 import core.servlet.helpers.UserCounter;
@@ -25,6 +26,10 @@ public class LoginServlet extends HttpServlet {
         this.repo = repository;
     }
 
+    protected void setConnection(UserRepository repo){
+        repo.setConnection(ConnectionPerRequest.connection.get());
+    }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
@@ -35,6 +40,8 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+
+        setConnection(repo);
 
         User user = new User();
 

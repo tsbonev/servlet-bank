@@ -2,7 +2,7 @@ package core.servlet.login;
 
 import core.model.User;
 import core.repository.UserRepository;
-import core.service.UserService;
+import core.servlet.filter.ConnectionPerRequest;
 import core.servlet.helpers.Page;
 
 import javax.servlet.ServletException;
@@ -23,6 +23,10 @@ public class RegisterServlet extends HttpServlet {
 
     Page page;
 
+    protected void setConnection(UserRepository repo){
+        repo.setConnection(ConnectionPerRequest.connection.get());
+    }
+
     public RegisterServlet(Page page, UserRepository repository){
         this.page = page;
         this.repo = repository;
@@ -36,6 +40,8 @@ public class RegisterServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        setConnection(repo);
 
         User user = new User();
         String username = req.getParameter("username");

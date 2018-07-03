@@ -10,12 +10,10 @@ public class AccountRepositoryImpl implements AccountRepository {
 
     private Connection conn;
 
-    protected Connection getConnection(){
-        return MySQLConnection.getConnection();
-    }
+    public AccountRepositoryImpl(){}
 
-    public AccountRepositoryImpl(){
-        this.conn = getConnection();
+    public void setConnection(Connection conn){
+        this.conn = conn;
     }
 
     public Account getById(int id) {

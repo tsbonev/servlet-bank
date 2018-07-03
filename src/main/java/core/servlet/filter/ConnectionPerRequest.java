@@ -12,6 +12,8 @@ import java.sql.Connection;
 @WebFilter("/*")
 public class ConnectionPerRequest implements Filter {
 
+    public static ThreadLocal<Connection> connection;
+
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
 
@@ -20,7 +22,7 @@ public class ConnectionPerRequest implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
 
-        ThreadLocal<Connection> connection = new ThreadLocal<>();
+        connection = new ThreadLocal<>();
         connection.set(MySQLConnection.getConnection());
 
         HttpServletRequest req = (HttpServletRequest) servletRequest;

@@ -13,12 +13,10 @@ public class TransactionRepositoryImpl implements TransactionRepository {
 
     private Connection conn;
 
-    protected Connection getConnection(){
-        return MySQLConnection.getConnection();
-    }
+    public TransactionRepositoryImpl(){}
 
-    public TransactionRepositoryImpl(){
-        this.conn = getConnection();
+    public void setConnection(Connection conn){
+        this.conn = conn;
     }
 
     public void setPageSize(int pageSize) {

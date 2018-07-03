@@ -51,41 +51,26 @@ public class LoginSystemTest {
     public HttpSession session;
 
     @Mock
-    UserRepository userRepo;
-
-    @Mock
     public Page page;
 
     public LoginServlet loginServlet;
     public RegisterServlet registerServlet;
     public LogoutServlet logoutServlet;
 
-    public AccountService accountService;
-    public UserService userService;
 
 
     @Before
     public void setUp() {
 
-        UserService.clearInstance();
-        AccountService.clearInstance();
-        UserCounter.clearInstance();
-
-        userService = UserService.getInstance(userRepository);
-        accountService = AccountService.getInstance(accountRepository);
-
-        loginServlet = new LoginServlet(page, userRepo);
+        loginServlet = new LoginServlet(page, userRepository);
         logoutServlet = new LogoutServlet(page);
-        registerServlet = new RegisterServlet(page, userRepo);
+        registerServlet = new RegisterServlet(page, userRepository);
 
     }
 
     @After
     public void cleanUp() {
 
-        UserService.clearInstance();
-        AccountService.clearInstance();
-        UserCounter.clearInstance();
 
     }
 

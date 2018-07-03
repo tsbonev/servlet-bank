@@ -2,9 +2,12 @@ package core.repository;
 
 import core.model.User;
 
+import java.sql.Connection;
 import java.util.List;
 
 public interface UserRepository {
+
+    void setConnection(Connection conn);
 
     User getById(int id);
 
