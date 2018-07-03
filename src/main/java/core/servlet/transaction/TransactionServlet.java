@@ -3,6 +3,7 @@ package core.servlet.transaction;
 import core.model.Transaction;
 import core.repository.TransactionRepository;
 import core.repository.UserRepository;
+import core.servlet.filter.ConnectionPerRequest;
 import core.servlet.helper.LoginSession;
 import core.servlet.helper.Page;
 import org.apache.commons.lang3.StringUtils;
@@ -29,8 +30,18 @@ public class TransactionServlet extends HttpServlet {
 
     Page page;
 
-    public TransactionServlet(Page page){
+    protected void setConnection(TransactionRepository transactionRepository,
+                                 UserRepository userRepository){
+        userRepository.setConnection(ConnectionPerRequest.connection.get());
+        transactionRepository.setConnection(ConnectionPerRequest.connection.get());
+    }
+
+    public TransactionServlet(Page page,
+                              UserRepository userRepository,
+                              TransactionRepository transactionRepository){
         this.page = page;
+        this.transactionRepository = transactionRepository;
+        this.userRepository = userRepository;
     }
 
     private static double maxAmount = Double.MAX_VALUE / 4;
@@ -48,6 +59,8 @@ public class TransactionServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        setConnection(transactionRepository, userRepository);
 
         LoginSession session = (LoginSession) req.getSession().getAttribute("authorized");
 
@@ -69,26 +82,31 @@ public class TransactionServlet extends HttpServlet {
                 && !amountToString.matches(leadingZeroFraction)
                 ){
             page.redirectTo("/account", resp, req,
-                    "errorMessage", "transaction amount format invalid!");
+                    "errorMessage", "Transaction amount format invalid!");
             return;
         }
 
         String username = req.getParameter("username");
 
+        if((!session.getUsername().equalsIgnoreCase("admin")
+                && !username.equalsIgnoreCase(session.getUsername()))
+                || !session.isAuthorized()
+                ){
+            page.redirectTo("/account", resp, req,
+                    "errorMessage", "Action not permitted!");
+            return;
+        }
+
         Transaction transaction = new Transaction();
         transaction.setDate(Date.valueOf(LocalDate.now()));
         transaction.setAmount(amount);
         transaction.setOperation(operation);
-        transaction.setUserId(userRepository.getByUsername(session.getUsername()).getId());
-
-        if(operation.equals(Transaction.Operation.WITHDRAW)){
-            amount *= -1;
-        }
+        transaction.setUserId(userRepository.getByUsername(username).getId());
 
         transactionRepository.save(transaction);
 
-        page.redirectTo("/account?username=" + session.getUsername(), resp, req,
-                "successMessage", "transaction successful!");
+        page.redirectTo("/account?username=" + username, resp, req,
+                "successMessage", "Transaction successful!");
 
 
     }

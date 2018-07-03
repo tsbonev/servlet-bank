@@ -2,9 +2,7 @@ package core.servlet.transaction;
 
 import core.model.Transaction;
 import core.repository.TransactionRepository;
-import core.repository.TransactionRepositoryImpl;
 import core.repository.UserRepository;
-import core.repository.UserRepositoryImpl;
 import core.servlet.filter.ConnectionPerRequest;
 import core.servlet.helper.LoginSession;
 import core.servlet.helper.Page;
@@ -64,10 +62,11 @@ public class HistoryServlet extends HttpServlet {
         List<Transaction> transactions;
 
         if(!StringUtils.isEmpty(scope) && scope.equalsIgnoreCase("global")){
-
+            req.setAttribute("globalScope", true);
             transactions = transactionRepository.getAll(currPage);
 
         }else {
+            req.setAttribute("globalScope", false);
             transactions = transactionRepository.getByUserId(
                     userRepository.getByUsername(
                             session.getUsername()).getId(), currPage

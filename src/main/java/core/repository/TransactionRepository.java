@@ -14,6 +14,8 @@ public interface TransactionRepository {
 
     List<Transaction> getAll(int page);
 
+    double getBalance(int userId);
+
     void deleteById(int id);
 
     void deleteAllRows();

@@ -1,6 +1,7 @@
 package core.repository;
 
 import core.model.Transaction;
+import core.model.User;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -13,9 +14,10 @@ public class TransactionRepositoryImpl implements TransactionRepository {
 
     private Connection conn;
 
-    public TransactionRepositoryImpl(){}
+    public TransactionRepositoryImpl() {
+    }
 
-    public void setConnection(Connection conn){
+    public void setConnection(Connection conn) {
         this.conn = conn;
     }
 
@@ -23,14 +25,14 @@ public class TransactionRepositoryImpl implements TransactionRepository {
         TransactionRepositoryImpl.pageSize = pageSize;
     }
 
-    public int getPageSize(){
+    public int getPageSize() {
         return TransactionRepositoryImpl.pageSize;
     }
 
     public Transaction getById(int id) {
         Transaction transaction = new Transaction();
 
-        try{
+        try {
             PreparedStatement get = conn.prepareStatement(
                     "SELECT * FROM transactions" +
                             " WHERE id = ?"
@@ -40,7 +42,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
 
             ResultSet result = get.executeQuery();
 
-            while (result.next()){
+            while (result.next()) {
                 transaction.setId(result.getInt("id"));
                 transaction.setUserId(result.getInt("userId"));
                 transaction.setAmount(result.getDouble("amount"));
@@ -58,7 +60,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
     public List<Transaction> getAll(int page) {
         List<Transaction> transactionList = new ArrayList<Transaction>();
 
-        try{
+        try {
             PreparedStatement get = conn.prepareStatement(
                     "SELECT * FROM transactions LIMIT ? OFFSET ?"
             );
@@ -68,7 +70,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
 
             ResultSet result = get.executeQuery();
 
-            while (result.next()){
+            while (result.next()) {
                 Transaction transaction = new Transaction();
                 transaction.setId(result.getInt("id"));
                 transaction.setUserId(result.getInt("userId"));
@@ -86,8 +88,46 @@ public class TransactionRepositoryImpl implements TransactionRepository {
         return transactionList;
     }
 
+    public double getBalance(int userId) {
+
+        double balance = 0;
+
+        try {
+
+            PreparedStatement get = conn.prepareStatement(
+                    "SELECT operation, amount FROM transactions WHERE userID = ?"
+            );
+
+            get.setInt(1, userId);
+
+            ResultSet result = get.executeQuery();
+
+            while (result.next()) {
+
+                double amount = result.getDouble("amount");
+
+                switch (result.getString("operation")){
+                    case "DEPOSIT":
+                        balance += amount;
+                        break;
+                    case "WITHDRAW":
+                        balance -= amount;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return balance;
+    }
+
+
     public void deleteById(int id) {
-        try{
+        try {
             PreparedStatement delete = conn.prepareStatement(
                     "DELETE FROM transactions" +
                             " WHERE id = ?"
@@ -115,12 +155,11 @@ public class TransactionRepositoryImpl implements TransactionRepository {
     }
 
     public void save(Transaction transaction) {
-        try{
+        try {
             PreparedStatement save = conn.prepareStatement(
                     "INSERT INTO transactions(amount, userId, transactionDate, operation)" +
                             " VALUES(?, ?, ?, ?)"
             );
-
 
 
             save.setDouble(1, transaction.getAmount());
@@ -137,7 +176,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
 
     public void update(Transaction transaction) {
 
-        try{
+        try {
             PreparedStatement update = conn.prepareStatement(
                     "UPDATE transactions" +
                             " SET amount = ?," +
@@ -176,7 +215,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
 
             ResultSet result = get.executeQuery();
 
-            while (result.next()){
+            while (result.next()) {
 
                 Transaction transaction = new Transaction();
 
@@ -213,7 +252,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
 
             ResultSet result = get.executeQuery();
 
-            while (result.next()){
+            while (result.next()) {
 
                 Transaction transaction = new Transaction();
 
@@ -254,7 +293,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
 
             ResultSet result = get.executeQuery();
 
-            while (result.next()){
+            while (result.next()) {
 
                 Transaction transaction = new Transaction();
 
@@ -295,7 +334,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
 
     }
 
-    public int pageCount(){
+    public int pageCount() {
 
         int numberOfRows = 0;
 
@@ -319,7 +358,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
 
     public boolean hasNextPage(int currPage) {
         int rowCount = this.pageCount();
-        if(rowCount <= this.getPageSize() * currPage)
+        if (rowCount <= this.getPageSize() * currPage)
             return false;
 
         return true;
@@ -344,7 +383,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
 
     }
 
-    public void fillUsernames(List<Transaction> list){
+    public void fillUsernames(List<Transaction> list) {
 
         UserRepositoryImpl userRepository = new UserRepositoryImpl();
         userRepository.setConnection(conn);

@@ -11,9 +11,9 @@ import core.servlet.helper.UserCounter;
 import core.servlet.login.LoginServlet;
 import core.servlet.login.LogoutServlet;
 import core.servlet.login.RegisterServlet;
+import core.servlet.transaction.AccountServlet;
 import core.servlet.transaction.HistoryServlet;
 import core.servlet.transaction.TransactionServlet;
-import core.servlet.user.AccountServlet;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandler;
@@ -58,8 +58,8 @@ public final class Jetty {
                 servletContext.addServlet("login", new LoginServlet(page, userRepo)).addMapping("/login");
                 servletContext.addServlet("register", new RegisterServlet(page, userRepo, transactionRepo)).addMapping("/register");
                 servletContext.addServlet("logout", new LogoutServlet(page)).addMapping("/logout");
-                servletContext.addServlet("account", new AccountServlet(page)).addMapping("/account");
-                servletContext.addServlet("transaction", new TransactionServlet(page)).addMapping("/transaction");
+                servletContext.addServlet("account", new AccountServlet(page, transactionRepo, userRepo)).addMapping("/account");
+                servletContext.addServlet("transaction", new TransactionServlet(page, userRepo, transactionRepo)).addMapping("/transaction");
                 servletContext.addServlet("history", new HistoryServlet(page, transactionRepo, userRepo)).addMapping("/history");
                 servletContext.addServlet("error", new ErrorHandler(page)).addMapping("/error");
 
