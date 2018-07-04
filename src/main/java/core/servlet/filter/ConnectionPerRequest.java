@@ -19,6 +19,17 @@ public class ConnectionPerRequest implements Filter {
         this.filterConfig = filterConfig;
     }
 
+    /**
+     * Opens a new connection and saves it in a ThreadLocal variable
+     * every time a request is sent to a page from
+     * account, transaction, login, register or history
+     * 
+     * @param servletRequest
+     * @param servletResponse
+     * @param filterChain
+     * @throws IOException
+     * @throws ServletException
+     */
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
 

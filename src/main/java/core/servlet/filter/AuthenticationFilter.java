@@ -25,6 +25,17 @@ public class AuthenticationFilter implements Filter {
         this.filterConfig = filterConfig;
     }
 
+    /**
+     * Authenticates a logged in user and ignores
+     * authentication if the page requested is
+     * home, register or login
+     *
+     * @param servletRequest
+     * @param servletResponse
+     * @param filterChain
+     * @throws IOException
+     * @throws ServletException
+     */
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
 

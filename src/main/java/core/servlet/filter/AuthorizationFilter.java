@@ -25,6 +25,17 @@ public class AuthorizationFilter implements Filter {
         this.filterConfig = filterConfig;
     }
 
+    /**
+     * Authorizes whether the request with a username in
+     * the parameters was made by the logged in user
+     * and lets the admin through in all cases
+     *
+     * @param servletRequest
+     * @param servletResponse
+     * @param filterChain
+     * @throws IOException
+     * @throws ServletException
+     */
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
 
