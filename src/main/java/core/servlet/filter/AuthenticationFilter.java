@@ -1,6 +1,6 @@
 package core.servlet.filter;
 
-import core.servlet.helper.LoginSession;
+import core.servlet.helper.LoginSessionImpl;
 import core.servlet.helper.Page;
 
 import javax.servlet.*;
@@ -41,7 +41,7 @@ public class AuthenticationFilter implements Filter {
 
         HttpServletRequest req = (HttpServletRequest) servletRequest;
         HttpServletResponse resp = (HttpServletResponse) servletResponse;
-        LoginSession session = (LoginSession) req.getSession().getAttribute("authorized");
+        LoginSessionImpl session = (LoginSessionImpl) req.getSession().getAttribute("authorized");
 
         if(req.getRequestURI().endsWith("/login")
                 || req.getRequestURI().endsWith("/register")

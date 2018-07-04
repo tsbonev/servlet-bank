@@ -1,11 +1,11 @@
 package core.servlet.transaction;
 
-import com.sun.deploy.net.HttpRequest;
 import core.model.User;
 import core.repository.TransactionRepository;
 import core.repository.UserRepository;
 import core.servlet.filter.ConnectionPerRequest;
 import core.servlet.helper.LoginSession;
+import core.servlet.helper.LoginSessionImpl;
 import core.servlet.helper.Page;
 
 import javax.servlet.ServletException;
@@ -44,7 +44,7 @@ public class AccountServlet extends HttpServlet {
 
     /**
      * Sets the connection of the repositories,
-     * gets the LoginSession and counts up the
+     * gets the LoginSessionImpl and counts up the
      * balance of the session username or the
      * username given in the url.
      *
@@ -66,8 +66,10 @@ public class AccountServlet extends HttpServlet {
 
         double balance = transactionRepository.getBalance(user.getId());
 
+        String username = req.getParameter("username");
+
         req.setAttribute("balance", balance);
-        req.setAttribute("passedUsername", req.getParameter("username"));
+        req.setAttribute("passedUsername", username);
 
         page.getPage("view/transaction/account.jsp", req, resp);
 

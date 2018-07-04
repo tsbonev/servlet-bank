@@ -4,7 +4,7 @@ import core.model.Transaction;
 import core.repository.TransactionRepository;
 import core.repository.UserRepository;
 import core.servlet.filter.ConnectionPerRequest;
-import core.servlet.helper.LoginSession;
+import core.servlet.helper.LoginSessionImpl;
 import core.servlet.helper.Page;
 import org.apache.commons.lang3.StringUtils;
 
@@ -137,7 +137,7 @@ public class TransactionServlet extends HttpServlet {
      */
     private boolean validateUser(HttpServletResponse resp, HttpServletRequest req, String username) throws IOException {
 
-        LoginSession session = (LoginSession) req.getSession().getAttribute("authorized");
+        LoginSessionImpl session = (LoginSessionImpl) req.getSession().getAttribute("authorized");
 
         if((!session.getUsername().equalsIgnoreCase("admin")
                 && !username.equalsIgnoreCase(session.getUsername()))

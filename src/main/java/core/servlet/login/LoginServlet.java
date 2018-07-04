@@ -4,6 +4,7 @@ import core.model.User;
 import core.repository.UserRepository;
 import core.servlet.filter.ConnectionPerRequest;
 import core.servlet.helper.LoginSession;
+import core.servlet.helper.LoginSessionImpl;
 import core.servlet.helper.Page;
 import core.servlet.helper.UserCounter;
 import org.apache.commons.lang3.StringUtils;
@@ -101,7 +102,7 @@ public class LoginServlet extends HttpServlet {
             counter.addUserToCount(user.getUsername());
         }
 
-        LoginSession session = new LoginSession(user.getUsername(), true);
+        LoginSession session = new LoginSessionImpl(user.getUsername(), true);
         req.getSession().setAttribute("authorized", session);
 
     }

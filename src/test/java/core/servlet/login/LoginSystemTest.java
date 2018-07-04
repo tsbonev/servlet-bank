@@ -5,6 +5,7 @@ import core.repository.TransactionRepository;
 import core.repository.UserRepository;
 import core.model.User;
 import core.servlet.helper.LoginSession;
+import core.servlet.helper.LoginSessionImpl;
 import core.servlet.helper.Page;
 import core.servlet.helper.UserCounter;
 import org.jmock.Expectations;
@@ -46,6 +47,9 @@ public class LoginSystemTest {
 
     @Mock
     private HttpSession session;
+
+    @Mock
+    private LoginSession loginSession;
 
     @Mock
     private Page page;
@@ -249,11 +253,6 @@ public class LoginSystemTest {
     @Test
     public void userLogsOut() throws IOException {
 
-        LoginSession loginSession = new LoginSession();
-
-        loginSession.setUsername("admin");
-        loginSession.setAuthorized(true);
-
         context.checking(new Expectations() {{
 
             oneOf(userRepository).setConnection(conn);
@@ -273,6 +272,9 @@ public class LoginSystemTest {
             oneOf(session).getAttribute("authorized");
             will(returnValue(loginSession));
 
+            oneOf(loginSession).setAuthorized(false);
+            oneOf(loginSession).getUsername();
+            will(returnValue("admin"));
 
             oneOf(page).redirectTo("/home", resp, req,
                     "infoMessage", "User logged out!");

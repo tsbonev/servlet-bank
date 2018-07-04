@@ -4,7 +4,7 @@ import core.model.Transaction;
 import core.repository.TransactionRepository;
 import core.repository.UserRepository;
 import core.servlet.filter.ConnectionPerRequest;
-import core.servlet.helper.LoginSession;
+import core.servlet.helper.LoginSessionImpl;
 import core.servlet.helper.Page;
 import org.apache.commons.lang3.StringUtils;
 
@@ -89,7 +89,7 @@ public class HistoryServlet extends HttpServlet {
 
         setConnection(transactionRepository, userRepository);
 
-        LoginSession session = (LoginSession) req.getSession().getAttribute("authorized");
+        LoginSessionImpl session = (LoginSessionImpl) req.getSession().getAttribute("authorized");
 
         int currPage = getCurrentPage(req);
 
