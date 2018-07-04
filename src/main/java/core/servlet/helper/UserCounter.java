@@ -22,18 +22,39 @@ public class UserCounter {
 
     List<String> users = new ArrayList<>();
 
+    /**
+     * Returns the number of usernames in the logged usernames list
+     * 
+     * @return
+     */
     public int getUsersCount(){
         return users.size();
     }
 
+    /**
+     * Checks if a username is already in the logged usernames list
+     *
+     * @param username to check
+     * @return
+     */
     public boolean userIsLoggedIn(String username){
         return users.contains(username);
     }
 
+    /**
+     * Adds a username to the logged usernames list
+     *
+     * @param username to add
+     */
     public void addUserToCount(String username){
         users.add(username);
     }
 
+    /**
+     * Removes a username from the logged usernames list
+     *
+     * @param username to remove
+     */
     public void removeUserFromCount(String username){
         users.remove(username);
     }
