@@ -1,5 +1,6 @@
 package core.servlet.transaction;
 
+import com.sun.deploy.net.HttpRequest;
 import core.model.User;
 import core.repository.TransactionRepository;
 import core.repository.UserRepository;
@@ -59,6 +60,48 @@ public class AccountServlet extends HttpServlet {
 
         setConnection(transactionRepository, userRepository);
 
+        User user = getUser(req);
+
+        if(!validateUser(user, req, resp)) return;
+
+        double balance = transactionRepository.getBalance(user.getId());
+
+        req.setAttribute("balance", balance);
+        req.setAttribute("passedUsername", req.getParameter("username"));
+
+        page.getPage("view/transaction/account.jsp", req, resp);
+
+    }
+
+    /**
+     * Validates a user object.
+     *
+     * @param user to validate
+     * @param req servlet request
+     * @param resp servlet response
+     * @return result of the validation
+     * @throws IOException
+     */
+    private boolean validateUser(User user, HttpServletRequest req, HttpServletResponse resp) throws IOException {
+
+        if(user.getId() == 0){
+            page.redirectTo("/home", resp, req,
+                    "errorMessage", "No such user exists!");
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Gets the user from the specified
+     * url or if no parameter has been
+     * passed the user from the session.
+     *
+     * @param req servlet request
+     * @return the user
+     */
+    private User getUser(HttpServletRequest req){
+
         LoginSession session = (LoginSession) req.getSession().getAttribute("authorized");
 
         String username = req.getParameter("username");
@@ -67,20 +110,7 @@ public class AccountServlet extends HttpServlet {
             username = session.getUsername();
         }
 
-        User user = userRepository.getByUsername(username);
-
-        if(user.getId() == 0){
-            page.redirectTo("/home", resp, req,
-                    "errorMessage", "No such user exists!");
-            return;
-        }
-
-        double balance = transactionRepository.getBalance(user.getId());
-
-        req.setAttribute("balance", balance);
-        req.setAttribute("passedUsername", req.getParameter("username"));
-
-        page.getPage("view/transaction/account.jsp", req, resp);
+        return userRepository.getByUsername(username);
 
     }
 }
