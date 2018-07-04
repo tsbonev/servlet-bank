@@ -20,7 +20,7 @@ public class PageImpl implements Page {
     }
 
     /**
-     * Returns a jsp page with the forward method and closes the jdbc connection
+     * Returns a jsp page with the forward method and closes the jdbc connection.
      *
      * @param pagePath page to find
      * @param req servlet request
@@ -38,7 +38,7 @@ public class PageImpl implements Page {
     /**
      * Redirects to a servlet or jsp page and saves
      * a message type and content into the request session,
-     * closes the connection after it has redirected
+     * closes the connection after it has redirected.
      *
      * @param servletPath to redirect to
      * @param resp servlet response

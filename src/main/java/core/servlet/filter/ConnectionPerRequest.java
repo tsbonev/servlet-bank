@@ -22,7 +22,7 @@ public class ConnectionPerRequest implements Filter {
     /**
      * Opens a new connection and saves it in a ThreadLocal variable
      * every time a request is sent to a page from
-     * account, transaction, login, register or history
+     * account, transaction, login, register or history.
      *
      * @param servletRequest
      * @param servletResponse

@@ -28,14 +28,34 @@ public class AccountServlet extends HttpServlet {
         this.userRepository = userRepository;
     }
 
+    /**
+     * Gets a connection from the ThreadLocal and
+     * injects it into the repositories.
+     *
+     * @param transactionRepository
+     * @param userRepository
+     */
     protected void setConnection(TransactionRepository transactionRepository,
                                  UserRepository userRepository){
         userRepository.setConnection(ConnectionPerRequest.connection.get());
         transactionRepository.setConnection(ConnectionPerRequest.connection.get());
     }
 
+    /**
+     * Sets the connection of the repositories,
+     * gets the LoginSession and counts up the
+     * balance of the session username or the
+     * username given in the url.
+     *
+     * @param req servlet request
+     * @param resp servlet response
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        req.setAttribute("title", "Account");
 
         setConnection(transactionRepository, userRepository);
 

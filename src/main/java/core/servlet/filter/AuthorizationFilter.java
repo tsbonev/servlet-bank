@@ -28,7 +28,7 @@ public class AuthorizationFilter implements Filter {
     /**
      * Authorizes whether the request with a username in
      * the parameters was made by the logged in user
-     * and lets the admin through in all cases
+     * and lets the admin through in all cases.
      *
      * @param servletRequest
      * @param servletResponse

@@ -28,7 +28,7 @@ public class AuthenticationFilter implements Filter {
     /**
      * Authenticates a logged in user and ignores
      * authentication if the page requested is
-     * home, register or login
+     * home, register or login.
      *
      * @param servletRequest
      * @param servletResponse

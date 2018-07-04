@@ -25,10 +25,23 @@ public class HistoryServlet extends HttpServlet {
 
     Page page;
 
+    /**
+     * Returns the total pages for the current user's transactions.
+     *
+     * @param size of all of the transactions
+     * @return number of pages
+     */
     private int totalPages(int size){
         return (size + transactionRepository.getPageSize() - 1) / transactionRepository.getPageSize();
     }
 
+    /**
+     * Checks if there is another page.
+     *
+     * @param size of the whole transaction list
+     * @param currPage current page's index
+     * @return whether a next page exists
+     */
     private boolean hasNextPage(int size, int currPage){
 
         if (size <= transactionRepository.getPageSize() * currPage)
@@ -46,14 +59,34 @@ public class HistoryServlet extends HttpServlet {
         this.transactionRepository = transactionRepository;
     }
 
+    /**
+     * Gets the connection from the ThreadLocal and
+     * injects it into the repositories.
+     *
+     * @param transactionRepository
+     * @param userRepository
+     */
     protected void setConnection(TransactionRepository transactionRepository,
                                  UserRepository userRepository){
         userRepository.setConnection(ConnectionPerRequest.connection.get());
         transactionRepository.setConnection(ConnectionPerRequest.connection.get());
     }
 
+    /**
+     * Sets the connection for the repositories
+     * and returns a jsp history page with
+     * a paginated list of transactions for
+     * the requested user.
+     *
+     * @param req servlet request
+     * @param resp servlet response
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        req.setAttribute("title", "History");
 
         setConnection(transactionRepository, userRepository);
 

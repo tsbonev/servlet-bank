@@ -46,8 +46,19 @@ public class TransactionServlet extends HttpServlet {
 
     private static double maxAmount = Double.MAX_VALUE / 4;
 
+    /**
+     * Gets a transaction form and
+     * sets the title to Transaction.
+     *
+     * @param req servlet request
+     * @param resp servlet response
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        req.setAttribute("title", "Transaction");
 
         String action = req.getParameter("action");
         action = StringUtils.capitalize(action);
@@ -57,6 +68,18 @@ public class TransactionServlet extends HttpServlet {
 
     }
 
+    /**
+     * Sets the connection of the repositories,
+     * gets the session, validates the transaction amount,
+     * checks if the request was sent by a valid user
+     * to a valid account and saves the transaction
+     * if all checks are passed.
+     *
+     * @param req servlet request
+     * @param resp servlet response
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 

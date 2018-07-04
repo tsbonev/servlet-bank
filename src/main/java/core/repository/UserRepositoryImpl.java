@@ -14,7 +14,7 @@ public class UserRepositoryImpl implements UserRepository {
     public UserRepositoryImpl(){ }
 
     /**
-     * Sets this classes' connection to an injected connection
+     * Sets this classes' connection to an injected connection.
      *
      * @param conn that is injected
      */
@@ -23,7 +23,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     /**
-     * Gets a user from the database by id
+     * Gets a user from the database by id.
      *
      * @param id of the user
      * @return found user or empty user
@@ -57,7 +57,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     /**
-     * Returns all users from the database
+     * Returns all users from the database.
      *
      * @return list of all users
      */
@@ -87,7 +87,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     /**
-     * Deletes a user by id
+     * Deletes a user by id.
      *
      * @param id of the user
      */
@@ -108,7 +108,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     /**
-     * Clears the rows of the user table
+     * Clears the rows of the user table.
      */
     public void deleteAllRows() {
         try {
@@ -123,7 +123,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     /**
-     * Saves a user into the database
+     * Saves a user into the database.
      *
      * @param user to be saved
      */
@@ -145,7 +145,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     /**
-     * Updates a user in the database
+     * Updates a user in the database.
      *
      * @param user to be updated
      */
@@ -170,7 +170,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     /**
-     * Gets a user by his username
+     * Gets a user by his username.
      *
      * @param username to search for
      * @return found user or empty user
@@ -202,7 +202,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     /**
-     * Checks if a given user is in the database
+     * Checks if a given user is in the database.
      *
      * @param user to check
      * @return whether or not the user exists in the given state
@@ -228,7 +228,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     /**
-     * Creates a user table in the database
+     * Creates a user table in the database.
      */
     public void createUserTable() {
 
@@ -248,7 +248,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     /**
-     * Drops the user table from the database
+     * Drops the user table from the database.
      */
     public void dropUserTable() {
 
@@ -265,9 +265,9 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     /**
-     * Returns the mysql metadata of the user table
+     * Returns the mysql metadata of the user table.
      *
-     * @return
+     * @return table metadata
      * @throws SQLException
      */
     public DatabaseMetaData getMetaData() throws SQLException {

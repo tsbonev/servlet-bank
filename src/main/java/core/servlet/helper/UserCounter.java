@@ -23,8 +23,8 @@ public class UserCounter {
     List<String> users = new ArrayList<>();
 
     /**
-     * Returns the number of usernames in the logged usernames list
-     * 
+     * Returns the number of usernames in the logged usernames list.
+     *
      * @return
      */
     public int getUsersCount(){
@@ -32,7 +32,7 @@ public class UserCounter {
     }
 
     /**
-     * Checks if a username is already in the logged usernames list
+     * Checks if a username is already in the logged usernames list.
      *
      * @param username to check
      * @return
@@ -42,7 +42,7 @@ public class UserCounter {
     }
 
     /**
-     * Adds a username to the logged usernames list
+     * Adds a username to the logged usernames list.
      *
      * @param username to add
      */
@@ -51,7 +51,7 @@ public class UserCounter {
     }
 
     /**
-     * Removes a username from the logged usernames list
+     * Removes a username from the logged usernames list.
      *
      * @param username to remove
      */

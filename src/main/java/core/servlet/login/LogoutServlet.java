@@ -20,6 +20,13 @@ public class LogoutServlet extends HttpServlet {
         this.page = page;
     }
 
+    /**
+     * Clears the authorized attribute of the session.
+     *
+     * @param req servlet request
+     * @param resp servlet response
+     * @throws IOException
+     */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 

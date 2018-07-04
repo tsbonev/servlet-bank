@@ -18,6 +18,14 @@ public class ErrorHandler extends HttpServlet {
         this.page = page;
     }
 
+    /**
+     * Redirects to the home page with an error message.
+     *
+     * @param req servlet request
+     * @param resp servlet response
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 

@@ -28,6 +28,12 @@ public class RegisterServlet extends HttpServlet {
 
     Page page;
 
+    /**
+     * Gets a connection from the ThreadLocal and injects it into the repositories.
+     *
+     * @param userRepository
+     * @param transactionRepository
+     */
     protected void setConnection(UserRepository userRepository, TransactionRepository transactionRepository){
         userRepository.setConnection(ConnectionPerRequest.connection.get());
         transactionRepository.setConnection(ConnectionPerRequest.connection.get());
@@ -39,12 +45,33 @@ public class RegisterServlet extends HttpServlet {
         this.transactionRepository = transactionRepository;
     }
 
+    /**
+     * Gets the register jsp form and sets the title to Register.
+     *
+     * @param req servlet request
+     * @param resp servlet response
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setAttribute("title", "Register");
         page.getPage("view/user/register.jsp", req, resp);
     }
 
+    /**
+     * Sets the connections for the repositories,
+     * checks if the register form fields are valid,
+     * checks if the username is not taken and
+     * registers the user if all checks are passed
+     * creating a deposit transaction with an amount of 5
+     * when a new user is registered.
+     *
+     * @param req servlet request
+     * @param resp servlet response
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 

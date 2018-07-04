@@ -25,19 +25,39 @@ public class LoginServlet extends HttpServlet {
         this.page = page;
         this.repo = repository;
     }
-
-    protected void setConnection(UserRepository repo){
-        repo.setConnection(ConnectionPerRequest.connection.get());
+    /**
+     * Gets a connection from the ThreadLocal and injects it into the repositories.
+     *
+     * @param userRepository
+     */
+    protected void setConnection(UserRepository userRepository){
+        userRepository.setConnection(ConnectionPerRequest.connection.get());
     }
 
+    /**
+     * Gets the login jsp form and changes the title to login.
+     *
+     * @param req servlet request
+     * @param resp servlet response
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        req.setAttribute("title", "login");
+        req.setAttribute("title", "Login");
         page.getPage("view/user/login.jsp", req, resp);
 
     }
 
+    /**
+     * Connects to the database, checks the data
+     * from the sent login form and authenticates it.
+     *
+     * @param req servlet request
+     * @param resp servlet response
+     * @throws IOException
+     */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 

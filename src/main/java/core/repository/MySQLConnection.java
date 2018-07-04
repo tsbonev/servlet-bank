@@ -7,9 +7,9 @@ import java.sql.SQLException;
 public class MySQLConnection {
 
     /**
-     * Returns a jdbc mysql connection
+     * Returns a jdbc connection to a mysql database.
      *
-     * @return
+     * @return a connection
      */
     public static Connection getConnection() {
 
