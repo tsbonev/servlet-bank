@@ -13,10 +13,21 @@ public class UserRepositoryImpl implements UserRepository {
 
     public UserRepositoryImpl(){ }
 
+    /**
+     * Sets this classes' connection to an injected connection
+     *
+     * @param conn that is injected
+     */
     public void setConnection(Connection conn){
         this.conn = conn;
     }
 
+    /**
+     * Gets a user from the database by id
+     *
+     * @param id of the user
+     * @return found user or empty user
+     */
     public User getById(int id) {
 
         User user = new User();
@@ -45,6 +56,11 @@ public class UserRepositoryImpl implements UserRepository {
 
     }
 
+    /**
+     * Returns all users from the database
+     *
+     * @return list of all users
+     */
     public List<User> getAll() {
         List<User> users = new ArrayList<User>();
 
@@ -70,6 +86,11 @@ public class UserRepositoryImpl implements UserRepository {
         return users;
     }
 
+    /**
+     * Deletes a user by id
+     *
+     * @param id of the user
+     */
     public void deleteById(int id) {
         try{
             PreparedStatement delete = conn.prepareStatement(
@@ -86,6 +107,9 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
+    /**
+     * Clears the rows of the user table
+     */
     public void deleteAllRows() {
         try {
             PreparedStatement delete = conn.prepareStatement(
@@ -98,6 +122,11 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
+    /**
+     * Saves a user into the database
+     *
+     * @param user to be saved
+     */
     public void save(User user) {
         try{
             PreparedStatement save = conn.prepareStatement(
@@ -115,6 +144,11 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
+    /**
+     * Updates a user in the database
+     *
+     * @param user to be updated
+     */
     public void update(User user) {
         try{
             PreparedStatement update = conn.prepareStatement(
@@ -135,6 +169,12 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
+    /**
+     * Gets a user by his username
+     *
+     * @param username to search for
+     * @return found user or empty user
+     */
     public User getByUsername(String username) {
         User user = new User();
 
@@ -161,6 +201,12 @@ public class UserRepositoryImpl implements UserRepository {
         return user;
     }
 
+    /**
+     * Checks if a given user is in the database
+     *
+     * @param user to check
+     * @return whether or not the user exists in the given state
+     */
     public boolean checkPassword(User user) {
 
         try {
@@ -181,6 +227,9 @@ public class UserRepositoryImpl implements UserRepository {
         return false;
     }
 
+    /**
+     * Creates a user table in the database
+     */
     public void createUserTable() {
 
         try {
@@ -198,6 +247,9 @@ public class UserRepositoryImpl implements UserRepository {
 
     }
 
+    /**
+     * Drops the user table from the database
+     */
     public void dropUserTable() {
 
         try {
@@ -212,6 +264,12 @@ public class UserRepositoryImpl implements UserRepository {
 
     }
 
+    /**
+     * Returns the mysql metadata of the user table
+     *
+     * @return
+     * @throws SQLException
+     */
     public DatabaseMetaData getMetaData() throws SQLException {
         return conn.getMetaData();
     }

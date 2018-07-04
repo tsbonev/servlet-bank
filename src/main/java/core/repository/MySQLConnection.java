@@ -6,6 +6,11 @@ import java.sql.SQLException;
 
 public class MySQLConnection {
 
+    /**
+     * Returns a jdbc mysql connection
+     *
+     * @return
+     */
     public static Connection getConnection() {
 
         try {

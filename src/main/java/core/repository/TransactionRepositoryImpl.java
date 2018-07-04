@@ -16,18 +16,39 @@ public class TransactionRepositoryImpl implements TransactionRepository {
     public TransactionRepositoryImpl() {
     }
 
+    /**
+     * Sets this classes' connection to an injected connection
+     *
+     * @param conn that is injected
+     */
     public void setConnection(Connection conn) {
         this.conn = conn;
     }
 
+    /**
+     * Sets the max size for transaction's pagination
+     *
+     * @param pageSize
+     */
     public void setPageSize(int pageSize) {
         TransactionRepositoryImpl.pageSize = pageSize;
     }
 
+    /**
+     * Returns the max size of the static pageSize variable
+     *
+     * @return
+     */
     public int getPageSize() {
         return TransactionRepositoryImpl.pageSize;
     }
 
+    /**
+     * Gets a transaction by its id
+     *
+     * @param id of the transaction
+     * @return the found transaction or an empty transaction
+     */
     public Transaction getById(int id) {
         Transaction transaction = new Transaction();
 
@@ -56,6 +77,12 @@ public class TransactionRepositoryImpl implements TransactionRepository {
         return transaction;
     }
 
+    /**
+     * Returns all transactions paginated
+     *
+     * @param page to return
+     * @return
+     */
     public List<Transaction> getAll(int page) {
         List<Transaction> transactionList = new ArrayList<Transaction>();
 
@@ -87,6 +114,12 @@ public class TransactionRepositoryImpl implements TransactionRepository {
         return transactionList;
     }
 
+    /**
+     * Sums up the balance of an account by looking up transactions
+     *
+     * @param userId to look up in transactions
+     * @return balance of the user
+     */
     public double getBalance(int userId) {
 
         double balance = 0;
@@ -124,7 +157,11 @@ public class TransactionRepositoryImpl implements TransactionRepository {
         return balance;
     }
 
-
+    /**
+     * Deletes a transaction by id
+     *
+     * @param id to delete
+     */
     public void deleteById(int id) {
         try {
             PreparedStatement delete = conn.prepareStatement(
@@ -141,6 +178,9 @@ public class TransactionRepositoryImpl implements TransactionRepository {
         }
     }
 
+    /**
+     * Clears the rows of the transaction database
+     */
     public void deleteAllRows() {
         try {
             PreparedStatement delete = conn.prepareStatement(
@@ -153,6 +193,11 @@ public class TransactionRepositoryImpl implements TransactionRepository {
         }
     }
 
+    /**
+     * Saves a transaction in the database
+     *
+     * @param transaction to save
+     */
     public void save(Transaction transaction) {
         try {
             PreparedStatement save = conn.prepareStatement(
@@ -173,6 +218,11 @@ public class TransactionRepositoryImpl implements TransactionRepository {
         }
     }
 
+    /**
+     * Updates a transaction row in the database
+     *
+     * @param transaction to update
+     */
     public void update(Transaction transaction) {
 
         try {
@@ -198,6 +248,13 @@ public class TransactionRepositoryImpl implements TransactionRepository {
         }
     }
 
+    /**
+     * Gets all the transactions of a user paginated
+     *
+     * @param id of the user
+     * @param page to return
+     * @return
+     */
     public List<Transaction> getByUserId(int id, int page) {
         List<Transaction> transactionList = new ArrayList<Transaction>();
 
@@ -234,6 +291,13 @@ public class TransactionRepositoryImpl implements TransactionRepository {
         return transactionList;
     }
 
+    /**
+     * Gets all transactions that have happened on a given date paginated
+     *
+     * @param date to search for
+     * @param page to return
+     * @return
+     */
     public List<Transaction> getByDate(Date date, int page) {
         List<Transaction> transactionList = new ArrayList<Transaction>();
 
@@ -272,6 +336,13 @@ public class TransactionRepositoryImpl implements TransactionRepository {
 
     }
 
+    /**
+     * Returns all transactions with a given operation paginated
+     *
+     * @param operation to search for
+     * @param page to get
+     * @return
+     */
     public List<Transaction> getByOperation(Transaction.Operation operation, int page) {
 
         List<Transaction> transactionList = new ArrayList<Transaction>();
@@ -313,6 +384,10 @@ public class TransactionRepositoryImpl implements TransactionRepository {
 
     }
 
+    /**
+     * Creates a transaction table in the database
+     *
+     */
     public void createTransactionTable() {
 
         try {
@@ -333,6 +408,10 @@ public class TransactionRepositoryImpl implements TransactionRepository {
 
     }
 
+    /**
+     * Drops transaction table form the database
+     *
+     */
     public void dropTransactionTable() {
 
         try {
@@ -347,6 +426,11 @@ public class TransactionRepositoryImpl implements TransactionRepository {
 
     }
 
+    /**
+     * Takes the userIds in a transaction and gets their usernames
+     *
+     * @param list transactions with usernames
+     */
     public void fillUsernames(List<Transaction> list) {
 
         UserRepositoryImpl userRepository = new UserRepositoryImpl();
@@ -358,6 +442,12 @@ public class TransactionRepositoryImpl implements TransactionRepository {
 
     }
 
+    /**
+     * Counts the number of transactions that a given user has
+     *
+     * @param userId of the user
+     * @return count of the transaction rows
+     */
     @Override
     public int getRowsForUserId(int userId) {
 
@@ -390,6 +480,11 @@ public class TransactionRepositoryImpl implements TransactionRepository {
 
     }
 
+    /**
+     * Returns the metadata of the mysql table
+     * @return
+     * @throws SQLException
+     */
     public DatabaseMetaData getMetaData() throws SQLException {
         return conn.getMetaData();
     }
