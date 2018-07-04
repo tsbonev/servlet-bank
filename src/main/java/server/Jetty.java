@@ -54,29 +54,40 @@ public final class Jetty {
                 UserRepository userRepo = new UserRepositoryImpl();
                 TransactionRepository transactionRepo = new TransactionRepositoryImpl();
 
-                servletContext.addServlet("home", new HomeServlet(page)).addMapping("/", "/home");
-                servletContext.addServlet("login", new LoginServlet(page, userRepo)).addMapping("/login");
-                servletContext.addServlet("register", new RegisterServlet(page, userRepo, transactionRepo)).addMapping("/register");
+                servletContext.addServlet("home", new HomeServlet(page))
+                        .addMapping("/", "/home");
+
+                servletContext.addServlet("login", new LoginServlet(page, userRepo))
+                        .addMapping("/login");
+                servletContext.addServlet("register", new RegisterServlet(page, userRepo, transactionRepo))
+                        .addMapping("/register");
                 servletContext.addServlet("logout", new LogoutServlet(page)).addMapping("/logout");
-                servletContext.addServlet("account", new AccountServlet(page, transactionRepo, userRepo)).addMapping("/account");
-                servletContext.addServlet("transaction", new TransactionServlet(page, userRepo, transactionRepo)).addMapping("/transaction");
-                servletContext.addServlet("history", new HistoryServlet(page, transactionRepo, userRepo)).addMapping("/history");
-                servletContext.addServlet("error", new ErrorHandler(page)).addMapping("/error");
+
+                servletContext.addServlet("account", new AccountServlet(page, transactionRepo, userRepo))
+                        .addMapping("/account");
+                servletContext.addServlet("transaction", new TransactionServlet(page, userRepo, transactionRepo))
+                        .addMapping("/transaction");
+
+                servletContext.addServlet("history", new HistoryServlet(page, transactionRepo, userRepo))
+                        .addMapping("/history");
+
+                servletContext.addServlet("error", new ErrorHandler(page))
+                        .addMapping("/error");
 
 
                 servletContext.addFilter("loginFilter", new AuthenticationFilter(page))
                         .addMappingForUrlPatterns(null, false, "/*");
+
                 servletContext.addFilter("accountFilter", new AuthorizationFilter(page))
                         .addMappingForUrlPatterns(null, false, "/account");
+
                 servletContext.addFilter("connectionPerRequest", new ConnectionPerRequest())
                         .addMappingForUrlPatterns(null, false, "/account",
                                 "/transaction", "/login", "/register", "/history");
 
             }
 
-            public void contextDestroyed(ServletContextEvent servletContextEvent) {
-
-            }
+            public void contextDestroyed(ServletContextEvent servletContextEvent) {}
         });
 
         ContextHandler staticResourceHandler = new ContextHandler();

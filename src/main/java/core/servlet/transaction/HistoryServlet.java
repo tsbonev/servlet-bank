@@ -1,7 +1,6 @@
 package core.servlet.transaction;
 
 import core.model.Transaction;
-import core.model.User;
 import core.repository.TransactionRepository;
 import core.repository.UserRepository;
 import core.servlet.filter.ConnectionPerRequest;
@@ -90,36 +89,36 @@ public class HistoryServlet extends HttpServlet {
 
         setConnection(transactionRepository, userRepository);
 
-        int currPage;
-
-        try {
-            currPage = (Integer.parseInt(req.getParameter("page")));
-        }
-        catch (Exception e){
-            currPage = 1;
-        }
-
         LoginSession session = (LoginSession) req.getSession().getAttribute("authorized");
 
-        String scope = req.getParameter("scope");
+        int currPage = getCurrentPage(req);
 
-        int userId = 0;
+        boolean scopeIsGlobal = judgeScope(req);
 
-        List<Transaction> transactions;
+        int userId = scopeIsGlobal ?
+                userRepository.getByUsername(
+                        session.getUsername()).getId() : 0;
 
-        if(!StringUtils.isEmpty(scope) && scope.equalsIgnoreCase("global")){
-            req.setAttribute("globalScope", true);
-            transactions = transactionRepository.getAll(currPage);
+        List<Transaction> transactions = getTransactions(currPage, scopeIsGlobal, userId);
 
-        }else {
-            req.setAttribute("globalScope", false);
-            userId = userRepository.getByUsername(
-                    session.getUsername()).getId();
+        setUpPagination(userId, currPage, req, transactions);
 
-            transactions = transactionRepository.getByUserId(
-                    userId, currPage
-            );
-        }
+        page.getPage("view/transaction/history.jsp", req, resp);
+
+    }
+
+    /**
+     * Sets up the pagination attributes
+     * needed for the jsp to properly paginate
+     * the transaction results.
+     *
+     * @param userId to get the row count for
+     * @param currPage to set the offset to
+     * @param req servlet request
+     * @param transactions the list of transactions
+     */
+    private void setUpPagination(int userId, int currPage,
+                                 HttpServletRequest req, List<Transaction> transactions){
 
         int rowCount = transactionRepository.getRowsForUserId(userId);
 
@@ -127,12 +126,82 @@ public class HistoryServlet extends HttpServlet {
         req.setAttribute("currPage", currPage);
         req.setAttribute("totalPage", totalPages(rowCount));
 
-
         transactionRepository.fillUsernames(transactions);
 
         req.setAttribute("transactions", transactions);
 
-        page.getPage("view/transaction/history.jsp", req, resp);
+    }
+
+
+    /**
+     * Checks whether the request has
+     * a parameter defining the scope
+     * as global.
+     *
+     * @param req servlet request
+     * @return result of the check
+     */
+    private boolean judgeScope(HttpServletRequest req){
+
+        String scope = req.getParameter("scope");
+
+        if(!StringUtils.isEmpty(scope) && scope.equalsIgnoreCase("global")) {
+            req.setAttribute("globalScope", true);
+            return true;
+        }
+            req.setAttribute("globalScope", false);
+            return false;
+
+    }
+
+    /**
+     * Returns the transaction list for
+     * the current page, user and scope.
+     *
+     * @param currPage current page
+     * @param scopeIsGlobal scope to get the list from
+     * @param userId id to get the list from
+     * @return the list of transactions paginated
+     */
+    private List<Transaction> getTransactions(int currPage,
+                                              boolean scopeIsGlobal, int userId){
+
+        List<Transaction> transactions;
+
+        if(scopeIsGlobal){
+            transactions = transactionRepository.getAll(currPage);
+
+        }else {
+
+            transactions = transactionRepository.getByUserId(
+                    userId, currPage
+            );
+        }
+
+        return transactions;
+    }
+
+    /**
+     * Returns the current page from a parameter,
+     * if the parameter is invalid default to the first page.
+     *
+     * @param req servlet request
+     * @return the current page
+     */
+    private int getCurrentPage(HttpServletRequest req){
+
+        int currPage;
+
+        String page = req.getParameter("page");
+
+        try {
+            currPage = (Integer.parseInt(page));
+        }
+        catch (NumberFormatException e){
+            currPage = 1;
+        }
+
+        return currPage;
 
     }
 }
