@@ -11,14 +11,6 @@ import java.sql.SQLException;
 
 public class PageImpl implements Page {
 
-    public void closeConnection() {
-        try {
-            ConnectionPerRequest.connection.get().close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     /**
      * Returns a jsp page with the forward method and closes the jdbc connection.
      *
@@ -32,7 +24,6 @@ public class PageImpl implements Page {
 
         RequestDispatcher rd = req.getRequestDispatcher(pagePath);
         rd.forward(req, resp);
-        closeConnection();
     }
 
     /**
@@ -51,7 +42,6 @@ public class PageImpl implements Page {
 
         req.getSession().setAttribute(messageType, messageContent);
         resp.sendRedirect(servletPath);
-        closeConnection();
 
     }
 

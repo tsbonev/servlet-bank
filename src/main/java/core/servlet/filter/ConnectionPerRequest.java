@@ -7,12 +7,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.SQLException;
 
 public class ConnectionPerRequest implements Filter {
 
     private FilterConfig filterConfig = null;
 
-    public static ThreadLocal<Connection> connection;
+    public static ThreadLocal<Connection> connection = new ThreadLocal<>();
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -33,13 +34,22 @@ public class ConnectionPerRequest implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
 
-        connection = new ThreadLocal<>();
-        connection.set(MySQLConnection.getConnection());
+        try{
+            connection.set(MySQLConnection.getConnection());
 
-        HttpServletRequest req = (HttpServletRequest) servletRequest;
-        HttpServletResponse resp = (HttpServletResponse) servletResponse;
+            HttpServletRequest req = (HttpServletRequest) servletRequest;
+            HttpServletResponse resp = (HttpServletResponse) servletResponse;
 
-        filterChain.doFilter(req, resp);
+            filterChain.doFilter(req, resp);
+        }
+        finally {
+            try {
+                ConnectionPerRequest.connection.get().close();
+                ConnectionPerRequest.connection.remove();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
 
     }
 

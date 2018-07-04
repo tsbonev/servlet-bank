@@ -95,9 +95,9 @@ public class HistoryServlet extends HttpServlet {
 
         boolean scopeIsGlobal = judgeScope(req);
 
-        int userId = scopeIsGlobal ?
-                userRepository.getByUsername(
-                        session.getUsername()).getId() : 0;
+        int userId = scopeIsGlobal ? 0
+                : userRepository.getByUsername(
+                        session.getUsername()).getId();
 
         List<Transaction> transactions = getTransactions(currPage, scopeIsGlobal, userId);
 
@@ -149,8 +149,9 @@ public class HistoryServlet extends HttpServlet {
             req.setAttribute("globalScope", true);
             return true;
         }
-            req.setAttribute("globalScope", false);
-            return false;
+
+        req.setAttribute("globalScope", false);
+        return false;
 
     }
 
