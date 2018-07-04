@@ -30,7 +30,6 @@ public class LogoutServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
-
         HttpSession session = req.getSession();
 
         LoginSession loginSession = (LoginSession) session.getAttribute("authorized");
@@ -39,15 +38,13 @@ public class LogoutServlet extends HttpServlet {
 
         loginSession.setAuthorized(false);
 
-        if(UserCounter.getInstance().userIsLoggedIn(sessionUsername)){
-            UserCounter.getInstance().removeUserFromCount(sessionUsername);
-        }
+        UserCounter counter = UserCounter.getInstance();
 
-        UserCounter.getInstance().removeUserFromCount(
-                loginSession.getUsername());
+        if(counter.userIsLoggedIn(sessionUsername)){
+            counter.removeUserFromCount(sessionUsername);
+        }
 
         page.redirectTo("/home", resp, req,
         "infoMessage", "User logged out!");
-
     }
 }

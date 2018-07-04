@@ -25,6 +25,7 @@ public class LoginServlet extends HttpServlet {
         this.page = page;
         this.repo = repository;
     }
+
     /**
      * Gets a connection from the ThreadLocal and injects it into the repositories.
      *
@@ -90,7 +91,6 @@ public class LoginServlet extends HttpServlet {
             LoginSession session = new LoginSession(username, true);
             req.getSession().setAttribute("authorized", session);
 
-
             page.redirectTo("/home", resp, req,
                     "successMessage", "Successfully logged in!");
         }
@@ -98,7 +98,6 @@ public class LoginServlet extends HttpServlet {
             page.redirectTo("/login", resp, req,
                     "errorMessage", "User not registered!");
         }
-
 
     }
 }

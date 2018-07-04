@@ -22,6 +22,7 @@ public class RegisterServlet extends HttpServlet {
 
     private static String usernamePattern = "^[\\w]{5,15}$";
     private static String passwordPattern = "^[\\w]{8,20}$";
+    private static double minAmount = 5;
 
     UserRepository userRepository;
     TransactionRepository transactionRepository;
@@ -64,8 +65,6 @@ public class RegisterServlet extends HttpServlet {
      * checks if the register form fields are valid,
      * checks if the username is not taken and
      * registers the user if all checks are passed
-     * creating a deposit transaction with an amount of 5
-     * when a new user is registered.
      *
      * @param req servlet request
      * @param resp servlet response
@@ -81,34 +80,84 @@ public class RegisterServlet extends HttpServlet {
         String username = req.getParameter("username");
         String password = req.getParameter("password");
 
-        if(!Pattern.matches(usernamePattern, username) || !Pattern.matches(passwordPattern, password)){
-            page.redirectTo("/register", resp, req,
-                    "errorMessage", "Something went wrong!");
-            return;
-        }
+        if(!validateForm(username, password, req, resp)) return;
 
         user.setUsername(username);
         user.setPassword(password);
 
-        if(userRepository.getByUsername(username).getId() != 0){
-            page.redirectTo("/register", resp, req,
-                    "errorMessage", "Username taken!");
-        }
-
-        else {
+        if(!usernameIsRegistered(username, req, resp)){
             userRepository.save(user);
 
-            Transaction transaction = new Transaction();
-            transaction.setAmount(5);
-            transaction.setDate(Date.valueOf(LocalDate.now()));
-            transaction.setOperation(Transaction.Operation.DEPOSIT);
-            transaction.setUsername(user.getUsername());
-            transaction.setUserId(userRepository.getByUsername(user.getUsername()).getId());
-            transactionRepository.save(transaction);
+            createInitialTransaction(user);
 
             page.redirectTo("/home", resp, req,
                     "successMessage", "User registered successfully!");
         }
 
     }
+
+    /**
+     * Checks if the username is already
+     * in the database and redirects
+     * to the register form if it is.
+     *
+     * @param username to check
+     * @param req servlet request
+     * @param resp servlet response
+     * @return check result
+     * @throws IOException
+     */
+    private boolean usernameIsRegistered(String username,
+                                         HttpServletRequest req, HttpServletResponse resp) throws IOException {
+
+        if(userRepository.getByUsername(username).getId() != 0){
+            page.redirectTo("/register", resp, req,
+                    "errorMessage", "Username taken!");
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Validates the username and password
+     * from the register form and
+     * redirects to an error page if
+     * validations fail.
+     *
+     * @param username to validate
+     * @param password to validate
+     * @param req servlet request
+     * @param resp servlet response
+     * @return validation result
+     * @throws IOException
+     */
+    private boolean validateForm(String username, String password,
+                                 HttpServletRequest req, HttpServletResponse resp) throws IOException {
+
+        if(!Pattern.matches(usernamePattern, username) || !Pattern.matches(passwordPattern, password)){
+            page.redirectTo("/register", resp, req,
+                    "errorMessage", "Something went wrong!");
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Creates an initial transaction for each registered
+     * user with an amount.
+     *
+     * @param user
+     */
+    private void createInitialTransaction(User user){
+
+        Transaction transaction = new Transaction();
+        transaction.setAmount(minAmount);
+        transaction.setDate(Date.valueOf(LocalDate.now()));
+        transaction.setOperation(Transaction.Operation.DEPOSIT);
+        transaction.setUsername(user.getUsername());
+        transaction.setUserId(userRepository.getByUsername(user.getUsername()).getId());
+        transactionRepository.save(transaction);
+
+    }
+
 }
