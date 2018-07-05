@@ -1,7 +1,12 @@
 package core.repository;
 
+import com.mysql.cj.jdbc.MysqlConnectionPoolDataSource;
+import com.mysql.cj.jdbc.MysqlDataSource;
+
+import javax.sql.ConnectionPoolDataSource;
+import javax.sql.DataSource;
+import javax.sql.PooledConnection;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class MySQLConnection {
@@ -14,17 +19,21 @@ public class MySQLConnection {
     public static Connection getConnection() {
 
         try {
-            String driver = "com.mysql.cj.jdbc.Driver";
             String url = "jdbc:mysql://localhost:3306/bank?useSSL=false&useLegacyDatetimeCode=false&serverTimezone=Europe/Sofia";
             String username = "user";
             String password = "password";
-            Class.forName(driver);
 
-            Connection conn = DriverManager.getConnection(url, username, password);
-            return conn;
+            MysqlConnectionPoolDataSource dataSource = new MysqlConnectionPoolDataSource();
+
+            dataSource.setUrl(url);
+            dataSource.setUser(username);
+            dataSource.setPassword(password);
+
+            PooledConnection pooledConnection = dataSource.getPooledConnection();
+
+            return pooledConnection.getConnection();
+
         } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
 
