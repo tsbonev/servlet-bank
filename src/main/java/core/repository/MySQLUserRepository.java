@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("Duplicates")
-public class MysqlUserRepository implements UserRepository {
+public class MySQLUserRepository implements UserRepository {
 
     private Connection conn;
 
-    public MysqlUserRepository(){ }
+    public MySQLUserRepository(){ }
 
     /**
      * Sets this classes' connection to an injected connection.

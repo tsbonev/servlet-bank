@@ -5,6 +5,7 @@ import core.servlet.*;
 import core.servlet.filter.AuthenticationFilter;
 import core.servlet.filter.AuthorizationFilter;
 import core.servlet.filter.ConnectionPerRequest;
+import core.servlet.filter.ErrorFilter;
 import core.servlet.helper.PageHandler;
 import core.servlet.helper.ServletPageHandler;
 import core.servlet.helper.UserCounter;
@@ -51,8 +52,8 @@ public final class Jetty {
                 servletContext.setAttribute("counter", UserCounter.getInstance());
 
                 PageHandler page = new ServletPageHandler();
-                UserRepository userRepo = new MysqlUserRepository();
-                TransactionRepository transactionRepo = new MysqlTransactionRepository();
+                UserRepository userRepo = new MySQLUserRepository();
+                TransactionRepository transactionRepo = new MySQLTransactionRepository();
 
                 servletContext.addServlet("home", new HomeServlet(page))
                         .addMapping("/", "/home");
@@ -84,6 +85,9 @@ public final class Jetty {
                 servletContext.addFilter("connectionPerRequest", new ConnectionPerRequest())
                         .addMappingForUrlPatterns(null, false, "/account",
                                 "/transaction", "/login", "/register", "/history");
+
+                servletContext.addFilter("errorFilter", new ErrorFilter())
+                        .addMappingForUrlPatterns(null, false, "/*");
 
             }
 

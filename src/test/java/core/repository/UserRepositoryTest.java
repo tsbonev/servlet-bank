@@ -16,7 +16,7 @@ import static org.hamcrest.CoreMatchers.is;
 
 public class UserRepositoryTest {
 
-    MysqlUserRepository userRepository = new MysqlUserRepository();
+    MySQLUserRepository userRepository = new MySQLUserRepository();
     Connection connection;
 
     @Before
