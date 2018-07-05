@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.sql.*;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class TransactionRepositoryTest {
     @Before
     public void setUp(){
 
-         connection = MySQLConnection.getConnection();
+        connection = MySQLConnection.getConnection();
 
         userRepository.setConnection(connection);
         transactionRepository.setConnection(connection);
@@ -143,6 +144,89 @@ public class TransactionRepositoryTest {
 
         assertThat(transactionRepository.getAll(2).size(), is(10));
         assertThat(transactionRepository.getAll(2).get(0).getAmount(), is(10.0));
+
+    }
+
+    @Test
+    public void fillUsernamesForTransactions(){
+
+        List<Transaction> transactionList = new ArrayList<>();
+
+        transactionList.add(transaction);
+
+        transactionRepository.fillUsernames(transactionList);
+
+        assertThat(transactionList.get(0).getUsername(), is(user.getUsername()));
+
+    }
+
+    @Test
+    public void getRowsForUser(){
+
+        Transaction transactionOne = new Transaction();
+        transactionOne.setUserId(user.getId());
+        transactionOne.setUsername("admin");
+        transactionOne.setOperation(Transaction.Operation.DEPOSIT);
+        transactionOne.setDate(Date.valueOf(LocalDate.now()));
+        transactionOne.setAmount(1);
+
+        Transaction transactionTwo = new Transaction();
+        transactionTwo.setUserId(user.getId());
+        transactionTwo.setUsername("admin");
+        transactionTwo.setOperation(Transaction.Operation.DEPOSIT);
+        transactionTwo.setDate(Date.valueOf(LocalDate.now()));
+        transactionTwo.setAmount(1);
+
+        transactionRepository.save(transactionOne);
+        transactionRepository.save(transactionTwo);
+
+        assertThat(transactionRepository.getRowsForUserId(user.getId()), is(2));
+
+    }
+
+    @Test
+    public void getAllRowsIfIdIsZero(){
+
+        User userOne = new User();
+        userOne.setUsername("username");
+        userOne.setPassword("password");
+
+        userRepository.save(userOne);
+        int userOneId = userRepository.getByUsername("username").getId();
+
+        transactionRepository.save(transaction);
+
+        Transaction transactionTwo = new Transaction();
+        transactionTwo.setUserId(userOneId);
+        transactionTwo.setUsername("username");
+        transactionTwo.setOperation(Transaction.Operation.DEPOSIT);
+        transactionTwo.setDate(Date.valueOf(LocalDate.now()));
+        transactionTwo.setAmount(1);
+
+        transactionRepository.save(transactionTwo);
+
+        assertThat(transactionRepository.getRowsForUserId(0), is(2));
+
+    }
+
+    @Test
+    public void calculateBalanceForUser(){
+
+        transaction.setAmount(500);
+
+        transactionRepository.save(transaction);
+
+        Transaction withdrawTransaction = new Transaction();
+        withdrawTransaction.setAmount(200);
+        withdrawTransaction.setDate(Date.valueOf(LocalDate.now()));
+        withdrawTransaction.setOperation(Transaction.Operation.WITHDRAW);
+        withdrawTransaction.setUserId(user.getId());
+
+        transactionRepository.save(withdrawTransaction);
+
+        double balance = transactionRepository.getBalance(user.getId());
+
+        assertThat(balance, is(transaction.getAmount() - withdrawTransaction.getAmount()));
 
     }
 

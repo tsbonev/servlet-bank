@@ -68,7 +68,7 @@ public class PageTest {
             oneOf(req).getSession();
             will(returnValue(session));
             oneOf(session).setAttribute(messageType, messageContent);
-            
+
             oneOf(resp).sendRedirect(pagePath);
 
         }});
