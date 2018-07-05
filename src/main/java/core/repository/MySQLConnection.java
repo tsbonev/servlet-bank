@@ -1,10 +1,7 @@
 package core.repository;
 
 import com.mysql.cj.jdbc.MysqlConnectionPoolDataSource;
-import com.mysql.cj.jdbc.MysqlDataSource;
 
-import javax.sql.ConnectionPoolDataSource;
-import javax.sql.DataSource;
 import javax.sql.PooledConnection;
 import java.sql.Connection;
 import java.sql.SQLException;

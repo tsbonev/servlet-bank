@@ -88,7 +88,7 @@ public class TransactionSystemTest {
     }
 
     @Test
-    public void accountShouldBeCalculated() throws ServletException, IOException {
+    public void accountBalanceShouldBeCalculated() throws ServletException, IOException {
 
         User user = new User();
         user.setUsername("username");
