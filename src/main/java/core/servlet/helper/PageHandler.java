@@ -5,7 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public interface Page {
+public interface PageHandler {
 
     void getPage(String pagePath, HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException;
     void redirectTo(String servletPath, HttpServletResponse resp,

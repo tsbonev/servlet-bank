@@ -4,8 +4,8 @@ import core.model.Transaction;
 import core.repository.TransactionRepository;
 import core.repository.UserRepository;
 import core.servlet.filter.ConnectionPerRequest;
-import core.servlet.helper.LoginSession;
-import core.servlet.helper.Page;
+import core.servlet.helper.SessionHandler;
+import core.servlet.helper.PageHandler;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.ServletException;
@@ -28,7 +28,7 @@ public class TransactionServlet extends HttpServlet {
     UserRepository userRepository;
     TransactionRepository transactionRepository;
 
-    Page page;
+    PageHandler page;
 
     protected void setConnection(TransactionRepository transactionRepository,
                                  UserRepository userRepository){
@@ -36,7 +36,7 @@ public class TransactionServlet extends HttpServlet {
         transactionRepository.setConnection(ConnectionPerRequest.connection.get());
     }
 
-    public TransactionServlet(Page page,
+    public TransactionServlet(PageHandler page,
                               UserRepository userRepository,
                               TransactionRepository transactionRepository){
         this.page = page;
@@ -141,7 +141,7 @@ public class TransactionServlet extends HttpServlet {
      */
     private boolean validateUser(HttpServletResponse resp, HttpServletRequest req, String username) throws IOException {
 
-        LoginSession session = (LoginSession) req.getSession().getAttribute("authorized");
+        SessionHandler session = (SessionHandler) req.getSession().getAttribute("authorized");
 
         String sessionUsername = session.getUsername();
 

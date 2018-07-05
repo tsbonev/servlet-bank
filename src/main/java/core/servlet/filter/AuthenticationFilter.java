@@ -1,7 +1,7 @@
 package core.servlet.filter;
 
-import core.servlet.helper.LoginSessionImpl;
-import core.servlet.helper.Page;
+import core.servlet.helper.LoginSession;
+import core.servlet.helper.PageHandler;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -14,9 +14,9 @@ public class AuthenticationFilter implements Filter {
 
     private FilterConfig filterConfig = null;
 
-    Page page;
+    PageHandler page;
 
-    public AuthenticationFilter(Page page){
+    public AuthenticationFilter(PageHandler page){
         this.page = page;
     }
 
@@ -41,7 +41,7 @@ public class AuthenticationFilter implements Filter {
 
         HttpServletRequest req = (HttpServletRequest) servletRequest;
         HttpServletResponse resp = (HttpServletResponse) servletResponse;
-        LoginSessionImpl session = (LoginSessionImpl) req.getSession().getAttribute("authorized");
+        LoginSession session = (LoginSession) req.getSession().getAttribute("authorized");
 
         if(req.getRequestURI().endsWith("/login")
                 || req.getRequestURI().endsWith("/register")

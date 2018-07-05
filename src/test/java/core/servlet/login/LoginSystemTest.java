@@ -4,9 +4,8 @@ import core.model.Transaction;
 import core.repository.TransactionRepository;
 import core.repository.UserRepository;
 import core.model.User;
-import core.servlet.helper.LoginSession;
-import core.servlet.helper.LoginSessionImpl;
-import core.servlet.helper.Page;
+import core.servlet.helper.SessionHandler;
+import core.servlet.helper.PageHandler;
 import core.servlet.helper.UserCounter;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -49,10 +48,10 @@ public class LoginSystemTest {
     private HttpSession session;
 
     @Mock
-    private LoginSession loginSession;
+    private SessionHandler loginSession;
 
     @Mock
-    private Page page;
+    private PageHandler page;
 
     @Mock
     private Connection conn;
@@ -110,7 +109,7 @@ public class LoginSystemTest {
             oneOf(userRepository).checkPassword(with(any(User.class)));
             will(returnValue(true));
 
-            oneOf(req).getSession().setAttribute("authorized", with(any(LoginSession.class)));
+            oneOf(req).getSession().setAttribute("authorized", with(any(SessionHandler.class)));
             oneOf(page).redirectTo("/home", resp, req, "successMessage",
                     "Successfully logged in!");
 
@@ -139,9 +138,9 @@ public class LoginSystemTest {
             allowing(userRepository).checkPassword(with(any(User.class)));
             will(returnValue(true));
 
-            allowing(req).getSession().setAttribute("authorized", with(any(LoginSession.class)));
+            allowing(req).getSession().setAttribute("authorized", with(any(SessionHandler.class)));
 
-            allowing(req).getSession().setAttribute("authorized", with(any(LoginSession.class)));
+            allowing(req).getSession().setAttribute("authorized", with(any(SessionHandler.class)));
             allowing(page).redirectTo("/home", resp, req, "successMessage",
                     "Successfully logged in!");
 
@@ -174,7 +173,7 @@ public class LoginSystemTest {
 
             oneOf(userRepository).checkPassword(with(any(User.class)));
             will(returnValue(true));
-            oneOf(req).getSession().setAttribute("authorized", with(any(LoginSession.class)));
+            oneOf(req).getSession().setAttribute("authorized", with(any(SessionHandler.class)));
 
             oneOf(page).redirectTo("/home", resp, req,
                     "successMessage", "Successfully logged in!");
@@ -189,7 +188,7 @@ public class LoginSystemTest {
             oneOf(userRepository).checkPassword(with(any(User.class)));
             will(returnValue(true));
 
-            oneOf(req).getSession().setAttribute("authorized", with(any(LoginSession.class)));
+            oneOf(req).getSession().setAttribute("authorized", with(any(SessionHandler.class)));
 
             oneOf(page).redirectTo("/home", resp, req,
                     "successMessage", "Successfully logged in!");
@@ -263,7 +262,7 @@ public class LoginSystemTest {
             will(returnValue(realUser.getPassword()));
             oneOf(userRepository).checkPassword(with(any(User.class)));
             will(returnValue(true));
-            oneOf(req).getSession().setAttribute("authorized", with(any(LoginSession.class)));
+            oneOf(req).getSession().setAttribute("authorized", with(any(SessionHandler.class)));
             oneOf(page).redirectTo("/home", resp, req,
                     "successMessage", "Successfully logged in!");
 

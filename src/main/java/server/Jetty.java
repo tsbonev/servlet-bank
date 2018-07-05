@@ -5,8 +5,8 @@ import core.servlet.*;
 import core.servlet.filter.AuthenticationFilter;
 import core.servlet.filter.AuthorizationFilter;
 import core.servlet.filter.ConnectionPerRequest;
-import core.servlet.helper.Page;
-import core.servlet.helper.PageImpl;
+import core.servlet.helper.PageHandler;
+import core.servlet.helper.ServletPageHandler;
 import core.servlet.helper.UserCounter;
 import core.servlet.login.LoginServlet;
 import core.servlet.login.LogoutServlet;
@@ -50,9 +50,9 @@ public final class Jetty {
 
                 servletContext.setAttribute("counter", UserCounter.getInstance());
 
-                Page page = new PageImpl();
-                UserRepository userRepo = new UserRepositoryImpl();
-                TransactionRepository transactionRepo = new TransactionRepositoryImpl();
+                PageHandler page = new ServletPageHandler();
+                UserRepository userRepo = new MysqlUserRepository();
+                TransactionRepository transactionRepo = new MysqlTransactionRepository();
 
                 servletContext.addServlet("home", new HomeServlet(page))
                         .addMapping("/", "/home");

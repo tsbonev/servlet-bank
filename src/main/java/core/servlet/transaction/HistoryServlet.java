@@ -4,8 +4,8 @@ import core.model.Transaction;
 import core.repository.TransactionRepository;
 import core.repository.UserRepository;
 import core.servlet.filter.ConnectionPerRequest;
-import core.servlet.helper.LoginSession;
-import core.servlet.helper.Page;
+import core.servlet.helper.SessionHandler;
+import core.servlet.helper.PageHandler;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.ServletException;
@@ -22,7 +22,7 @@ public class HistoryServlet extends HttpServlet {
     TransactionRepository transactionRepository;
     UserRepository userRepository;
 
-    Page page;
+    PageHandler page;
 
     /**
      * Returns the total pages for the current user's transactions.
@@ -51,7 +51,7 @@ public class HistoryServlet extends HttpServlet {
     }
 
 
-    public HistoryServlet(Page page, TransactionRepository transactionRepository,
+    public HistoryServlet(PageHandler page, TransactionRepository transactionRepository,
                           UserRepository userRepository){
         this.page = page;
         this.userRepository = userRepository;
@@ -89,7 +89,7 @@ public class HistoryServlet extends HttpServlet {
 
         setConnection(transactionRepository, userRepository);
 
-        LoginSession session = (LoginSession) req.getSession().getAttribute("authorized");
+        SessionHandler session = (SessionHandler) req.getSession().getAttribute("authorized");
 
         int currPage = getCurrentPage(req);
 

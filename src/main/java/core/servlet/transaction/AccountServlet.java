@@ -4,9 +4,8 @@ import core.model.User;
 import core.repository.TransactionRepository;
 import core.repository.UserRepository;
 import core.servlet.filter.ConnectionPerRequest;
-import core.servlet.helper.LoginSession;
-import core.servlet.helper.LoginSessionImpl;
-import core.servlet.helper.Page;
+import core.servlet.helper.SessionHandler;
+import core.servlet.helper.PageHandler;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,11 +17,11 @@ import java.io.IOException;
 @WebServlet("/account")
 public class AccountServlet extends HttpServlet {
 
-    Page page;
+    PageHandler page;
     TransactionRepository transactionRepository;
     UserRepository userRepository;
 
-    public AccountServlet(Page page, TransactionRepository transactionRepository,
+    public AccountServlet(PageHandler page, TransactionRepository transactionRepository,
                           UserRepository userRepository){
         this.page = page;
         this.transactionRepository = transactionRepository;
@@ -44,7 +43,7 @@ public class AccountServlet extends HttpServlet {
 
     /**
      * Sets the connection of the repositories,
-     * gets the LoginSessionImpl and counts up the
+     * gets the LoginSession and counts up the
      * balance of the session username or the
      * username given in the url.
      *
@@ -104,7 +103,7 @@ public class AccountServlet extends HttpServlet {
      */
     private User getUser(HttpServletRequest req){
 
-        LoginSession session = (LoginSession) req.getSession().getAttribute("authorized");
+        SessionHandler session = (SessionHandler) req.getSession().getAttribute("authorized");
 
         String username = req.getParameter("username");
 

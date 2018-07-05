@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-public class PageTest {
+public class PageHandlerTest {
 
     @Rule
     public JUnitRuleMockery context = new JUnitRuleMockery();
@@ -31,11 +31,11 @@ public class PageTest {
     @Mock
     private HttpSession session;
 
-    private PageImpl page;
+    private ServletPageHandler page;
 
     @Before
     public void setUp(){
-        page = new PageImpl();
+        page = new ServletPageHandler();
     }
 
     @Test

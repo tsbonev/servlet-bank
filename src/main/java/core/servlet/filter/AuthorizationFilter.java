@@ -1,7 +1,7 @@
 package core.servlet.filter;
 
-import core.servlet.helper.LoginSessionImpl;
-import core.servlet.helper.Page;
+import core.servlet.helper.LoginSession;
+import core.servlet.helper.PageHandler;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -14,9 +14,9 @@ public class AuthorizationFilter implements Filter {
 
     private FilterConfig filterConfig = null;
 
-    private Page page;
+    private PageHandler page;
 
-    public AuthorizationFilter(Page page){
+    public AuthorizationFilter(PageHandler page){
         this.page = page;
     }
 
@@ -41,7 +41,7 @@ public class AuthorizationFilter implements Filter {
 
         HttpServletRequest req = (HttpServletRequest) servletRequest;
         HttpServletResponse resp = (HttpServletResponse) servletResponse;
-        LoginSessionImpl session = (LoginSessionImpl) req.getSession().getAttribute("authorized");
+        LoginSession session = (LoginSession) req.getSession().getAttribute("authorized");
 
         if(session.getUsername().equalsIgnoreCase("admin")
                 && session.isAuthorized()){

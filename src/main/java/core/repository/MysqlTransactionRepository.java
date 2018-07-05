@@ -7,13 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("Duplicates")
-public class TransactionRepositoryImpl implements TransactionRepository {
+public class MysqlTransactionRepository implements TransactionRepository {
 
     private static int pageSize = 10;
 
     private Connection conn;
 
-    public TransactionRepositoryImpl() {
+    public MysqlTransactionRepository() {
     }
 
     /**
@@ -31,7 +31,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
      * @param pageSize
      */
     public void setPageSize(int pageSize) {
-        TransactionRepositoryImpl.pageSize = pageSize;
+        MysqlTransactionRepository.pageSize = pageSize;
     }
 
     /**
@@ -40,7 +40,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
      * @return page size
      */
     public int getPageSize() {
-        return TransactionRepositoryImpl.pageSize;
+        return MysqlTransactionRepository.pageSize;
     }
 
     /**
@@ -431,7 +431,7 @@ public class TransactionRepositoryImpl implements TransactionRepository {
      */
     public void fillUsernames(List<Transaction> list) {
 
-        UserRepositoryImpl userRepository = new UserRepositoryImpl();
+        MysqlUserRepository userRepository = new MysqlUserRepository();
         userRepository.setConnection(conn);
 
         for (Transaction transaction : list) {

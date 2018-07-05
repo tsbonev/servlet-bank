@@ -1,7 +1,7 @@
 package core.servlet.login;
 
-import core.servlet.helper.LoginSession;
-import core.servlet.helper.Page;
+import core.servlet.helper.SessionHandler;
+import core.servlet.helper.PageHandler;
 import core.servlet.helper.UserCounter;
 
 import javax.servlet.annotation.WebServlet;
@@ -14,9 +14,9 @@ import java.io.IOException;
 @WebServlet("/logout")
 public class LogoutServlet extends HttpServlet {
 
-    Page page;
+    PageHandler page;
 
-    public LogoutServlet(Page page){
+    public LogoutServlet(PageHandler page){
         this.page = page;
     }
 
@@ -32,7 +32,7 @@ public class LogoutServlet extends HttpServlet {
 
         HttpSession session = req.getSession();
 
-        LoginSession loginSession = (LoginSession) session.getAttribute("authorized");
+        SessionHandler loginSession = (SessionHandler) session.getAttribute("authorized");
 
         String sessionUsername = loginSession.getUsername();
 

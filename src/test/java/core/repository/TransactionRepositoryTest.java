@@ -18,8 +18,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class TransactionRepositoryTest {
 
-    UserRepositoryImpl userRepository = new UserRepositoryImpl();
-    TransactionRepositoryImpl transactionRepository = new TransactionRepositoryImpl();
+    MysqlUserRepository userRepository = new MysqlUserRepository();
+    MysqlTransactionRepository transactionRepository = new MysqlTransactionRepository();
 
     User user = new User("admin", "admin");
     Transaction transaction;

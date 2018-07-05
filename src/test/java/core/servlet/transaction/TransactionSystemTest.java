@@ -4,16 +4,11 @@ import core.model.Transaction;
 import core.model.User;
 import core.repository.TransactionRepository;
 import core.repository.UserRepository;
-import core.servlet.helper.LoginSession;
-import core.servlet.helper.Page;
-import core.servlet.helper.UserCounter;
-import core.servlet.login.LoginServlet;
-import core.servlet.login.LogoutServlet;
-import core.servlet.login.RegisterServlet;
+import core.servlet.helper.SessionHandler;
+import core.servlet.helper.PageHandler;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.jmock.integration.junit4.JUnitRuleMockery;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -48,10 +43,10 @@ public class TransactionSystemTest {
     private HttpSession session;
 
     @Mock
-    private LoginSession loginSession;
+    private SessionHandler loginSession;
 
     @Mock
-    private Page page;
+    private PageHandler page;
 
     @Mock
     private Connection conn;

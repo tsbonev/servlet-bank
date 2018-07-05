@@ -1,6 +1,6 @@
 package core.servlet;
 
-import core.servlet.helper.Page;
+import core.servlet.helper.PageHandler;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,9 +12,9 @@ import java.io.IOException;
 @WebServlet("/error")
 public class ErrorHandler extends HttpServlet {
 
-    Page page;
+    PageHandler page;
 
-    public ErrorHandler(Page page){
+    public ErrorHandler(PageHandler page){
         this.page = page;
     }
 

@@ -5,7 +5,7 @@ import core.model.User;
 import core.repository.TransactionRepository;
 import core.repository.UserRepository;
 import core.servlet.filter.ConnectionPerRequest;
-import core.servlet.helper.Page;
+import core.servlet.helper.PageHandler;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -27,7 +27,7 @@ public class RegisterServlet extends HttpServlet {
     UserRepository userRepository;
     TransactionRepository transactionRepository;
 
-    Page page;
+    PageHandler page;
 
     /**
      * Gets a connection from the ThreadLocal and injects it into the repositories.
@@ -40,7 +40,7 @@ public class RegisterServlet extends HttpServlet {
         transactionRepository.setConnection(ConnectionPerRequest.connection.get());
     }
 
-    public RegisterServlet(Page page, UserRepository userRepository, TransactionRepository transactionRepository){
+    public RegisterServlet(PageHandler page, UserRepository userRepository, TransactionRepository transactionRepository){
         this.page = page;
         this.userRepository = userRepository;
         this.transactionRepository = transactionRepository;

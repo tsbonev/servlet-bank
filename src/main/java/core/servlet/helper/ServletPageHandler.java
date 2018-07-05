@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class PageImpl implements Page {
+public class ServletPageHandler implements PageHandler {
 
     /**
      * Returns a jsp page with the forward method and closes the jdbc connection.

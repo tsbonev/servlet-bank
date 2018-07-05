@@ -1,13 +1,30 @@
 package core.servlet.helper;
 
-public interface LoginSession {
+public class LoginSession implements SessionHandler {
 
-    String getUsername();
+    private String username;
+    private boolean authorized = false;
 
-    void setUsername(String username);
+    public LoginSession() {}
 
-    boolean isAuthorized();
+    public LoginSession(String username, boolean authorized) {
+        this.username = username;
+        this.authorized = authorized;
+    }
 
-    void setAuthorized(boolean authorized);
+    public String getUsername() {
+        return username;
+    }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public boolean isAuthorized() {
+        return authorized;
+    }
+
+    public void setAuthorized(boolean authorized) {
+        this.authorized = authorized;
+    }
 }

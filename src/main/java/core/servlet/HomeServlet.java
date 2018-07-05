@@ -1,6 +1,6 @@
 package core.servlet;
 
-import core.servlet.helper.Page;
+import core.servlet.helper.PageHandler;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -11,9 +11,9 @@ import java.io.IOException;
 @WebServlet("/home")
 public class HomeServlet extends HttpServlet {
 
-    Page page;
+    PageHandler page;
 
-    public HomeServlet(Page page){
+    public HomeServlet(PageHandler page){
         this.page = page;
     }
 

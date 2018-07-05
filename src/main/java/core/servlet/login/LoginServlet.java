@@ -3,10 +3,9 @@ package core.servlet.login;
 import core.model.User;
 import core.repository.UserRepository;
 import core.servlet.filter.ConnectionPerRequest;
+import core.servlet.helper.*;
 import core.servlet.helper.LoginSession;
-import core.servlet.helper.LoginSessionImpl;
-import core.servlet.helper.Page;
-import core.servlet.helper.UserCounter;
+import core.servlet.helper.SessionHandler;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.ServletException;
@@ -20,9 +19,9 @@ import java.io.IOException;
 public class LoginServlet extends HttpServlet {
 
     UserRepository repo;
-    Page page;
+    PageHandler page;
 
-    public LoginServlet(Page page, UserRepository repository){
+    public LoginServlet(PageHandler page, UserRepository repository){
         this.page = page;
         this.repo = repository;
     }
@@ -102,7 +101,7 @@ public class LoginServlet extends HttpServlet {
             counter.addUserToCount(user.getUsername());
         }
 
-        LoginSession session = new LoginSessionImpl(user.getUsername(), true);
+        SessionHandler session = new LoginSession(user.getUsername(), true);
         req.getSession().setAttribute("authorized", session);
 
     }
