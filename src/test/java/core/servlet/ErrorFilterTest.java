@@ -1,7 +1,6 @@
 package core.servlet;
 
 import core.servlet.filter.ErrorFilter;
-import core.servlet.helper.PageHandler;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.jmock.integration.junit4.JUnitRuleMockery;

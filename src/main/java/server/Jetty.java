@@ -20,6 +20,7 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
+import org.eclipse.jetty.servlet.ErrorPageErrorHandler;
 import org.eclipse.jetty.webapp.WebAppContext;
 
 import javax.servlet.ServletContext;
@@ -43,6 +44,11 @@ public final class Jetty {
         classlist.addBefore("org.eclipse.jetty.webapp.JettyWebXmlConfiguration", "org.eclipse.jetty.annotations.AnnotationConfiguration");
 
         servletContext.setAttribute("org.eclipse.jetty.server.webapp.ContainerIncludeJarPattern",".*/[^/]*jstl.*\\.jar$");
+
+        ErrorPageErrorHandler errorHandler = new ErrorPageErrorHandler();
+        errorHandler.addErrorPage(404, "/error?code=404");
+        errorHandler.addErrorPage(500, "error?code=500");
+        servletContext.setErrorHandler(errorHandler);
 
         servletContext.addEventListener(new ServletContextListener() {
 
@@ -74,6 +80,7 @@ public final class Jetty {
 
                 servletContext.addServlet("error", new ErrorHandler(page))
                         .addMapping("/error");
+
 
 
                 servletContext.addFilter("loginFilter", new AuthenticationFilter(page))

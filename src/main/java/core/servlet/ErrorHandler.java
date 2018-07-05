@@ -29,8 +29,23 @@ public class ErrorHandler extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+        String errorContent = "Something has happened!";
+
+        String errorCode = req.getParameter("code");
+
+        if(errorCode != null && !errorCode.isEmpty()){
+            switch (errorCode){
+                case "404":
+                    errorContent = "Page not found!";
+                    break;
+                case "500":
+                    errorContent = "Internal server error!";
+                    break;
+            }
+        }
+
         page.redirectTo("/home", resp, req,
-                "errorMessage", "Something has happened!");
+                "errorMessage", errorContent);
 
     }
 }
