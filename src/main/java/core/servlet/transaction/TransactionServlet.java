@@ -4,7 +4,7 @@ import core.model.Transaction;
 import core.repository.TransactionRepository;
 import core.repository.UserRepository;
 import core.servlet.filter.ConnectionPerRequest;
-import core.servlet.helper.LoginSessionImpl;
+import core.servlet.helper.LoginSession;
 import core.servlet.helper.Page;
 import org.apache.commons.lang3.StringUtils;
 
@@ -44,7 +44,11 @@ public class TransactionServlet extends HttpServlet {
         this.userRepository = userRepository;
     }
 
-    private static double maxAmount = Double.MAX_VALUE / 4;
+    private static double maxAmount = Double.MAX_VALUE / 8;
+
+    public void setMaxAmount(double amount){
+        maxAmount = amount;
+    }
 
     /**
      * Gets a transaction form and
@@ -137,10 +141,12 @@ public class TransactionServlet extends HttpServlet {
      */
     private boolean validateUser(HttpServletResponse resp, HttpServletRequest req, String username) throws IOException {
 
-        LoginSessionImpl session = (LoginSessionImpl) req.getSession().getAttribute("authorized");
+        LoginSession session = (LoginSession) req.getSession().getAttribute("authorized");
 
-        if((!session.getUsername().equalsIgnoreCase("admin")
-                && !username.equalsIgnoreCase(session.getUsername()))
+        String sessionUsername = session.getUsername();
+
+        if((!sessionUsername.equalsIgnoreCase("admin")
+                && !username.equalsIgnoreCase(sessionUsername))
                 || !session.isAuthorized()
                 ){
             page.redirectTo("/account", resp, req,
